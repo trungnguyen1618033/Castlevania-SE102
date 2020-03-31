@@ -138,10 +138,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	GameObject::Update(dt);
 
 	vy += SIMON_GRAVITY;
-	if (y > 150)
+	if (y > 128)
 	{
 		vy = 0;
-		y = 150.0f;
+		y = 128.0f;
 	}
 }
 
@@ -219,7 +219,7 @@ void Simon::SetState(int state)
 
 bool Simon::IsStand()
 {
-	return this->y == 150.0f;
+	return this->y == 128.0f;
 }
 
 void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)

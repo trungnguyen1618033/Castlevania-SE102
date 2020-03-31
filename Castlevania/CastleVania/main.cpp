@@ -9,12 +9,14 @@
 #include "Define.h"
 #include "Simon.h"
 #include "Torch.h"
+#include "TileMap.h"
 
 
 
 Game* game;
 Simon * simon;
 Torch* torch;
+TileMap* tilemap;
 
 class KeyHandler : public KeyEventHandler
 {
@@ -118,6 +120,12 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void Update(DWORD dt)
 {
 	simon->Update(dt);
+
+	float cx, cy;
+	simon->GetPosition(cx, cy);
+
+	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemap->GetMapWidth())
+		game->SetCameraPosition(cx - SCREEN_WIDTH / 2, 0);
 }
 
 void Render()
@@ -132,6 +140,8 @@ void Render()
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
+
+		tilemap->Draw(game->GetCameraPositon());
 
 		simon->Render();
 		torch->Render();
@@ -245,6 +255,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	simon->LoadResources();
 	torch->LoadResources();
+
+	tilemap = new TileMap(0, FILEPATH_TEX_SCENE, FILEPATH_DATA_SCENE, 768, 192, 32, 32);
+	tilemap->LoadResources();
+	tilemap->Load_MapData();
 
 
 	Run();

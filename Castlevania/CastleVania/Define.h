@@ -6,7 +6,7 @@
 
 	#define BACKGROUND_COLOR		D3DCOLOR_XRGB(255,255,255)
 	#define SCREEN_WIDTH			320
-	#define SCREEN_HEIGHT			240
+	#define SCREEN_HEIGHT			224
 
 	#define MAX_FRAME_RATE			90
 
@@ -51,3 +51,7 @@
 	#define ID_TEX_WHIP					2
 	#define FILEPATH_TEX_WHIP			L"Textures\\Whip.png"
 	#define NORMAL_WHIP	0
+
+	// TileMap
+	#define FILEPATH_TEX_SCENE		L"Textures\\Entrance.BMP"
+	#define FILEPATH_DATA_SCENE		L"Textures\\Entrance.txt"

@@ -24,7 +24,7 @@ void Torch::LoadResources()
 
 	AddAnimation(10);
 
-	SetPosition(150.0f, 150.0f);
+	SetPosition(128.0f, 128.0f);
 }
 
 void Torch::Render()
