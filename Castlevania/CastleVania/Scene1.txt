@@ -1,0 +1,110 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\Simon.png	255	255	255
+1	textures\Whip.png	255	255	255
+2	textures\Item.png	255	255	255
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# SIMON
+# idle 
+1	0	0	32	32	0
+# walk
+2	32	0	64	32	0		
+3	64	0	96	32	0
+4	96	0	128	32	0
+# duck and jump
+5	128	0	160	32	0
+# ascend
+6	0	32	32	64	0
+7	32	32	64	64	0
+# descend
+8	64	32	96	64	0
+9	96	32	128	64	0
+# hurt
+10	128	32	160	64	0
+# death
+11	0	64	32	96	0
+12	32	64	63	96	0
+# standing
+13	96	64	128	96	0		
+14	128	64	160	96	0
+15	0	32	128	128	0
+# ducking
+16	32	96	64	128	0		
+17	64	96	96	128	0
+18	96	96	128	128	0
+# ascending
+19	128	96	160	128	0		
+20	0	128	32	160	0
+21	32	128	64	160	0
+# descending
+22	64	128	96	160	0		
+23	96	128	128	160	0
+24	128	128	160	160	0
+#WHIP
+101	0	0	64	32	1		
+102	64	0	128	32	1
+103	128	0	192	32	1
+#TORCH
+201	174	0	191	33	2
+202	191	0	208	33	2
+						
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
+# ==== SIMON =========
+# idle
+1	1	100
+# walk
+2	2	100	3	100	4	100
+# duck
+3	5	100
+# jump
+4	5	100
+# ascend
+5	6	100	7	100
+# descend
+6	8	100	9	100
+# hurt
+7	10	100	10	100
+# death
+8	11	200	12	200
+# standing
+9	13	150	14	150	15	200
+# ducking
+10	16	150	17	150	18	200
+# ascending
+11	19	150	20	150	21	200
+# descending
+12	22	150	23	150	24	200
+# ==== WHIP =========
+101	101	150 	102	150	103	200
+
+# ==== TORCH =========
+201	201	100	202	100
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# SIMON
+0	1	2	3	4	5	6	7	8	9	10	11	12	101
+# TORCH
+2	201
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 0 = Simon, 2 = Torch
+# SIMON
+0	50.0	124	0
+
+# TORCH
+2	200	124	2
+2	260	124	2
+2	320	124	2
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	400	100	0	416	150	200	1
+

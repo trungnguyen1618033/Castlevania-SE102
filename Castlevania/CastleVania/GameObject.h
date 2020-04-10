@@ -9,6 +9,8 @@
 #include "Game.h"
 #include "Textures.h"
 #include "Sprites.h"
+#include "Animations.h"
+
 
 using namespace std;
 
@@ -18,8 +20,6 @@ typedef GameObject* LPGAMEOBJECT;
 
 struct CollisionEvent;
 typedef CollisionEvent* LPCOLLISIONEVENT;
-
-
 struct CollisionEvent
 {
 	LPGAMEOBJECT obj;
@@ -57,7 +57,7 @@ public:
 
 	DWORD dt;
 
-	vector<LPANIMATION> animations;
+	LPANIMATION_SET animation_set;
 
 
 	GameObject();
@@ -72,6 +72,8 @@ public:
 
 	void RenderBoundingBox();
 
+	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
 	void FilterCollision(
@@ -82,7 +84,6 @@ public:
 		float& nx,
 		float& ny);
 
-	void AddAnimation(int aniID);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL);

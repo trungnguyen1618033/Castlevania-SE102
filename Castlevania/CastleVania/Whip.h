@@ -3,13 +3,17 @@
 #include "GameObject.h"
 #include "Textures.h"
 #include "Define.h"
+#include "Animations.h"
+
+#define ID_TEX_WHIP					1
+#define NORMAL_WHIP	0
 
 class Whip : public GameObject
 {
 public:
 	Whip() : GameObject() {}
 
-	void LoadResources();
+	/*void LoadResources();*/
 	void Update();
 	void Render();
 

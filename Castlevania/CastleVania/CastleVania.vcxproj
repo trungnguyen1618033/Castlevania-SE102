@@ -144,10 +144,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animations.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="KeyEventHandler.h" />
+    <ClInclude Include="ManageScene.h" />
+    <ClInclude Include="Portal.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Simon.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
@@ -156,10 +162,16 @@
     <ClInclude Include="Whip.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animations.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ManageScene.cpp" />
+    <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Simon.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />

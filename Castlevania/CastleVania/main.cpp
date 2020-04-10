@@ -14,94 +14,9 @@
 
 
 Game* game;
-Simon * simon;
-Torch* torch;
 TileMap* tilemap;
 
-class KeyHandler : public KeyEventHandler
-{
-	virtual void KeyState(BYTE* state)
-	{
-		// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
-		if (simon->GetState() == JUMP && simon->IsStand() == false)
-			return;
 
-		// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
-		if (simon->GetState() == STANDING && simon->animations[STANDING]->IsOver() == false)
-			return;
-
-		if (simon->GetState() == DUCKING && simon->animations[DUCKING]->IsOver() == false)
-			return;
-
-		if (simon->GetState() == ASCENDING && simon->animations[ASCENDING]->IsOver() == false)
-			return;
-
-		if (simon->GetState() == DESCENDING && simon->animations[DESCENDING]->IsOver() == false)
-			return;
-
-		if (simon->GetState() == HURT && simon->animations[HURT]->IsOver() == false)
-			return;
-
-		if (simon->GetState() == DEATH && simon->animations[DEATH]->IsOver() == false)
-			return;
-
-		if (game->IsKeyDown(DIK_RIGHT))
-		{
-			simon->nx = 1;
-			simon->SetState(WALK);
-		}
-		else if (game->IsKeyDown(DIK_LEFT))
-		{
-			simon->nx = -1;
-			simon->SetState(WALK);
-		}
-		else if (game->IsKeyDown(DIK_DOWN))
-		{
-			simon->SetState(DUCK);
-		}
-		else
-		{
-			simon->SetState(IDLE);
-		}
-	}
-
-	virtual void OnKeyDown(int KeyCode)
-	{
-		switch (KeyCode)
-		{
-		case DIK_SPACE:
-			simon->SetState(JUMP);
-			break;
-		case DIK_Z:
-			if (simon->GetState() == STANDING || simon->GetState() == DUCKING || simon->GetState() == ASCENDING || simon->GetState() == DESCENDING)
-				return;
-			if (simon->GetState() == IDLE || simon->GetState() == JUMP)
-			{
-				simon->SetState(STANDING);
-			}
-			else if (simon->GetState() == DUCK)
-			{
-				simon->SetState(DUCKING);
-			}
-			break;
-		case DIK_D:
-			simon->SetState(DEATH);
-			break;
-		case DIK_H:
-			simon->SetState(HURT);
-			break;
-		default:
-			break;
-		}
-	}
-
-	virtual void OnKeyUp(int KeyCode)
-	{
-		DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-	}
-};
-
-KeyHandler* keyHandler;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -119,13 +34,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Update(DWORD dt)
 {
-	simon->Update(dt);
-
-	float cx, cy;
-	simon->GetPosition(cx, cy);
-
-	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemap->GetMapWidth())
-		game->SetCameraPosition(cx - SCREEN_WIDTH / 2, 0);
+	Game::GetInstance()->GetCurrentScene()->Update(dt);
 }
 
 void Render()
@@ -142,9 +51,8 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		tilemap->Draw(game->GetCameraPositon());
+		Game::GetInstance()->GetCurrentScene()->Render();
 
-		simon->Render();
-		torch->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -246,20 +154,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game = Game::GetInstance();
 	game->Init(hWnd);
+	game->InitKeyboard();
 
-	simon = new Simon();
-	torch = new Torch();
-
-	keyHandler = new KeyHandler();
-	game->InitKeyboard(keyHandler);
-
-	simon->LoadResources();
-	torch->LoadResources();
-
+	game->Load(L"Simon-entrance.txt");
 	tilemap = new TileMap(0, FILEPATH_TEX_SCENE, FILEPATH_DATA_SCENE, 768, 192, 32, 32);
 	tilemap->LoadResources();
 	tilemap->Load_MapData();
-
+	
 
 	Run();
 

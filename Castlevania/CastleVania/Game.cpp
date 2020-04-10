@@ -1,8 +1,68 @@
 #include "Game.h"
+#include <iostream>
+#include <fstream>
+#include "debug.h"
+#include "ManageScene.h"
 
 Game* Game::_instance = NULL;
 
-void Game::InitKeyboard(LPKEYEVENTHANDLER handler)
+
+#define MAX_GAME_LINE 1024
+
+
+#define GAME_FILE_SECTION_UNKNOWN -1
+#define GAME_FILE_SECTION_SETTINGS 1
+#define GAME_FILE_SECTION_SCENES 2
+
+
+/*
+Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for
+rendering 2D images
+- hInst: Application instance handle
+- hWnd: Application window handle
+*/
+void Game::Init(HWND hWnd)
+{
+	LPDIRECT3D9 d3d = Direct3DCreate9(D3D_SDK_VERSION);
+
+	this->hWnd = hWnd;
+
+	D3DPRESENT_PARAMETERS d3dpp;
+	ZeroMemory(&d3dpp, sizeof(d3dpp));
+
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+
+	d3dpp.Windowed = TRUE;
+	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+	d3dpp.BackBufferCount = 1;
+	d3dpp.BackBufferHeight = rect.bottom + 1;
+	d3dpp.BackBufferWidth = rect.right + 1;
+
+	d3d->CreateDevice(
+		D3DADAPTER_DEFAULT,
+		D3DDEVTYPE_HAL,
+		hWnd,
+		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+		&d3dpp,
+		&d3ddv);
+
+	if (d3ddv == NULL)
+	{
+		DebugOut(L"[ERROR] CreateDevice failed\n");
+		return;
+	}
+
+	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
+
+	// Initialize sprite helper from Direct3DX helper library
+	D3DXCreateSprite(d3ddv, &spriteHandler);
+
+	DebugOut(L"[INFO] Init Game done\n");
+}
+
+void Game::InitKeyboard()
 {
 	HRESULT hr = DirectInput8Create(
 		(HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
@@ -57,57 +117,11 @@ void Game::InitKeyboard(LPKEYEVENTHANDLER handler)
 		return;
 	}
 
-	this->keyHandler = handler;
 
 	DebugOut(L"[INFO] Keyboard has been initialized successfully\n");
 }
 
-/*
-Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for
-rendering 2D images
-- hInst: Application instance handle
-- hWnd: Application window handle
-*/
-void Game::Init(HWND hWnd)
-{
-	LPDIRECT3D9 d3d = Direct3DCreate9(D3D_SDK_VERSION);
 
-	this->hWnd = hWnd;
-
-	D3DPRESENT_PARAMETERS d3dpp;
-	ZeroMemory(&d3dpp, sizeof(d3dpp));
-
-	RECT rect;
-	GetClientRect(hWnd, &rect);
-
-	d3dpp.Windowed = TRUE;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
-	d3dpp.BackBufferCount = 1;
-	d3dpp.BackBufferHeight = rect.bottom + 1;
-	d3dpp.BackBufferWidth = rect.right + 1;
-
-	d3d->CreateDevice(
-		D3DADAPTER_DEFAULT,
-		D3DDEVTYPE_HAL,
-		hWnd,
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-		&d3dpp,
-		&d3ddv);
-
-	if (d3ddv == NULL)
-	{
-		DebugOut(L"[ERROR] CreateDevice failed\n");
-		return;
-	}
-
-	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
-
-	// Initialize sprite helper from Direct3DX helper library
-	D3DXCreateSprite(d3ddv, &spriteHandler);
-
-	DebugOut(L"[INFO] Init Game done\n");
-}
 
 void Game::Draw(int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
 {
@@ -215,7 +229,7 @@ Game* Game::GetInstance()
 	return _instance;
 }
 
-void Game::SetCameraPosition(float x, float y)
+void Game::SetCamPos(float x, float y)
 {
 	this->cameraPosition.x = x;
 	this->cameraPosition.y = y;
@@ -323,4 +337,86 @@ Game::~Game()
 	if (backBuffer != NULL) backBuffer->Release();
 	if (d3ddv != NULL) d3ddv->Release();
 	if (d3d != NULL) d3d->Release();
+}
+
+
+void Game::Load(LPCWSTR gameFile)
+{
+	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
+
+	ifstream f;
+	f.open(gameFile);
+	char str[MAX_GAME_LINE];
+
+	// current resource section flag
+	int section = GAME_FILE_SECTION_UNKNOWN;
+
+	while (f.getline(str, MAX_GAME_LINE))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+
+		if (line == "[SETTINGS]") { section = GAME_FILE_SECTION_SETTINGS; continue; }
+		if (line == "[SCENES]") { section = GAME_FILE_SECTION_SCENES; continue; }
+
+		//
+		// data section
+		//
+		switch (section)
+		{
+		case GAME_FILE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
+		case GAME_FILE_SECTION_SCENES: _ParseSection_SCENES(line); break;
+		}
+	}
+	f.close();
+
+
+	//LPSCENE scene = new CPlayScene(1, L"scene1.txt");
+	//scenes[1] = scene;
+	//scene = new CPlayScene(2, L"scene2.txt");
+	//scenes[2] = scene;
+
+	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
+
+	SwitchScene(current_scene);
+}
+
+void Game::SwitchScene(int scene_id)
+{
+	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
+	current_scene = scene_id;
+
+	LPSCENE s = scenes[current_scene];
+	s->Unload();
+
+	Textures::GetInstance()->Clear();
+	Sprites::GetInstance()->Clear();
+	Animations::GetInstance()->Clear();
+
+	Game::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+	s->Load();
+}
+
+void Game::_ParseSection_SETTINGS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return;
+	if (tokens[0] == "start")
+		current_scene = atoi(tokens[1].c_str());
+	else
+		DebugOut(L"[ERROR] Unknown game setting %s\n", ToWSTR(tokens[0]).c_str());
+}
+
+void Game::_ParseSection_SCENES(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return;
+	int id = atoi(tokens[0].c_str());
+	LPCWSTR path = ToLPCWSTR(tokens[1]);
+
+	LPSCENE scene = new ManageScene(id, path);
+	scenes[id] = scene;
 }

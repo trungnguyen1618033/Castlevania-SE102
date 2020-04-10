@@ -36,61 +36,8 @@ class Sprites
 public:
 	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
 	LPSPRITE Get(int id) { return sprites[id]; }
+	void Sprites::Clear();
 
 	static Sprites* GetInstance();
 };
 
-/*
-	Sprite Animation Frame
-*/
-class AnimationFrame
-{
-	LPSPRITE sprite;
-	DWORD time;				// time to render a sprite
-
-public:
-	AnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
-
-	LPSPRITE GetSprite() { return this->sprite; }
-	DWORD GetTime() { return this->time; }
-};
-
-typedef AnimationFrame* LPANIMATION_FRAME;
-
-/*
-	Manage all frames of an animation
-*/
-class Animation
-{
-	DWORD lastFrameTime;
-	int defaultTime;
-	int currentFrame;
-	vector<LPANIMATION_FRAME> frames;
-
-	bool isOverAnimation = false;
-
-public:
-	Animation(int defaultTime = 100);
-	bool IsOver() { return isOverAnimation; }
-	void Reset() { isOverAnimation = false; }
-
-	void Add(int spriteID, DWORD time = 0);
-	void Render(int nx, float x, float y, int alpha = 255);
-};
-
-typedef Animation* LPANIMATION;
-
-/*
-	Manage all animations
-*/
-class Animations
-{
-	static Animations* _instance;
-	unordered_map<int, LPANIMATION> animations;
-
-public:
-	void Add(int id, LPANIMATION ani) { animations[id] = ani; }
-	LPANIMATION Get(int id) { return animations[id]; }
-
-	static Animations* GetInstance();
-};

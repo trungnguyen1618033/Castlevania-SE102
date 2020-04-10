@@ -2,6 +2,13 @@
 
 Textures* Textures::_instance = NULL;
 
+Textures* Textures::GetInstance()
+{
+	if (_instance == NULL) _instance = new Textures();
+	return _instance;
+}
+
+
 void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 {
 	D3DXIMAGE_INFO info;
@@ -44,8 +51,16 @@ void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 	DebugOut(L"[INFO] Load texture successfully: id=%d, path=%s \n", id, filePath);
 }
 
-Textures* Textures::GetInstance()
+/*
+	Clear all loaded textures
+*/
+void Textures::Clear()
 {
-	if (_instance == NULL) _instance = new Textures();
-	return _instance;
+	for (auto x : textures)
+	{
+		LPDIRECT3DTEXTURE9 tex = x.second;
+		if (tex != NULL) tex->Release();
+	}
+
+	textures.clear();
 }

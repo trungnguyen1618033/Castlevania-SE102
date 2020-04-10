@@ -5,20 +5,9 @@
 #include <dinput.h>
 #include "Define.h"
 #include "Debug.h"
-
-
-/*
-Abstract class to define keyboard event handlers
-*/
-class KeyEventHandler
-{
-public:
-	virtual void KeyState(BYTE *state) = 0;
-	virtual void OnKeyDown(int KeyCode) = 0;
-	virtual void OnKeyUp(int KeyCode) = 0;
-};
-
-typedef KeyEventHandler * LPKEYEVENTHANDLER;
+#include "KeyEventHandler.h"
+#include <unordered_map>
+#include "Scene.h"
 
 class Game
 {
@@ -41,8 +30,18 @@ class Game
 
 	D3DXVECTOR3 cameraPosition;			// camera position for viewing
 
+	unordered_map<int, LPSCENE> scenes;
+	int current_scene;
+
+	int screen_width;
+	int screen_height;
+
+	void _ParseSection_SETTINGS(string line);
+	void _ParseSection_SCENES(string line);
+
 public:
-	void InitKeyboard(LPKEYEVENTHANDLER handler);
+	void InitKeyboard();
+	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 	void Init(HWND hWnd);
 	void Draw(int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
 
@@ -50,6 +49,10 @@ public:
 	int IsKeyPress(int KeyCode);
 	int IsKeyRelease(int KeyCode);
 	void ProcessKeyboard();
+
+	void Load(LPCWSTR gameFile);
+	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	void SwitchScene(int scene_id);
 
 	static void SweptAABB(
 		float ml,			// move left góc của đối tượng di chuyển
@@ -71,7 +74,10 @@ public:
 	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
 	D3DXVECTOR3 GetCameraPositon() { return this->cameraPosition; }
 
-	void SetCameraPosition(float x, float y);
+	int GetScreenWidth() { return screen_width; }
+	int GetScreenHeight() { return screen_height; }
+
+	void SetCamPos(float x, float y);
 
 	static Game * GetInstance();
 
