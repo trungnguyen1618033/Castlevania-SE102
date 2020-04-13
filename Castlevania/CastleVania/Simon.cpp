@@ -167,7 +167,7 @@ void Simon::Render()
 
 	int ani = GetState();
 	animation_set->at(ani)->Render(nx, x, y);
-	DebugOut(L"[INFO] State: %d\n", ani);
+	/*DebugOut(L"[INFO] State: %d\n", ani);*/
 }
 
 void Simon::SetState(int state)

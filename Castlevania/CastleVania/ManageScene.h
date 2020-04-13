@@ -7,7 +7,10 @@
 #include "Torch.h"
 #include "Portal.h"
 #include "TileMap.h"
-
+#include "Knife.h"
+#include "WhipItem.h"
+#include "Heart.h"
+#include "MoneyBag.h"
 
 class ManageScene: public Scene
 {

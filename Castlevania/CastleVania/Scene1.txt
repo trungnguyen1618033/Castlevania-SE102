@@ -2,8 +2,11 @@
 [TEXTURES]
 0	textures\Simon.png	255	255	255
 1	textures\Whip.png	255	255	255
-2	textures\Item.png	255	255	255
-
+2	textures\Torch.png	255	255	255
+3	textures\Knife.png	255	255	255
+4	textures\WhipItem.png	255	255	255
+5	textures\Heart.png	255	255	255
+6	textures\MoneyBag.png	255	255	255
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 # SIMON
@@ -29,7 +32,7 @@
 # standing
 13	96	64	128	96	0		
 14	128	64	160	96	0
-15	0	32	128	128	0
+15	160	64	192	96	0
 # ducking
 16	32	96	64	128	0		
 17	64	96	96	128	0
@@ -47,8 +50,19 @@
 102	64	0	128	32	1
 103	128	0	192	32	1
 #TORCH
-201	174	0	191	33	2
-202	191	0	208	33	2
+201	0	0	32	32	2
+202	32	0	64	32	2
+#Knife
+301	0	0	32	32	3
+#WhipItem
+401	0	0	32	32	4
+#Heart
+501	0	0	32	32	5
+502	32	0	64	32	5
+#MoneyBag
+601	0	0	32	32	6
+602	32	0	64	32	6
+603	64	0	96	32	6
 						
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -84,6 +98,17 @@
 # ==== TORCH =========
 201	201	100	202	100
 
+# ==== KNIFE =========
+301	301	100
+
+# ==== WHIPITEM =========
+401	401	100
+
+# ==== HEART =========
+501	501	100
+502	502	100
+# ==== MONEYBAG =========
+601	601	100	602	100	603	100
 #
 # id	ani1	ani2	ani3
 #
@@ -92,6 +117,14 @@
 0	1	2	3	4	5	6	7	8	9	10	11	12	101
 # TORCH
 2	201
+# KNIFE
+3	301
+# WHIPITEM
+4	401
+# HEART
+5	501	502
+# MONEYBAG
+6	601
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -104,7 +137,16 @@
 2	260	124	2
 2	320	124	2
 
+# KNIFE
+3	160	124	3
+3	220	124	3
+# WHIPITEM
+4	280	124	4
+# HEART
+5	360	124	5
+# MONEYBAG
+6	400	124	6
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	400	100	0	416	150	200	1
+50	600	100	0	416	150	200	1
 

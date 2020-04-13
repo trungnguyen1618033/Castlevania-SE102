@@ -34,7 +34,7 @@ void Whip::Update()
 
 void Whip::Render()
 {
-	animation_set->at(101)->Render(nx, x, y);
+	animation_set->at(12)->Render(nx, x, y);
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand, int nx)

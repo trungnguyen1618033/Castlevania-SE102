@@ -24,6 +24,11 @@ ManageScene::ManageScene(int id, LPCWSTR filePath) :Scene(id, filePath)
 #define OBJECT_TYPE_SIMON	0
 #define OBJECT_TYPE_WHIP	1
 #define OBJECT_TYPE_TORCH	2
+#define OBJECT_TYPE_KNIFE	3
+#define OBJECT_TYPE_WHIPITEM	4
+#define OBJECT_TYPE_HEART	5
+#define OBJECT_TYPE_MONEYBAG	6
+
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -142,9 +147,13 @@ void ManageScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new Simon();
 		player = (Simon*)obj;
-		player->SetWhipAnimationSet(obj->animation_set);
+		player->SetWhipAnimationSet(animation_sets->Get(ani_set_id));
 		break;	
 	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
+	case OBJECT_TYPE_KNIFE: obj = new Knife(); break;
+	case OBJECT_TYPE_WHIPITEM: obj = new WhipItem(); break;
+	case OBJECT_TYPE_HEART: obj = new Heart(); break;
+	case OBJECT_TYPE_MONEYBAG: obj = new MoneyBag(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());

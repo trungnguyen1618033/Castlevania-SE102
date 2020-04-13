@@ -150,16 +150,21 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Heart.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="ManageScene.h" />
+    <ClInclude Include="MoneyBag.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Simon.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Knife.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Torch.h" />
     <ClInclude Include="Whip.h" />
+    <ClInclude Include="WhipItem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
@@ -167,17 +172,22 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Heart.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ManageScene.cpp" />
+    <ClCompile Include="MoneyBag.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Simon.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Knife.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Torch.cpp" />
     <ClCompile Include="Whip.cpp" />
+    <ClCompile Include="WhipItem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
