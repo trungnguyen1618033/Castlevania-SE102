@@ -24,7 +24,7 @@ void GameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	Game::GetInstance()->Draw(0, x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
+	Game::GetInstance()->Draw(0, l, t, bbox, 0, 0, rect.right, rect.bottom, 100);
 }
 
 /*
@@ -67,6 +67,10 @@ LPCOLLISIONEVENT GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	coObjects: the list of colliable objects
 	coEvents: list of potential collisions
 */
+bool GameObject::AABB(float left_a, float top_a, float right_a, float bottom_a, float left_b, float top_b, float right_b, float bottom_b)
+{
+	return left_a < right_b&& right_a > left_b && top_a < bottom_b&& bottom_a > top_b;
+}
 void GameObject::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)
 {
 	for (UINT i = 0; i < coObjects->size(); i++)
@@ -113,11 +117,11 @@ void GameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPCO
 
 
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
 {
 	this->dt = dt;
-	x += vx * dt;
-	y += vy * dt;
+	dx = vx * dt;
+	dy = vy * dt;
 }
 
 

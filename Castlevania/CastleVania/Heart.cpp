@@ -1,6 +1,12 @@
 #include "Heart.h"
 
 
+Heart::Heart() :GameObject()
+{
+	vy = ITEM_FALLING_SPEED;
+}
+
+
 void Heart::Render()
 {
 	int alpha = 255;

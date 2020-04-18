@@ -14,7 +14,6 @@
 
 
 Game* game;
-TileMap* tilemap;
 
 
 
@@ -50,7 +49,6 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		tilemap->Draw(game->GetCameraPositon());
 		Game::GetInstance()->GetCurrentScene()->Render();
 
 
@@ -157,9 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 
 	game->Load(L"Simon-entrance.txt");
-	tilemap = new TileMap(0, FILEPATH_TEX_SCENE, FILEPATH_DATA_SCENE, 768, 192, 32, 32);
-	tilemap->LoadResources();
-	tilemap->Load_MapData();
+	
 	
 
 	Run();

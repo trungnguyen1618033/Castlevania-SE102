@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "debug.h"
-#include "ManageScene.h"
+#include "PlayScene.h"
 
 Game* Game::_instance = NULL;
 
@@ -417,6 +417,6 @@ void Game::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
-	LPSCENE scene = new ManageScene(id, path);
+	LPSCENE scene = new PlayScene(id, path);
 	scenes[id] = scene;
 }

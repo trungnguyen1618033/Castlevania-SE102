@@ -14,11 +14,14 @@ public:
 	Whip() : GameObject() {}
 
 	/*void LoadResources();*/
-	void Update();
-	void Render();
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT>* coObjects = NULL) {};
+	virtual void Render() {}
 
-	void SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand, int nx);
+	void Render(int currentID);
 
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {}
+	void SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand);
+	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
+
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };
 

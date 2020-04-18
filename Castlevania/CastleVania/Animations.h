@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Windows.h>
 #include <d3dx9.h>
 #include <unordered_map>
@@ -23,6 +23,7 @@ typedef AnimationFrame* LPANIMATION_FRAME;
 
 class Animation
 {
+	DWORD animStartTime;   // mốc thời gian kể từ lúc bắt đầu render một animation
 	DWORD lastFrameTime;
 	int defaultTime;
 	int currentFrame;
@@ -30,11 +31,16 @@ class Animation
 	bool isOverAnimation = false;
 public:
 	Animation(int defaultTime = 100);
-	bool IsOver() { return isOverAnimation; }
+	bool IsOver(DWORD dt) { return GetTickCount() - animStartTime >= dt; }
 	void Reset() { isOverAnimation = false; }
 
 	void Add(int spriteID, DWORD time = 0);
 	void Render(int nx, float x, float y, int alpha = 255);
+
+	int GetCurrentFrame() { return currentFrame; }
+	int GetFramesSize() { return frames.size(); }
+	void SetAniStartTime(DWORD t) { animStartTime = t; }
+	void RenderByID(int currentID, int nx, float x, float y, int alpha = 255); // hàm dùng riêng để render whip -> giải quyết bài toán đồng bộ whip cử động tay của simon
 };
 
 typedef Animation* LPANIMATION;

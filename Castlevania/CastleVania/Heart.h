@@ -4,9 +4,9 @@
 
 class Heart : public GameObject
 {
-	
+	DWORD timeAppear;   // thời gian bắt đầu xuất hiện của item, dùng để xét cho item tự huỷ
 public:
-	Heart() : GameObject() {};
+	Heart();
 
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMovement = false);

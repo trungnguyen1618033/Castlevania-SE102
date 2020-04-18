@@ -4,15 +4,20 @@
 #include "Define.h"
 #include "Animations.h"
 
-class MoneyBag: public GameObject
+
+class Items : public GameObject
 {
 	DWORD timeAppear;   // thời gian bắt đầu xuất hiện của item, dùng để xét cho item tự huỷ
 public:
-	MoneyBag();
+	Items();
+
 
 	void Render();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL);
-
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT>* coObject = NULL);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	void GetRandomItem();
+	void SetItem(int idItem);
+
 };
 

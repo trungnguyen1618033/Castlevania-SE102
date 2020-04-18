@@ -8,15 +8,19 @@
 #include "Portal.h"
 #include "TileMap.h"
 #include "Knife.h"
-#include "WhipItem.h"
+#include "Items.h"
 #include "Heart.h"
 #include "MoneyBag.h"
+#include"Ground.h"
+#include "TileMap.h"
 
-class ManageScene: public Scene
+class PlayScene : public Scene
 {
 protected:
 	Simon* player;					// A play scene has to have player, right? 
-	
+	Whip* whip;
+	Knife* knife;
+	TileMaps* tilemaps = TileMaps::GetInstance();
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -26,22 +30,24 @@ protected:
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 public:
-	ManageScene(int id, LPCWSTR filePath);
+	PlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();	
 
-	friend class SceneKeyHandler;
+	Simon* GetPlayer() { return player; }
+
+	/*friend class SceneKeyHandler;*/
 };
 
-class SceneKeyHandler : public KeyHandler
+class PlaySceneKeyHandler : public KeyHandler
 {
 public:
 	virtual void KeyState(BYTE* states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode);
-	SceneKeyHandler(Scene* s) :KeyHandler(s) {};
+	PlaySceneKeyHandler(Scene* s) :KeyHandler(s) {};
 };
 

@@ -8,11 +8,10 @@
 class Knife : public GameObject
 {
 public:
-	Knife(): GameObject() {}
+	Knife();
 
-	
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL);
 	void Render();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

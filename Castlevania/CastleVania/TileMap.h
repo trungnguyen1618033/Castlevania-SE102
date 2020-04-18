@@ -4,7 +4,6 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-
 #include "Textures.h"
 #include "Sprites.h"
 #include "Debug.h"
@@ -28,9 +27,7 @@ class TileMap
 
 public:
 	vector<vector<int>> map_Data;	// ma trận lưu dữ liệu map
-
 	Sprites* sprites;		// lưu các tile
-
 
 	TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height);
 
@@ -61,5 +58,19 @@ public:
 
 		fs.close();
 	}
+};
+
+typedef TileMap* LPTILEMAP;
+
+class TileMaps
+{
+	static TileMaps* _instance;
+	unordered_map<int, LPTILEMAP> tilemaps;
+
+public:
+	void Add(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height);
+	LPTILEMAP Get(int ID) { return tilemaps[ID]; }
+
+	static TileMaps* GetInstance();
 };
 

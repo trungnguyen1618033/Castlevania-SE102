@@ -153,7 +153,7 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Heart.h" />
     <ClInclude Include="KeyEventHandler.h" />
-    <ClInclude Include="ManageScene.h" />
+    <ClInclude Include="PlayScene.h" />
     <ClInclude Include="MoneyBag.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Scene.h" />
@@ -164,7 +164,7 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Torch.h" />
     <ClInclude Include="Whip.h" />
-    <ClInclude Include="WhipItem.h" />
+    <ClInclude Include="Items.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
@@ -176,7 +176,7 @@
     <ClCompile Include="Heart.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ManageScene.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="MoneyBag.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -187,7 +187,7 @@
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Torch.cpp" />
     <ClCompile Include="Whip.cpp" />
-    <ClCompile Include="WhipItem.cpp" />
+    <ClCompile Include="Items.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

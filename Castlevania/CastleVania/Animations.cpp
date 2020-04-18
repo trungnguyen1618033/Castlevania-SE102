@@ -44,6 +44,14 @@ void Animation::Render(int nx, float x, float y, int alpha)
 	frames[currentFrame]->GetSprite()->Draw(nx, x, y, alpha);
 }
 
+void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
+{
+	if (frames.size() == 3) // normal whip, short chain
+	{
+		frames[currentID]->GetSprite()->Draw(nx, x, y, alpha);
+	}
+}
+
 
 Animations* Animations::_instance = NULL;
 

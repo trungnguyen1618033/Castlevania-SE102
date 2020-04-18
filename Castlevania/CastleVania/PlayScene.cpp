@@ -1,12 +1,12 @@
-﻿#include "ManageScene.h"
+﻿#include "PlayScene.h"
 #include <iostream>
 #include <fstream>
 
 using namespace std;
 
-ManageScene::ManageScene(int id, LPCWSTR filePath) :Scene(id, filePath)
+PlayScene::PlayScene(int id, LPCWSTR filePath) :Scene(id, filePath)
 {
-	key_handler = new SceneKeyHandler(this);
+	key_handler = new PlaySceneKeyHandler(this);
 }
 
 /*
@@ -29,12 +29,12 @@ ManageScene::ManageScene(int id, LPCWSTR filePath) :Scene(id, filePath)
 #define OBJECT_TYPE_HEART	5
 #define OBJECT_TYPE_MONEYBAG	6
 
-
+#define OBJECT_TYPE_GROUND	7
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
 
-void ManageScene::_ParseSection_TEXTURES(string line)
+void PlayScene::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -49,7 +49,7 @@ void ManageScene::_ParseSection_TEXTURES(string line)
 	Textures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
 }
 
-void ManageScene::_ParseSection_SPRITES(string line)
+void PlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -72,7 +72,7 @@ void ManageScene::_ParseSection_SPRITES(string line)
 	Sprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
 
-void ManageScene::_ParseSection_ANIMATIONS(string line)
+void PlayScene::_ParseSection_ANIMATIONS(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -93,7 +93,7 @@ void ManageScene::_ParseSection_ANIMATIONS(string line)
 	Animations::GetInstance()->Add(ani_id, ani);
 }
 
-void ManageScene::_ParseSection_ANIMATION_SETS(string line)
+void PlayScene::_ParseSection_ANIMATION_SETS(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -119,7 +119,7 @@ void ManageScene::_ParseSection_ANIMATION_SETS(string line)
 /*
 	Parse a line in section [OBJECTS]
 */
-void ManageScene::_ParseSection_OBJECTS(string line)
+void PlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -150,10 +150,7 @@ void ManageScene::_ParseSection_OBJECTS(string line)
 		player->SetWhipAnimationSet(animation_sets->Get(ani_set_id));
 		break;	
 	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
-	case OBJECT_TYPE_KNIFE: obj = new Knife(); break;
-	case OBJECT_TYPE_WHIPITEM: obj = new WhipItem(); break;
-	case OBJECT_TYPE_HEART: obj = new Heart(); break;
-	case OBJECT_TYPE_MONEYBAG: obj = new MoneyBag(); break;
+	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
@@ -176,7 +173,7 @@ void ManageScene::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 }
 
-void ManageScene::Load()
+void PlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 
@@ -225,9 +222,15 @@ void ManageScene::Load()
 
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+
+	tilemaps->Add(0, FILEPATH_TEX_SCENE, FILEPATH_DATA_SCENE, 768, 192, 32, 32);
+	/*knife = new Knife();
+	knife->isEnable = false;
+	objects.push_back(knife);*/
+
 }
 
-void ManageScene::Update(DWORD dt)
+void PlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
@@ -240,32 +243,37 @@ void ManageScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		objects[i]->Update(dt, &objects, &coObjects);
 	}
 
 
-	// Update camera to follow mario
+	// Update camera to follow simon
 	float cx, cy;
 	player->GetPosition(cx, cy);
+	
 
+	Game* game = Game::GetInstance();;
 
-	Game* game = Game::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-
-	Game::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemaps->Get(0)->GetMapWidth())
+		game->SetCamPos(cx - SCREEN_WIDTH / 2, 0);
 }
 
-void ManageScene::Render()
+void PlayScene::Render()
 {
+	Game* game = Game::GetInstance();
+
+	tilemaps->Get(0)->Draw(game->GetCameraPositon());
 	for (int i = 0; i < objects.size(); i++)
+	{
 		objects[i]->Render();
+		objects[i]->RenderBoundingBox();
+	}
 }
 
 /*
 	Unload current scene
 */
-void ManageScene::Unload()
+void PlayScene::Unload()
 {
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
@@ -274,32 +282,35 @@ void ManageScene::Unload()
 	player = NULL;
 }
 
-void SceneKeyHandler::KeyState(BYTE* state)
+void PlaySceneKeyHandler::KeyState(BYTE* state)
 {
 	Game* game = Game::GetInstance();
-	Simon* simon = ((ManageScene*)scene)->player;
+	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 
 	// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
-	if (simon->GetState() == JUMP && simon->IsStand() == false)
+	if (simon->GetState() == JUMP && simon->IsTouchGround() == false)
 		return;
 
 	// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
-	if (simon->GetState() == STANDING && simon->animation_set->at(STANDING)->IsOver() == false)
+	if (simon->GetState() == STANDING && simon->animation_set->at(STANDING)->IsOver(300) == false)
 		return;
 
-	if (simon->GetState() == DUCKING && simon->animation_set->at(DUCKING)->IsOver() == false)
+	if (simon->GetState() == DUCKING && simon->animation_set->at(DUCKING)->IsOver(300) == false)
 		return;
 
-	if (simon->GetState() == ASCENDING && simon->animation_set->at(ASCENDING)->IsOver() == false)
+	if (simon->GetState() == ASCENDING && simon->animation_set->at(ASCENDING)->IsOver(300) == false)
 		return;
 
-	if (simon->GetState() == DESCENDING && simon->animation_set->at(DESCENDING)->IsOver() == false)
+	if (simon->GetState() == DESCENDING && simon->animation_set->at(DESCENDING)->IsOver(300) == false)
 		return;
 
-	if (simon->GetState() == HURT && simon->animation_set->at(HURT)->IsOver() == false)
+	if (simon->GetState() == HURT && simon->animation_set->at(HURT)->IsOver(200) == false)
 		return;
 
-	if (simon->GetState() == DEATH && simon->animation_set->at(DEATH)->IsOver() == false)
+	if (simon->GetState() == DEATH && simon->animation_set->at(DEATH)->IsOver(200) == false)
+		return;
+
+	if (simon->GetState() == THROW && simon->animation_set->at(THROW)->IsOver(300) == false)
 		return;
 
 	if (game->IsKeyDown(DIK_RIGHT))
@@ -322,16 +333,18 @@ void SceneKeyHandler::KeyState(BYTE* state)
 	}
 }
 
-void SceneKeyHandler::OnKeyDown(int KeyCode)
+void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	Simon* simon = ((ManageScene*)scene)->player;
+	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
+		if (simon->GetState() == JUMP || simon->GetState() == STANDING || simon->GetState() == DUCKING)
+			return;
 		simon->SetState(JUMP);
 		break;
-	case DIK_Z:
-		if (simon->GetState() == STANDING || simon->GetState() == DUCKING || simon->GetState() == ASCENDING || simon->GetState() == DESCENDING)
+	case DIK_A:
+		if (simon->GetState() == STANDING || simon->GetState() == DUCKING /*|| simon->GetState() == ASCENDING || simon->GetState() == DESCENDING*/)
 			return;
 		if (simon->GetState() == IDLE || simon->GetState() == JUMP)
 		{
@@ -342,6 +355,18 @@ void SceneKeyHandler::OnKeyDown(int KeyCode)
 			simon->SetState(DUCKING);
 		}
 		break;
+	case DIK_S:
+		if (simon->hasKnife == false)
+			return;
+		if (simon->GetState() == IDLE || simon->GetState() == JUMP)
+		{
+			float sx, sy;
+			simon->GetPosition(sx, sy);
+			simon->GetKnife()->SetPosition(sx, sy + 10);
+			simon->GetKnife()->SetOrientation(simon->GetOrientation());
+			simon->GetKnife()->isEnable = true;
+			simon->SetState(THROW);
+		}
 	case DIK_D:
 		simon->SetState(DEATH);
 		break;
@@ -353,7 +378,7 @@ void SceneKeyHandler::OnKeyDown(int KeyCode)
 	}
 }
 
-void SceneKeyHandler::OnKeyUp(int KeyCode)
+void PlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 }

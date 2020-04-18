@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3dx9.h>
@@ -59,6 +59,7 @@ public:
 
 	LPANIMATION_SET animation_set;
 
+	bool isEnable;	// kiểm tra còn kích hoạt nửa ko
 
 	GameObject();
 
@@ -69,12 +70,19 @@ public:
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 	int GetState() { return this->state; }
+	int GetOrientation() { return this->nx; }
 
 	void RenderBoundingBox();
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
+
+	// kiểm tra va chạm của 2 đối tượng (ex: whip and torch)
+	bool AABB(
+		float left_a, float top_a, float right_a, float bottom_a,
+		float left_b, float top_b, float right_b, float bottom_b
+	);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
 	void FilterCollision(
 		vector<LPCOLLISIONEVENT>& coEvents,
@@ -86,7 +94,7 @@ public:
 
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT>* coObject = NULL);
 	virtual void Render() = 0;
 
 	void SetOrientation(int nx) { this->nx = nx; }

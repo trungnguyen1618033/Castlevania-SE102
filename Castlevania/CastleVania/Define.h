@@ -17,7 +17,7 @@
 	// special texture to draw object bounding box
 	#define ID_TEX_BBOX				-100		
 
-
+	#define ITEM_FALLING_SPEED		0.2f
 
 	
 

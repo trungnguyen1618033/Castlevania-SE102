@@ -1,43 +1,16 @@
 #include "Whip.h"
 
+#define WHIP_BBOX_WIDTH				50
+#define WHIP_BBOX_HEIGHT			20
+#define WHIP_ANIMATION				13
 
-//void Whip::LoadResources()
-//{
-//	Textures* texture = Textures::GetInstance();
-//
-//	texture->Add(ID_TEX_WHIP, FILEPATH_TEX_WHIP, D3DCOLOR_XRGB(255, 255, 255));
-//
-//	Sprites* sprites = Sprites::GetInstance();
-//	Animations* animations = Animations::GetInstance();
-//
-//	LPDIRECT3DTEXTURE9 texWhip = texture->Get(ID_TEX_WHIP);
-//
-//	sprites->Add(201, 0, 0, 64, 32, texWhip);
-//	sprites->Add(202, 64, 0, 128, 32 , texWhip);
-//	sprites->Add(203, 128, 0, 192, 32, texWhip);
-//
-//
-//	LPANIMATION ani;
-//
-//	ani = new Animation();
-//	ani->Add(201, 150);
-//	ani->Add(202, 150);
-//	ani->Add(203, 200);
-//	animations->Add(NORMAL_WHIP, ani);
-//
-//	AddAnimation(NORMAL_WHIP);
-//}
-
-void Whip::Update()
+void Whip::Render(int currentID)
 {
+	animation_set->at(WHIP_ANIMATION)->RenderByID(currentID, nx, x, y);
+	RenderBoundingBox();
 }
 
-void Whip::Render()
-{
-	animation_set->at(12)->Render(nx, x, y);
-}
-
-void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand, int nx)
+void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)
 {	
 	if (nx == 1)
 		simonPositon.x -= 10.0f;
@@ -47,6 +20,33 @@ void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand, int nx)
 		simonPositon.y += 4.0f;
 
 	SetPosition(simonPositon.x, simonPositon.y);
+}
+
+bool Whip::CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom)
+{
+	float whip_left,
+		whip_top,
+		whip_right,
+		whip_bottom;
+
+	GetBoundingBox(whip_left, whip_top, whip_right, whip_bottom);
+
+	return GameObject::AABB(whip_left, whip_top, whip_right, whip_bottom, obj_left, obj_top, obj_right, obj_bottom);
+}
+
+void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	top = y + 5;
+	bottom = top + WHIP_BBOX_HEIGHT;
+	if (nx < 0)
+	{
+		left = x + 10;
+	}
+	else if (nx > 0)
+	{
+		left = (100 - 20) - WHIP_BBOX_WIDTH + x;
+	}
+
 }
 
 
