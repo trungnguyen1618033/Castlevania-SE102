@@ -1,13 +1,12 @@
 #include "Whip.h"
 
-#define WHIP_BBOX_WIDTH				50
-#define WHIP_BBOX_HEIGHT			20
+#define WHIP_BBOX_WIDTH				25
+#define WHIP_BBOX_HEIGHT			10
 #define WHIP_ANIMATION				13
 
 void Whip::Render(int currentID)
 {
 	animation_set->at(WHIP_ANIMATION)->RenderByID(currentID, nx, x, y);
-	RenderBoundingBox();
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)
@@ -40,12 +39,14 @@ void Whip::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	bottom = top + WHIP_BBOX_HEIGHT;
 	if (nx < 0)
 	{
-		left = x + 10;
+		left = x + 5;
 	}
 	else if (nx > 0)
 	{
-		left = (100 - 20) - WHIP_BBOX_WIDTH + x;
+		left = x + WHIP_BBOX_WIDTH + 10;
 	}
+	
+	right = left + WHIP_BBOX_WIDTH;
 
 }
 

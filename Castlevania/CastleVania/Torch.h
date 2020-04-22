@@ -10,8 +10,10 @@
 #define TORCH			0
 #define EFFECTEXPLORE	1
 
+
 class Torch : public GameObject
 {
+	Items* item;
 public:
 	Torch();
 
@@ -19,6 +21,9 @@ public:
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	virtual void SetAnimationSet(LPANIMATION_SET ani_set);
+	virtual void SetItemsAnimationSet(LPANIMATION_SET ani_set);
 
 };
 

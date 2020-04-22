@@ -18,7 +18,7 @@ class Textures
 
 public:
 	void Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor);
-	LPDIRECT3DTEXTURE9 Get(int id) { return textures[id]; }
+	LPDIRECT3DTEXTURE9 Get(unsigned int i);
 
 	void Clear();
 	static Textures* GetInstance();

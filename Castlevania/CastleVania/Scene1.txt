@@ -8,6 +8,7 @@
 5	textures\Heart.png	255	255	255
 6	textures\MoneyBag.png	255	255	255
 7	textures\Enemies-Effect.png	255	255	255
+-100	textures\bbox.png	255	255	255
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 # SIMON
@@ -126,11 +127,10 @@
 # SIMON
 0	1	2	3	4	5	6	7	8	9	10	11	12	13	101
 # TORCH
-2	201	701
+2	201	701	401	501	502	601	301
 # KNIFE
 3	301
-# ITEMS
-4	401	501	502	601
+
 
 
 

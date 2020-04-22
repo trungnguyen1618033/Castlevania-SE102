@@ -14,7 +14,7 @@
 // Simon	
 #define ID_TEX_SIMON				0
 
-#define SIMON_BBOX_WIDTH			32
+#define SIMON_BBOX_WIDTH			18
 #define SIMON_BBOX_HEIGHT			32
 
 #define SIMON_WALKING_SPEED			0.1f

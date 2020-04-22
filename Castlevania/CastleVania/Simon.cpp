@@ -191,6 +191,7 @@ void Simon::SetState(int state)
 	default:
 		break;
 	}
+	RenderBoundingBox();
 }
 
 void Simon::SetWhipAnimationSet(LPANIMATION_SET ani_set)
@@ -203,8 +204,8 @@ void Simon::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x + 7;
 	top = y;
-	right = x + SIMON_BBOX_WIDTH - 7;
-	bottom = y + SIMON_BBOX_HEIGHT;
+	right = left + SIMON_BBOX_WIDTH;
+	bottom = top + SIMON_BBOX_HEIGHT;
 }
 
 

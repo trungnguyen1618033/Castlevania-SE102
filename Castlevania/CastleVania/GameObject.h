@@ -74,7 +74,8 @@ public:
 
 	void RenderBoundingBox();
 
-	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+	virtual void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 
@@ -98,5 +99,8 @@ public:
 	virtual void Render() = 0;
 
 	void SetOrientation(int nx) { this->nx = nx; }
+
+	void SetEnable(bool enable) { this->isEnable = enable; }
+	bool IsEnable() { return this->isEnable; }
 };
 

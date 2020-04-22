@@ -1,9 +1,12 @@
 #include "Items.h"
 
-#define KNIFE			0
-#define WHIPITEM		1
-#define HEART			2
-#define MONEYBAG		3
+
+#define WHIPITEM		2
+#define HEART_SMALL		3
+#define HEART_BIG		4
+#define MONEYBAG		5
+#define KNIFE			6
+
 #define ITEM_TIME_DESTROYED			5000
 
 Items::Items() :GameObject()
@@ -71,19 +74,23 @@ void Items::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 	switch (state)
 	{
-	case KNIFE:
-		right = left + 16;
-		bottom = top + 16;
-		break;
 	case WHIPITEM: 
 		right = left + 16;
 		bottom = top + 16;
 		break;
-	case HEART: 
+	case HEART_SMALL: 
 		right = left +	16;
 		bottom = top + 16;
 		break;
+	case HEART_BIG:
+		right = left + 16;
+		bottom = top + 16;
+		break;
 	case MONEYBAG: 
+		right = left + 16;
+		bottom = top + 16;
+		break;
+	case KNIFE:
 		right = left + 16;
 		bottom = top + 16;
 		break;

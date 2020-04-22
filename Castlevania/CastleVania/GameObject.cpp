@@ -7,6 +7,7 @@ GameObject::GameObject()
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;					// right
+	isEnable = true;
 }
 
 void GameObject::RenderBoundingBox()
@@ -24,7 +25,7 @@ void GameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	Game::GetInstance()->Draw(0, l, t, bbox, 0, 0, rect.right, rect.bottom, 100);
+	Game::GetInstance()->Draw(nx, l, t, bbox, 0, 0, rect.right, rect.bottom, 100);
 }
 
 /*

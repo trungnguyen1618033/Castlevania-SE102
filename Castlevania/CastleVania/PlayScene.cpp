@@ -149,7 +149,11 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		player = (Simon*)obj;
 		player->SetWhipAnimationSet(animation_sets->Get(ani_set_id));
 		break;	
-	case OBJECT_TYPE_TORCH: obj = new Torch(); break;
+	case OBJECT_TYPE_TORCH: {
+		obj = new Torch();
+		obj->SetEnable(false);
+		break; 
+	}
 	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
@@ -163,13 +167,13 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
-
 	// General object setup
 	obj->SetPosition(x, y);
 
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
 	obj->SetAnimationSet(ani_set);
+	/*obj->SetEnable(true);*/
 	objects.push_back(obj);
 }
 
@@ -238,7 +242,10 @@ void PlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if (objects[i]->isEnable == false)
+			continue;
+		else
+			coObjects.push_back(objects[i]);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -266,7 +273,7 @@ void PlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Render();
-		objects[i]->RenderBoundingBox();
+		/*objects[i]->RenderBoundingBox();*/
 	}
 }
 

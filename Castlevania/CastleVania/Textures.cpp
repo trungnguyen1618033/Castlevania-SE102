@@ -50,6 +50,11 @@ void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 	textures[id] = texture;
 	DebugOut(L"[INFO] Load texture successfully: id=%d, path=%s \n", id, filePath);
 }
+LPDIRECT3DTEXTURE9 Textures::Get(unsigned int id)
+{
+	return textures[id];
+}
+
 
 /*
 	Clear all loaded textures
