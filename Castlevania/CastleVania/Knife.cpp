@@ -2,7 +2,8 @@
 
 #define KNIFE_SPEED			0.3f
 #define KNIFE_BBOX_WIDTH			16
-#define KNIFE_BBOX_HEIGHT			16		
+#define KNIFE_BBOX_HEIGHT			16
+#define KNIFE_ANIMATION				14
 
 Knife::Knife() : GameObject()
 {
@@ -12,10 +13,10 @@ Knife::Knife() : GameObject()
 
 void Knife::Render()
 {
-	animation_set->at(state)->Render(nx, x, y);
+	animation_set->at(state)->Render(-nx, x, y);
 }
 
-void Knife::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT*>* coObject)
+void Knife::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
 {
 	if (nx < 0) vx = -KNIFE_SPEED;
 	else vx = KNIFE_SPEED;

@@ -25,10 +25,9 @@ PlayScene::PlayScene(int id, LPCWSTR filePath) :Scene(id, filePath)
 #define OBJECT_TYPE_WHIP	1
 #define OBJECT_TYPE_TORCH	2
 #define OBJECT_TYPE_KNIFE	3
-#define OBJECT_TYPE_WHIPITEM	4
+#define OBJECT_TYPE_ITEMS	4
 #define OBJECT_TYPE_HEART	5
 #define OBJECT_TYPE_MONEYBAG	6
-
 #define OBJECT_TYPE_GROUND	7
 #define OBJECT_TYPE_PORTAL	50
 
@@ -148,19 +147,31 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		obj = new Simon();
 		player = (Simon*)obj;
 		player->SetWhipAnimationSet(animation_sets->Get(ani_set_id));
-		break;	
+		break;
 	case OBJECT_TYPE_TORCH: {
 		obj = new Torch();
-		obj->SetEnable(false);
-		break; 
+		break;
 	}
 	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
+	case OBJECT_TYPE_ITEMS:
+	{
+		obj = new Items();
+		items = (Items*)obj;
+		obj->isEnable = false;
+		break; 
+	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new Portal(x, y, r, b, scene_id);
+	}
+	case OBJECT_TYPE_KNIFE: {
+		obj = new Knife();
+		knife = (Knife*)obj;
+		obj->isEnable = false;
+		break;
 	}
 	break;
 	default:
@@ -228,9 +239,7 @@ void PlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
 	tilemaps->Add(0, FILEPATH_TEX_SCENE, FILEPATH_DATA_SCENE, 768, 192, 32, 32);
-	/*knife = new Knife();
-	knife->isEnable = false;
-	objects.push_back(knife);*/
+	
 
 }
 
@@ -272,6 +281,8 @@ void PlayScene::Render()
 	tilemaps->Get(0)->Draw(game->GetCameraPositon());
 	for (int i = 0; i < objects.size(); i++)
 	{
+		if (objects[i]->isEnable == false)
+			continue;
 		objects[i]->Render();
 		/*objects[i]->RenderBoundingBox();*/
 	}
@@ -343,6 +354,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
+	Knife* knife = ((PlayScene*)scene)->GetKnife();
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
@@ -369,11 +381,13 @@ void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		{
 			float sx, sy;
 			simon->GetPosition(sx, sy);
-			simon->GetKnife()->SetPosition(sx, sy + 10);
-			simon->GetKnife()->SetOrientation(simon->GetOrientation());
-			simon->GetKnife()->isEnable = true;
+			knife->SetState(14);
+			knife->SetPosition(sx, sy + 4);
+			knife->SetOrientation(simon->GetOrientation());
+			knife->isEnable = true;
 			simon->SetState(THROW);
 		}
+		break;
 	case DIK_D:
 		simon->SetState(DEATH);
 		break;

@@ -7,7 +7,6 @@
 #include "Torch.h"
 #include "Knife.h"
 #include "Items.h"
-#include "Heart.h"
 #include "MoneyBag.h"
 #include"Ground.h"
 
@@ -44,7 +43,6 @@ using namespace std;
 class Simon : public GameObject
 {
 	Whip* whip;
-	Knife* knife;
 
 	int untouchable;
 	DWORD untouchable_start;
@@ -62,7 +60,6 @@ public:
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
-	Knife* GetKnife() { return this->knife; }
 
 };
 

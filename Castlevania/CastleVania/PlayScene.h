@@ -9,7 +9,6 @@
 #include "TileMap.h"
 #include "Knife.h"
 #include "Items.h"
-#include "Heart.h"
 #include "MoneyBag.h"
 #include"Ground.h"
 #include "TileMap.h"
@@ -20,7 +19,9 @@ protected:
 	Simon* player;					// A play scene has to have player, right? 
 	Whip* whip;
 	Knife* knife;
+	Items* items;
 	TileMaps* tilemaps = TileMaps::GetInstance();
+
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -29,6 +30,8 @@ protected:
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
+
+	
 public:
 	PlayScene(int id, LPCWSTR filePath);
 
@@ -38,6 +41,9 @@ public:
 	virtual void Unload();	
 
 	Simon* GetPlayer() { return player; }
+	Knife* GetKnife() { return this->knife; }
+
+	/*void CreateItem(double x, double y);*/
 
 	/*friend class SceneKeyHandler;*/
 };

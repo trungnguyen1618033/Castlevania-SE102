@@ -1,4 +1,5 @@
 ﻿#include "Torch.h"
+#include "PlayScene.h"
 
 #define TORCH_BBOX_WIDTH		16
 #define TORCH_BBOX_HEIGHT		32
@@ -11,25 +12,32 @@ Torch::Torch()
 
 void Torch::Render()
 {
+	/*if (this->IsEnable())
+		animation_set->at(GetState())->Render(nx, x, y);
+	else
+		this->item->Render();*/
 	animation_set->at(GetState())->Render(nx, x, y);
+	this->item->Render();
 }
 
 void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObjects)
 {
-	
+
 	if (state == EFFECTEXPLORE && animation_set->at(state)->IsOver(150)) 	//nếu render xong hết đốm lửa rồi thì set enable = false -> biến mất
-	{
+	{	
+		SetEnable(false);
+		item->isEnable = true;
+		int ID = rand() % 6 + 2;
+		item->SetState(ID);
+		item->SetPosition(x + 50, y);
+
+		//Objects->push_back(item);
+
+
 		
-		this->isEnable = false;
 
 			// Tạo một item theo id và thêm vào Objects
 
-		/*	item->isEnable = true;
-			int ID = rand() % 3;
-			item->SetState(ID);
-			item->SetPosition(x, y);
-			Objects->push_back(item);*/
-		
 	}
 	
 }
@@ -48,7 +56,3 @@ void Torch::SetAnimationSet(LPANIMATION_SET ani_set)
 	item->SetAnimationSet(ani_set);
 }
 
-void Torch::SetItemsAnimationSet(LPANIMATION_SET ani_set)
-{
-	item->SetAnimationSet(ani_set);
-}

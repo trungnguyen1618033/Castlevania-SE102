@@ -149,9 +149,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Define.h" />
-    <ClInclude Include="Grid.h" />
     <ClInclude Include="Ground.h" />
-    <ClInclude Include="Heart.h" />
+    <ClInclude Include="ItemsManage.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="MoneyBag.h" />
@@ -171,9 +170,8 @@
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="Heart.cpp" />
+    <ClCompile Include="ItemsManage.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayScene.cpp" />

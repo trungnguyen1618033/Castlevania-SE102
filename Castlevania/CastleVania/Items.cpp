@@ -1,23 +1,31 @@
 #include "Items.h"
 
+//
+//#define WHIPITEM		2
+//#define HEART_SMALL		3
+//#define HEART_BIG		4
+//#define MONEYBAG		5
+//#define KNIFE			6
 
-#define WHIPITEM		2
-#define HEART_SMALL		3
-#define HEART_BIG		4
-#define MONEYBAG		5
-#define KNIFE			6
+#define WHIPITEM		0
+#define HEART_SMALL		1
+#define HEART_BIG		2
+#define MONEYBAG		3
+#define KNIFE			4
 
 #define ITEM_TIME_DESTROYED			5000
 
 Items::Items() :GameObject()
 {
+	/*vx = 0.3;*/
 	vy = ITEM_FALLING_SPEED;
 	timeAppear = -1;
+	SetState(0);
 }
 
 void Items::Render()
 {
-	animation_set->at(GetState())->Render(nx, x, y);
+	animation_set->at(2)->Render(nx, x, y);
 }
 
 void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
@@ -36,7 +44,6 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>
 			return;
 		}
 	}
-
 
 	GameObject::Update(dt);
 
@@ -101,7 +108,7 @@ void Items::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Items::GetRandomItem()
 {
-	state = rand() % 3;
+	state = rand() % 4;
 	
 }
 

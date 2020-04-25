@@ -5,7 +5,6 @@ Simon::Simon() : GameObject()
 	untouchable = 0;
 	SetState(IDLE);
 	whip = new Whip();
-	knife = new Knife();
 	
 }
 
@@ -125,6 +124,9 @@ void Simon::Render()
 	if (state == STANDING || state == DUCKING) {		// lấy vị trí của simon để thực hiện gắn roi
 		whip->Render(animation_set->at(state)->GetCurrentFrame());
 	}
+	/*else if (state == THROW) {
+		knife->Render(animation_set->at(state)->GetCurrentFrame());
+	}*/
 }
 
 void Simon::SetState(int state)

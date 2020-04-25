@@ -42,11 +42,12 @@ void Animation::Render(int nx, float x, float y, int alpha)
 	}
 
 	frames[currentFrame]->GetSprite()->Draw(nx, x, y, alpha);
+	//DebugOut(L"[INFO] State: %d\n", ani);
 }
 
 void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
 {
-	if (frames.size() == 3) // normal whip, short chain
+	if (frames.size() == 3)
 	{
 		frames[currentID]->GetSprite()->Draw(nx, x, y, alpha);
 	}

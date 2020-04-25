@@ -23,7 +23,6 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	virtual void SetAnimationSet(LPANIMATION_SET ani_set);
-	virtual void SetItemsAnimationSet(LPANIMATION_SET ani_set);
 
 };
 
