@@ -10,7 +10,6 @@
 
 class TileMap
 {
-	//vector<vector<int>> map_Data;	// ma trận lưu dữ liệu map
 
 	int map_Width;			// chiều rộng của map
 	int map_Height;			// chiều cao của map

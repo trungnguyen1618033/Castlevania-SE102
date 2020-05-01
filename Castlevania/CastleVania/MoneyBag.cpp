@@ -10,7 +10,7 @@ void MoneyBag::Render()
 	animation_set->at(GetState())->Render(nx, x, y);
 }
 
-void MoneyBag::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT*>* coObject)
+void MoneyBag::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 }
 

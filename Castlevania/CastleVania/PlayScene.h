@@ -19,7 +19,7 @@ protected:
 	Simon* player;					// A play scene has to have player, right? 
 	Whip* whip;
 	Knife* knife;
-	Items* items;
+	//Items* items;
 	TileMaps* tilemaps = TileMaps::GetInstance();
 
 

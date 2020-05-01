@@ -31,7 +31,7 @@ void TileMap::LoadResources()
 
 	LPDIRECT3DTEXTURE9 texTileMap = texture->Get(ID);
 
-	// lấy thông tin về kích thước của texture lưu các block tiles (filePath_tex)
+	// lấy thông tin về kích thước của texture lưu các  tiles (filePath_tex)
 
 	D3DSURFACE_DESC surfaceDesc;
 	int level = 0;
@@ -68,14 +68,6 @@ void TileMap::Load_MapData()
 
 	string line;
 
-	/*for (int i = 0; i < nums_col; i++)
-	{
-		getline(fs, line);
-		vector<int> numInLine;
-
-
-	}*/
-
 	while (!fs.eof())
 	{
 		getline(fs, line);
@@ -99,12 +91,6 @@ void TileMap::Load_MapData()
 
 	//DebugOut(L"%d %d\n", map_Data.size(), map_Data[0].size());
 
-	//for (int i = 0; i < map_Data.size(); i++) {
-	//	for (int j = 0; j < map_Data[i].size(); j++) {
-	//		DebugOut(L"%d ", map_Data[i][j]);
-	//	}
-	//	DebugOut(L"\n");
-	//}
 }
 
 void TileMap::Draw(int start_col, int end_col)

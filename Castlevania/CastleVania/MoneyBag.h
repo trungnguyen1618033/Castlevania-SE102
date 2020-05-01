@@ -11,7 +11,7 @@ public:
 	MoneyBag();
 
 	void Render();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

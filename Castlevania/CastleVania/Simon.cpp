@@ -9,7 +9,7 @@ Simon::Simon() : GameObject()
 }
 
 
-void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObjects)
+void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	GameObject::Update(dt);
 
@@ -53,12 +53,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			// collision of Simon and Candle -> do nothing -> update x, y;
 			if (dynamic_cast<Torch*>(e->obj))
-			{
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
-				/*if (ny != 0) vy = 0;*/
+			{	
+				if (e->obj->explode)
+				{
+					e->obj->SetEnable(false);
+				}
+				else
+				{
+					if (e->nx != 0) x += dx;
+					if (e->ny != 0) y += dy;
+				}
 			}
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
@@ -107,8 +112,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>
 					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
 					{
 						DebugOut(L"collision\n");
-						e->SetState(EFFECTEXPLORE);
-						e->animation_set->at(EFFECTEXPLORE)->SetAniStartTime(GetTickCount());
+						e->SetState(EFFECTEXPLODE);
+						e->animation_set->at(EFFECTEXPLODE)->SetAniStartTime(GetTickCount());
 					}
 				}
 			}

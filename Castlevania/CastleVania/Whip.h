@@ -14,7 +14,7 @@ public:
 	Whip() : GameObject() {}
 
 	/*void LoadResources();*/
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT>* coObjects = NULL) {};
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render() {}
 
 	void Render(int currentID);

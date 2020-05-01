@@ -7,6 +7,7 @@
 //#define MONEYBAG		5
 //#define KNIFE			6
 
+
 #define WHIPITEM		0
 #define HEART_SMALL		1
 #define HEART_BIG		2
@@ -28,7 +29,7 @@ void Items::Render()
 	animation_set->at(2)->Render(nx, x, y);
 }
 
-void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	if (timeAppear == -1)
 	{

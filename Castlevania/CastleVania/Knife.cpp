@@ -16,7 +16,7 @@ void Knife::Render()
 	animation_set->at(state)->Render(-nx, x, y);
 }
 
-void Knife::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void Knife::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	if (nx < 0) vx = -KNIFE_SPEED;
 	else vx = KNIFE_SPEED;

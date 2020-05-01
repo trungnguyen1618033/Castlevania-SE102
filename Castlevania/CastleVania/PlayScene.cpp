@@ -153,13 +153,13 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
-	case OBJECT_TYPE_ITEMS:
+	/*case OBJECT_TYPE_ITEMS:
 	{
 		obj = new Items();
 		items = (Items*)obj;
 		obj->isEnable = false;
 		break; 
-	}
+	}*/
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
@@ -259,7 +259,7 @@ void PlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &objects, &coObjects);
+		objects[i]->Update(dt, &coObjects);
 	}
 
 

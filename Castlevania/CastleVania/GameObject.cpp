@@ -8,6 +8,7 @@ GameObject::GameObject()
 	vx = vy = 0;
 	nx = 1;					// right
 	isEnable = true;
+	explode = false;
 }
 
 void GameObject::RenderBoundingBox()
@@ -118,7 +119,7 @@ void GameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPCO
 
 
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT>* coObject)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 {
 	this->dt = dt;
 	dx = vx * dt;

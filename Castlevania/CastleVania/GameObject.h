@@ -61,6 +61,8 @@ public:
 
 	bool isEnable;	// kiểm tra còn kích hoạt nửa ko
 
+	bool explode; //kiểm tra torch rớt ra items
+
 	GameObject();
 
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
@@ -95,12 +97,14 @@ public:
 
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT>* coObject = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render() = 0;
 
 	void SetOrientation(int nx) { this->nx = nx; }
 
 	void SetEnable(bool enable) { this->isEnable = enable; }
 	bool IsEnable() { return this->isEnable; }
+	void SetExplode(bool explode) { this->explode = explode; }
+	bool IsExplode() { return this->explode; }
 };
 
