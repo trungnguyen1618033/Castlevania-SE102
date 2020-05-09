@@ -63,16 +63,10 @@
     <ClInclude Include="Knife.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MoneyBag.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Items.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemsManage.h">
+    <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -125,16 +119,10 @@
     <ClCompile Include="Knife.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MoneyBag.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Items.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemsManage.cpp">
+    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

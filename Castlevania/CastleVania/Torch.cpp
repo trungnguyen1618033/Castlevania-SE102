@@ -25,7 +25,6 @@ void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (state == EFFECTEXPLODE && animation_set->at(state)->IsOver(150))
 	{	
-		/*SetEnable(false);*/
 		int ID = rand() % 5 + 2;
 		SetState(ID);
 		SetPosition(x, y);

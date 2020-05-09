@@ -9,7 +9,6 @@
 #include "TileMap.h"
 #include "Knife.h"
 #include "Items.h"
-#include "MoneyBag.h"
 #include"Ground.h"
 #include "TileMap.h"
 

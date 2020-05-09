@@ -7,7 +7,6 @@
 #include "Torch.h"
 #include "Knife.h"
 #include "Items.h"
-#include "MoneyBag.h"
 #include"Ground.h"
 
 // Simon	
@@ -46,6 +45,11 @@ class Simon : public GameObject
 
 	int untouchable;
 	DWORD untouchable_start;
+
+	int score;
+	int life;
+	int HP;
+
 public:
 	bool isStand = true;
 	bool hasKnife = true;
@@ -59,6 +63,10 @@ public:
 	void SetWhipAnimationSet(LPANIMATION_SET ani_set);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	int GetLife() { return this->life; }
+	int GetScore() { return this->score; }
+	int GetHP() { return this->HP; }
 
 
 };

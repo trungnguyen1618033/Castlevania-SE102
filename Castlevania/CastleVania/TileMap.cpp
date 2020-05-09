@@ -28,9 +28,7 @@ void TileMap::LoadResources()
 
 	texture->Add(ID, filePath_tex, D3DCOLOR_XRGB(255, 255, 255));
 
-
 	LPDIRECT3DTEXTURE9 texTileMap = texture->Get(ID);
-
 	// lấy thông tin về kích thước của texture lưu các  tiles (filePath_tex)
 
 	D3DSURFACE_DESC surfaceDesc;
@@ -40,7 +38,6 @@ void TileMap::LoadResources()
 	// tính toán số hàng, số cột cần thiết để load tile 
 	int nums_rowToRead = surfaceDesc.Height / tile_Height;
 	int nums_colToRead = surfaceDesc.Width / tile_Width;
-
 	// thực hiện lưu danh sách các tile vô sprites theo thứ tự id_sprite
 	int id_sprite = 1;
 
@@ -58,7 +55,6 @@ void TileMap::Load_MapData()
 {
 	fstream fs;
 	fs.open(filePath_data, ios::in);
-
 	if (fs.fail())
 	{
 		DebugOut(L"[ERROR] TileMap::Load_MapData failed: ID=%d", ID);
@@ -71,8 +67,7 @@ void TileMap::Load_MapData()
 	while (!fs.eof())
 	{
 		getline(fs, line);
-		// tách số từ chuỗi đọc được
-
+		//DebugOut(L"%d", line)
 		vector<int> numInLine;
 		stringstream ss(line);
 		int n;
@@ -81,14 +76,10 @@ void TileMap::Load_MapData()
 			numInLine.push_back(n);
 		}
 
-		// thêm vào ma trận map_Data
-
 		map_Data.push_back(numInLine);
 	}
 
-
 	fs.close();
-
 	//DebugOut(L"%d %d\n", map_Data.size(), map_Data[0].size());
 
 }
@@ -111,10 +102,8 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 	{
 		for (int j = start_col_to_draw; j <= end_col_to_draw; j++)
 		{
-			// +camPosition để luôn giữ camera ở chính giữa, vì hàm draw vẽ tất cả các sprite đều di chuyển theo camera...
-			// +(int)camPosition.x % 32 để giữ cho camera chuyển động mượt (thực ra giá trị này bằng vx*dt, chính là quãng đường dịch chuyển của simon)
 			float x = tile_Width * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32;
-			float y = tile_Height * i;
+			float y = tile_Height * i + 40;
 
 			sprites->Get(map_Data[i][j])->Draw(-1, x, y);
 		}

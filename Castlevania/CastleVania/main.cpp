@@ -10,10 +10,12 @@
 #include "Simon.h"
 #include "Torch.h"
 #include "TileMap.h"
+#include "Player.h"
 
 
 
 Game* game;
+Player* player;
 
 
 
@@ -34,6 +36,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void Update(DWORD dt)
 {
 	Game::GetInstance()->GetCurrentScene()->Update(dt);
+	player->Update(dt);
+
 }
 
 void Render()
@@ -50,7 +54,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		Game::GetInstance()->GetCurrentScene()->Render();
-
+		player->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -155,7 +159,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 
 	game->Load(L"Simon-entrance.txt");
-	
+
+	player = new Player(game);
+	player->Init();
+
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);	
 	
 
 	Run();

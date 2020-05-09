@@ -21,7 +21,7 @@
 
 class Torch : public GameObject
 {
-	DWORD timeAppear;   // thời gian bắt đầu xuất hiện của item, dùng để xét cho item tự huỷ
+	DWORD timeAppear;   
 public:
 	
 	Torch();

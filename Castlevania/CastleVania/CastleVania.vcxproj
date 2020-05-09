@@ -150,10 +150,9 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Ground.h" />
-    <ClInclude Include="ItemsManage.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="PlayScene.h" />
-    <ClInclude Include="MoneyBag.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Simon.h" />
@@ -163,7 +162,6 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Torch.h" />
     <ClInclude Include="Whip.h" />
-    <ClInclude Include="Items.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
@@ -171,11 +169,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
-    <ClCompile Include="ItemsManage.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayScene.cpp" />
-    <ClCompile Include="MoneyBag.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Simon.cpp" />
@@ -185,7 +182,6 @@
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Torch.cpp" />
     <ClCompile Include="Whip.cpp" />
-    <ClCompile Include="Items.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

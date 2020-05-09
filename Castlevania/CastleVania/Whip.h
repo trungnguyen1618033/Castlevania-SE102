@@ -13,7 +13,6 @@ class Whip : public GameObject
 public:
 	Whip() : GameObject() {}
 
-	/*void LoadResources();*/
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
 	virtual void Render() {}
 
