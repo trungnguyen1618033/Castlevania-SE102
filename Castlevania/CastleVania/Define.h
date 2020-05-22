@@ -21,9 +21,13 @@
 
 	
 
-
-	
-
 	// TileMap
-	#define FILEPATH_TEX_SCENE		L"Textures\\Entrance.BMP"
-	#define FILEPATH_DATA_SCENE		L"Textures\\Entrance.txt"
+	#define FILEPATH_TEX_SCENE		L"scenes\\Entrance.BMP"
+	#define FILEPATH_DATA_SCENE		L"scenes\\Entrance.txt"
+
+	#define FILEPATH_TEX_SCENE_2	L"scenes\\Hall.BMP"
+	#define FILEPATH_DATA_SCENE_2	L"scenes\\Hall.txt"
+
+	#define FILEPATH_TEX_SCENE_3	L"scenes\\Tower1.BMP"
+	#define FILEPATH_DATA_SCENE_3	L"scenes\\Tower1.txt"
+	

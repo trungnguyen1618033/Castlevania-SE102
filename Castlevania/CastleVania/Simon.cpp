@@ -5,6 +5,12 @@ Simon::Simon() : GameObject()
 	untouchable = 0;
 	SetState(IDLE);
 	whip = new Whip();
+
+	score = 0;
+	energy = 99;
+	life = 3;
+	subWeapon = 0;
+	HP = 10;
 	
 }
 
@@ -13,13 +19,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	GameObject::Update(dt);
 
-	/*vy += SIMON_GRAVITY;
-	if (y > 128)
-	{
-		vy = 0;
-		y = 128.0f;	
-	}*/
-
 	// simple collision with border map
 	if (x < 0) x = 0;
 	if (x >= 736) x = 736;
@@ -27,6 +26,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (vy < -0.1f || vy > 0.1f)
 		vy += SIMON_GRAVITY*dt;
 	else vy += SIMON_GRAVITY_LOWER*dt;
+
 	// Check collision between Simon and other objects
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -55,6 +55,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<Torch*>(e->obj))
 			{	
+				
 				if (e->obj->explode)
 				{
 					e->obj->SetEnable(false);
@@ -65,13 +66,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->ny != 0) y += dy;
 				}
 			}
+			else if (dynamic_cast<Portal*>(e->obj))
+			{
+				DebugOut(L"hello\n");
+				Portal* p = dynamic_cast<Portal*>(e->obj);
+				Game::GetInstance()->SwitchScene(p->GetSceneId());
+			}
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
 				if (ny != 0) vy = 0;
-			}
-			else if (dynamic_cast<Items*>(e->obj))
-			{
-				e->obj->isEnable = false;
 			}
 			else
 			{
@@ -109,13 +112,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				/*	DebugOut(L"%f %f %f %f\n", left, top, right, bottom);*/
 
-					if (whip->CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và nến
+					if (whip->CheckCollision(left, top, right, bottom) == true)
 					{
 						DebugOut(L"collision\n");
 						e->SetState(EFFECTEXPLODE);
 						e->animation_set->at(EFFECTEXPLODE)->SetAniStartTime(GetTickCount());
 					}
 				}
+				
 			}
 		}
 	}
@@ -126,12 +130,10 @@ void Simon::Render()
 	animation_set->at(state)->Render(nx, x, y);
 	/*DebugOut(L"[INFO] State: %d\n", ani);*/
 
-	if (state == STANDING || state == DUCKING) {		// lấy vị trí của simon để thực hiện gắn roi
+	if (state == STANDING || state == DUCKING) {	
 		whip->Render(animation_set->at(state)->GetCurrentFrame());
 	}
-	/*else if (state == THROW) {
-		knife->Render(animation_set->at(state)->GetCurrentFrame());
-	}*/
+	RenderBoundingBox();
 }
 
 void Simon::SetState(int state)
@@ -198,7 +200,7 @@ void Simon::SetState(int state)
 	default:
 		break;
 	}
-	RenderBoundingBox();
+	
 }
 
 void Simon::SetWhipAnimationSet(LPANIMATION_SET ani_set)

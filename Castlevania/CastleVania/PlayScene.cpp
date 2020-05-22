@@ -150,30 +150,23 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_TORCH: {
 		obj = new Torch();
-		break;
+		break; 
 	}
 	case OBJECT_TYPE_GROUND: obj = new Ground(); break;
-	/*case OBJECT_TYPE_ITEMS:
-	{
-		obj = new Items();
-		items = (Items*)obj;
-		obj->isEnable = false;
-		break; 
-	}*/
 	case OBJECT_TYPE_PORTAL:
-	{
+		{
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new Portal(x, y, r, b, scene_id);
 	}
+		break;
 	case OBJECT_TYPE_KNIFE: {
-		obj = new Knife();
-		knife = (Knife*)obj;
+		obj = new Weapon();
+		weapon = (Weapon*)obj;
 		obj->isEnable = false;
 		break;
 	}
-	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -184,7 +177,6 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
 	obj->SetAnimationSet(ani_set);
-	/*obj->SetEnable(true);*/
 	objects.push_back(obj);
 }
 
@@ -238,7 +230,10 @@ void PlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
-	tilemaps->Add(0, FILEPATH_TEX_SCENE, FILEPATH_DATA_SCENE, 768, 192, 32, 32);
+	tilemaps->Add(0, FILEPATH_TEX_SCENE, FILEPATH_DATA_SCENE, 768, 192);
+	tilemaps->Add(1, FILEPATH_TEX_SCENE_2, FILEPATH_DATA_SCENE_2, 1536, 192);
+	tilemaps->Add(2, FILEPATH_TEX_SCENE_3, FILEPATH_DATA_SCENE_3, 768, 192);
+
 	
 
 }
@@ -270,15 +265,16 @@ void PlayScene::Update(DWORD dt)
 
 	Game* game = Game::GetInstance();;
 
-	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemaps->Get(0)->GetMapWidth())
+	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemaps->Get(id)->GetMapWidth())
 		game->SetCamPos(cx - SCREEN_WIDTH / 2, 0);
+
 }
 
 void PlayScene::Render()
 {
 	Game* game = Game::GetInstance();
 
-	tilemaps->Get(0)->Draw(game->GetCameraPositon());
+	tilemaps->Get(id)->Draw(game->GetCameraPositon());
 	for (int i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->isEnable == false)
@@ -305,11 +301,9 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	Game* game = Game::GetInstance();
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 
-	// nếu simon đang nhảy và chưa chạm đất, tiếp tục render trạng thái nhảy
 	if (simon->GetState() == JUMP && simon->IsTouchGround() == false)
 		return;
 
-	// nếu simon đang quất roi và animation chưa được render hết thì tiếp tục render
 	if (simon->GetState() == STANDING && simon->animation_set->at(STANDING)->IsOver(300) == false)
 		return;
 
@@ -354,7 +348,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
-	Knife* knife = ((PlayScene*)scene)->GetKnife();
+	Weapon* weapon = ((PlayScene*)scene)->GetKnife();
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
@@ -381,10 +375,9 @@ void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		{
 			float sx, sy;
 			simon->GetPosition(sx, sy);
-			knife->SetState(14);
-			knife->SetPosition(sx, sy + 4);
-			knife->SetOrientation(simon->GetOrientation());
-			knife->isEnable = true;
+			weapon->SetPosition(sx, sy + 4);
+			weapon->SetOrientation(simon->GetOrientation());
+			weapon->isEnable = true;
 			simon->SetState(THROW);
 		}
 		break;

@@ -372,12 +372,6 @@ void Game::Load(LPCWSTR gameFile)
 	}
 	f.close();
 
-
-	//LPSCENE scene = new CPlayScene(1, L"scene1.txt");
-	//scenes[1] = scene;
-	//scene = new CPlayScene(2, L"scene2.txt");
-	//scenes[2] = scene;
-
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
 	SwitchScene(current_scene);

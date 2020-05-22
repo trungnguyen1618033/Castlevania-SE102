@@ -7,7 +7,7 @@
 #include "Torch.h"
 #include "Portal.h"
 #include "TileMap.h"
-#include "Knife.h"
+#include "Weapon.h"
 #include "Items.h"
 #include"Ground.h"
 #include "TileMap.h"
@@ -15,12 +15,10 @@
 class PlayScene : public Scene
 {
 protected:
-	Simon* player;					// A play scene has to have player, right? 
 	Whip* whip;
-	Knife* knife;
-	//Items* items;
+	Weapon* weapon;
 	TileMaps* tilemaps = TileMaps::GetInstance();
-
+	Simon* player;					// A play scene has to have player, right? 
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -40,11 +38,8 @@ public:
 	virtual void Unload();	
 
 	Simon* GetPlayer() { return player; }
-	Knife* GetKnife() { return this->knife; }
+	Weapon* GetKnife() { return this->weapon; }
 
-	/*void CreateItem(double x, double y);*/
-
-	/*friend class SceneKeyHandler;*/
 };
 
 class PlaySceneKeyHandler : public KeyHandler

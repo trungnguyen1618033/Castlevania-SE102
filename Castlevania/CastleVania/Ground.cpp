@@ -11,7 +11,7 @@ Ground::Ground() : GameObject()
 
 void Ground::Render()
 {
-	RenderBoundingBox();
+	/*RenderBoundingBox();*/
 }
 
 void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)

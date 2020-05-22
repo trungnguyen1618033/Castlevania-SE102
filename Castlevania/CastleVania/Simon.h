@@ -5,9 +5,10 @@
 #include "Define.h"
 #include "Whip.h"
 #include "Torch.h"
-#include "Knife.h"
+#include "Weapon.h"
 #include "Items.h"
-#include"Ground.h"
+#include "Ground.h"
+#include "Portal.h"
 
 // Simon	
 #define ID_TEX_SIMON				0
@@ -15,8 +16,8 @@
 #define SIMON_BBOX_WIDTH			18
 #define SIMON_BBOX_HEIGHT			32
 
-#define SIMON_WALKING_SPEED			0.1f
-#define SIMON_JUMP_SPEED_Y			0.5f
+#define SIMON_WALKING_SPEED			0.10f
+#define SIMON_JUMP_SPEED_Y			0.4f
 #define SIMON_GRAVITY				0.002f
 #define SIMON_GRAVITY_LOWER			0.001f
 
@@ -49,6 +50,8 @@ class Simon : public GameObject
 	int score;
 	int life;
 	int HP;
+	int energy;
+	int subWeapon;
 
 public:
 	bool isStand = true;
@@ -67,7 +70,8 @@ public:
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
 	int GetHP() { return this->HP; }
-
+	int GetEnergy() { return this->energy; }
+	int GetSubWeapon() { return this->subWeapon; }
 
 };
 
