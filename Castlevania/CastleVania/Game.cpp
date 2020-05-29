@@ -57,6 +57,8 @@ void Game::Init(HWND hWnd)
 	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
 
 	// Initialize sprite helper from Direct3DX helper library
+	if(spriteHandler != NULL)
+		spriteHandler->Release();
 	D3DXCreateSprite(d3ddv, &spriteHandler);
 
 	DebugOut(L"[INFO] Init Game done\n");
@@ -123,10 +125,10 @@ void Game::InitKeyboard()
 
 
 
-void Game::Draw(int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
+void Game::Draw(int accordingCam, int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
 {
 	// calculate position of object in real world
-	D3DXVECTOR3 p(x - cameraPosition.x, y - cameraPosition.y, 0);
+	D3DXVECTOR3 p(x - cameraPosition.x * accordingCam, y - cameraPosition.y * accordingCam, 0);
 
 	RECT rect;
 	rect.left = left;
@@ -391,6 +393,7 @@ void Game::SwitchScene(int scene_id)
 
 	Game::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+	SetCamPos(0,0);
 }
 
 void Game::_ParseSection_SETTINGS(string line)

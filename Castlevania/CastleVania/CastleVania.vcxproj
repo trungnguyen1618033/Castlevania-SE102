@@ -151,6 +151,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="Items.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Leopad.h" />
     <ClInclude Include="PlayScene.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Simon.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="Stair.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TileMap.h" />
@@ -173,6 +175,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Items.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="Leopad.cpp" />
     <ClCompile Include="main.cpp" />
@@ -182,6 +185,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Simon.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="Stair.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="TileMap.cpp" />

@@ -4,16 +4,20 @@
 #include "Textures.h"
 #include "Define.h"
 #include "Animations.h"
+#include "Torch.h"
+#include "Zombie.h"
+#include "Bat.h"
+#include "Leopad.h"
 
-#define ID_TEX_WHIP					1
-#define NORMAL_WHIP	0
+
 
 class Whip : public GameObject
 {
 public:
-	Whip() : GameObject() {}
+	Whip();
+	~Whip() {};
 
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render() {}
 
 	void Render(int currentID);
@@ -22,5 +26,8 @@ public:
 	bool CheckCollision(float obj_left, float obj_top, float obj_right, float obj_bottom);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	void Upgrade();
+
 };
 

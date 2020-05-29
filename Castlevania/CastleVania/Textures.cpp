@@ -34,7 +34,7 @@ void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 		D3DPOOL_DEFAULT,
 		D3DX_DEFAULT,
 		D3DX_DEFAULT,
-		transparentColor,
+		D3DCOLOR_XRGB(255, 0, 255),
 		&info,
 		NULL,
 		&texture

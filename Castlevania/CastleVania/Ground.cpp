@@ -1,11 +1,7 @@
 #include "Ground.h"
 
-#define GROUND_BBOX_WIDTH 32
-#define GROUND_BBOX_HEIGHT 32
-
 Ground::Ground() : GameObject()
 {
-
 
 }
 

@@ -11,10 +11,10 @@ Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTU
 	this->texture = tex;
 }
 
-void Sprite::Draw(int nx, float x, float y, int alpha)
+void Sprite::Draw(int accordingCam, int nx, float x, float y, int alpha)
 {
 	Game* game = Game::GetInstance();
-	game->Draw(nx, x, y, texture, left, top, right, bottom, alpha);
+	game->Draw(accordingCam, nx, x, y, texture, left, top, right, bottom, alpha);
 }
 
 

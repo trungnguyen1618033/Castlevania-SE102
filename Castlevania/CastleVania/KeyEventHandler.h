@@ -1,6 +1,5 @@
 #pragma once
 #include <Windows.h>
-
 /*
 Abstract class to define keyboard event handlers
 */
@@ -13,4 +12,3 @@ public:
 };
 
 typedef KeyEventHandler* LPKEYEVENTHANDLER;
-

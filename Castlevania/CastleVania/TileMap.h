@@ -23,7 +23,8 @@ class TileMap
 	int ID;					
 
 public:
-	vector<vector<int>> map_Data;	
+	vector<vector<int>> map_Data;
+
 	Sprites* sprites;		
 
 	TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height);

@@ -61,7 +61,9 @@ public:
 
 	bool isEnable;	// kiểm tra còn kích hoạt nửa ko
 
-	bool explode; //kiểm tra torch rớt ra items
+	D3DXVECTOR2 entryPosition;
+
+	bool isDroppedItem = false;
 
 	GameObject();
 
@@ -77,7 +79,6 @@ public:
 	void RenderBoundingBox();
 
 	virtual void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
-
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 
@@ -104,7 +105,11 @@ public:
 
 	void SetEnable(bool enable) { this->isEnable = enable; }
 	bool IsEnable() { return this->isEnable; }
-	void SetExplode(bool explode) { this->explode = explode; }
-	bool IsExplode() { return this->explode; }
+	void SetEntryPosition(float x, float y) { entryPosition.x = x; entryPosition.y = y; }
+	D3DXVECTOR2 GetEntryPosition() { return this->entryPosition; }
+
+	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
+	bool IsDroppedItem() { return this->isDroppedItem; }
+	void SetIsDroppedItem(bool x) { this->isDroppedItem = x; }
 };
 

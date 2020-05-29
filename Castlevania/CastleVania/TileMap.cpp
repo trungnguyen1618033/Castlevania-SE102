@@ -36,7 +36,7 @@ void TileMap::LoadResources()
 	int nums_rowToRead = surfaceDesc.Height / TILE_HEIGHT;
 	int nums_colToRead = surfaceDesc.Width / TILE_WIDTH;
 	
-	int id_sprite = 0;
+	int id_sprite = 1;
 
 	for (int i = 0; i < nums_rowToRead; i++)
 	{
@@ -85,7 +85,7 @@ void TileMap::Draw(int start_col, int end_col)
 {
 	for (int i = 0; i < 10; i++) {
 		for (int j = start_col; j <= end_col; j++) {
-			sprites->Get(map_Data[i][j])->Draw(-1, TILE_WIDTH * (j - start_col), TILE_HEIGHT * i);
+			sprites->Get(map_Data[i][j])->Draw(1, -1, TILE_WIDTH * (j - start_col), TILE_HEIGHT * i);
 		}
 	}
 }
@@ -100,9 +100,9 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 		for (int j = start_col_to_draw; j <= end_col_to_draw; j++)
 		{
 			float x = TILE_WIDTH * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32;
-			float y = TILE_HEIGHT * i + 40;
+			float y = TILE_HEIGHT * i + 80;
 
-			sprites->Get(1000 * ID + map_Data[i][j])->Draw(-1, x, y);
+			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y);
 		}
 	}
 }
