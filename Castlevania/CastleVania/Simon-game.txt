@@ -1,0 +1,7 @@
+[SETTINGS]
+start	1
+#scene list
+[SCENES]
+0	scenes/Map_1_object.txt
+1	scenes/Map_2_object.txt
+2	scenes/Map_3_object.txt
