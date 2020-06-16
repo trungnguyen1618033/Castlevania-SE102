@@ -5,14 +5,12 @@
 #include "Define.h"
 #include "Animations.h"
 #include "Torch.h"
-#include "Zombie.h"
-#include "Bat.h"
-#include "Leopad.h"
 
 
 
 class Whip : public GameObject
 {
+	DWORD timeCheck;
 public:
 	Whip();
 	~Whip() {};

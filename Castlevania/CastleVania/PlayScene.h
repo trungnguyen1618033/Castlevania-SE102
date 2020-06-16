@@ -11,9 +11,6 @@
 #include "Items.h"
 #include"Ground.h"
 #include"Stair.h"
-#include "Zombie.h"
-#include "Leopad.h"
-#include "Bat.h"
 
 class PlayScene : public Scene
 {
@@ -25,17 +22,13 @@ protected:
 
 	Items* items;
 
-	Bat* bat = new Bat();
-
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listGrounds;
 	vector<LPGAMEOBJECT> listTorchs;
 	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> listStairs;
-	vector<LPGAMEOBJECT> listZombies;
-	vector<LPGAMEOBJECT> listLeopads;
-	vector<LPGAMEOBJECT> listBats;
-	vector<LPGAMEOBJECT> listPortals;
+
+	Portal* portal;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

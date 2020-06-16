@@ -127,6 +127,7 @@ void Game::InitKeyboard()
 
 void Game::Draw(int accordingCam, int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
 {
+
 	// calculate position of object in real world
 	D3DXVECTOR3 p(x - cameraPosition.x * accordingCam, y - cameraPosition.y * accordingCam, 0);
 
@@ -345,6 +346,7 @@ Game::~Game()
 
 void Game::Load(LPCWSTR gameFile)
 {
+
 	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
 
 	ifstream f;
@@ -382,6 +384,7 @@ void Game::Load(LPCWSTR gameFile)
 void Game::SwitchScene(int scene_id)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
+	SetRenderScene(true);
 	current_scene = scene_id;
 
 	LPSCENE s = scenes[current_scene];

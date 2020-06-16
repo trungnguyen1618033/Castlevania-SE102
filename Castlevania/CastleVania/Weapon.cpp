@@ -95,30 +95,6 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				if (state == KNIFE || state == AXE || state == BOOMERANG)
 					this->isEnable = false;
 			}
-			else if (dynamic_cast<Zombie*>(e->obj))
-			{
-				Zombie* zombie = dynamic_cast<Zombie*>(e->obj);
-				zombie->SetState(ZOMBIE_DESTROYED);
-
-				if (state == KNIFE || state == AXE || state == BOOMERANG)
-					this->isEnable = false;
-			}
-			else if (dynamic_cast<Leopad*>(e->obj))
-			{
-				Leopad* leopad = dynamic_cast<Leopad*>(e->obj);
-				leopad->SetState(LEOPAD_DESTROYED);
-
-				if (state == KNIFE || state == AXE || state == BOOMERANG)
-					this->isEnable = false;
-			}
-			else if (dynamic_cast<Bat*>(e->obj))
-			{
-				Bat* bat = dynamic_cast<Bat*>(e->obj);
-				bat->SetState(LEOPAD_DESTROYED);
-
-				if (state == KNIFE || state == AXE || state == BOOMERANG)
-					this->isEnable = false;
-			}
 			else if (dynamic_cast<Simon*>(e->obj))
 			{
 				if (state == BOOMERANG)

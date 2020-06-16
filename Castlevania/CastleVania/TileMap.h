@@ -10,13 +10,11 @@
 
 class TileMap
 {
-
 	int map_Width;			
 	int map_Height;			
 
 	int nums_row;			
 	int nums_col;		
-
 
 	LPCWSTR filePath_tex;
 	LPCWSTR filePath_data;
@@ -32,7 +30,6 @@ public:
 	void LoadResources();	
 	void Load_MapData();	
 	void Draw(D3DXVECTOR3 camPosition);	
-	void Draw(int start_col, int end_col);
 
 	int GetMapWidth() { return map_Width; }
 

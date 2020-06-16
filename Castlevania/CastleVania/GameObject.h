@@ -59,9 +59,8 @@ public:
 
 	LPANIMATION_SET animation_set;
 
-	bool isEnable;	// kiểm tra còn kích hoạt nửa ko
+	bool isEnable;
 
-	D3DXVECTOR2 entryPosition;
 
 	bool isDroppedItem = false;
 
@@ -105,8 +104,6 @@ public:
 
 	void SetEnable(bool enable) { this->isEnable = enable; }
 	bool IsEnable() { return this->isEnable; }
-	void SetEntryPosition(float x, float y) { entryPosition.x = x; entryPosition.y = y; }
-	D3DXVECTOR2 GetEntryPosition() { return this->entryPosition; }
 
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	bool IsDroppedItem() { return this->isDroppedItem; }

@@ -182,34 +182,6 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		objects.push_back(obj);
 		listTorchs.push_back(obj);
 		break;
-	case OBJECT_TYPE_ZOMBIE: 
-		obj = new Zombie();
-		obj->SetEntryPosition(x, y);
-		obj->SetAnimationSet(ani_set);
-		obj->SetState(ZOMBIE_INACTIVE);
-		//obj->SetEnable(false);
-		objects.push_back(obj);
-		listZombies.push_back(obj);
-		break;
-	case OBJECT_TYPE_LEOPAD: 
-		obj = new Leopad();
-		obj->SetEntryPosition(x, y);
-		obj->SetPosition(x, y);
-		obj->SetEnable(false);
-		obj->SetAnimationSet(ani_set);
-		obj->SetState(LEOPAD_IDLE);
-		objects.push_back(obj);
-		listLeopads.push_back(obj);
-		break;
-	case OBJECT_TYPE_BAT: 
-		obj = new Bat();
-		obj->SetEntryPosition(x, y);
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
-		obj->SetState(BAT_INACTIVE);
-		objects.push_back(obj);
-		listBats.push_back(obj);
-		break;
 	case OBJECT_TYPE_GROUND: 
 		obj = new Ground();
 		obj->SetPosition(x, y);
@@ -231,8 +203,8 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		b = atof(tokens[5].c_str());
 		scene_id = atoi(tokens[6].c_str());
 		obj = new Portal(x, y, r, b, scene_id);
+		portal = (Portal*)obj;
 		objects.push_back(obj);
-		listPortals.push_back(obj);
 		break;
 	case OBJECT_TYPE_ITEMS:
 		obj = new Items();
@@ -265,7 +237,7 @@ void PlayScene::_ParseSection_TILEMAP(string line)
 void PlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
-
+	
 	ifstream f;
 	f.open(sceneFilePath);
 
@@ -312,6 +284,8 @@ void PlayScene::Load()
 
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	Game* game = Game::GetInstance();
+	game->SetRenderScene(false);
 
 }
 
@@ -320,13 +294,12 @@ void PlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
-
 	SetInactivation();
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-			LPGAMEOBJECT object = objects[i];
+		LPGAMEOBJECT object = objects[i];
 
 		SetDropItems(object);
 
@@ -334,12 +307,12 @@ void PlayScene::Update(DWORD dt)
 
 		if (dynamic_cast<Simon*>(object))
 		{
-			for (auto candle : listTorchs)
+			for (auto torch : listTorchs)
 			{
-				if (candle->IsEnable() == false)
+				if (torch->IsEnable() == false)
 					continue;
 
-				coObjects.push_back(candle);
+				coObjects.push_back(torch);
 			}
 
 			for (auto ground : listGrounds)
@@ -349,47 +322,11 @@ void PlayScene::Update(DWORD dt)
 
 				coObjects.push_back(ground);
 			}
-
-			for (auto zombie : listZombies)
-			{
-				if (zombie->GetState() == ZOMBIE_INACTIVE)
-					continue;
-
-				coObjects.push_back(zombie);
-			}
-
-			for (auto leopard : listLeopads)
-			{
-				if (leopard->GetState() == LEOPAD_INACTIVE)
-					continue;
-
-				coObjects.push_back(leopard);
-			}
-
-			for (auto bat : listBats)
-			{
-				if (bat->GetState() == BAT_INACTIVE)
-					continue;
-
-				coObjects.push_back(bat);
-			}
-			for (auto portal : listPortals)
-			{
-				if (portal->IsEnable() == false)
-					continue;
-
-				coObjects.push_back(portal);
-			}
+			
+			coObjects.push_back(portal);
 
 			player->Update(dt, &coObjects);
 			player->CheckCollisionWithItem(&listItems);
-			player->CheckCollisionWithEnemyActiveArea(&listZombies);
-			player->CheckCollisionWithEnemyActiveArea(&listLeopads);
-			player->CheckCollisionWithEnemyActiveArea(&listBats);
-		}
-		else if (dynamic_cast<Items*>(object))
-		{
-			object->Update(dt, &listGrounds);
 		}
 		else if (dynamic_cast<Whip*>(object))
 		{
@@ -399,56 +336,35 @@ void PlayScene::Update(DWORD dt)
 				whip->Upgrade();
 			}
 
-			// lấy vị trí và phương của simon cho whip
 			float simon_x, simon_y;
 			player->GetPosition(simon_x, simon_y);
 
 			whip->SetOrientation(player->GetOrientation());
 			whip->SetWhipPosition(D3DXVECTOR3(simon_x, simon_y, 0), player->IsStand());
 
-			// chỉ xét va chạm khi render tới sprite cuối cùng của simon (vung tay tới)
-			if ((player->GetState() == STANDING || player->GetState() == DUCKING ||
-				player->GetState() == ASCENDING || player->GetState() == DESCENDING) &&
-				player->animation_set->at(player->GetState())->IsRenderingLastFrame() == true &&
-				player->IsHitSubWeapons() == false)
+			for (auto torch : listTorchs)
 			{
-				// Lấy vector coobjects
-				for (auto candle : listTorchs)
-				{
-					if (candle->IsEnable() == false)
-						continue;
+				if (torch->IsEnable() == false)
+					continue;
 
-					coObjects.push_back(candle);
-				}
+				coObjects.push_back(torch);
+			}
 
-				for (auto zombie : listZombies)
-				{
-					if (zombie->GetState() == ZOMBIE_INACTIVE)
-						continue;
-
-					coObjects.push_back(zombie);
-				}
-
-				for (auto leopard : listLeopads)
-				{
-					if (leopard->GetState() == LEOPAD_INACTIVE)
-						continue;
-
-					coObjects.push_back(leopard);
-				}
-
-				for (auto bat : listBats)
-				{
-					if (bat->GetState() == BAT_INACTIVE)
-						continue;
-
-					coObjects.push_back(bat);
-				}
+			if ( player->IsHit() && player->animation_set->at(player->GetState())->IsRenderingLastFrame() == true && player->IsHitWeapons() == false)
+			{
+				//DebugOut(L"\nframe :%d \t", whip->animation_set->at(whip->GetState())->GetCurrentFrame());
 				whip->Update(dt, &coObjects);
 			}
 		}
+		else if (dynamic_cast<Items*>(object) && object->IsEnable() == true)
+		{
+			object->Update(dt, &listGrounds);
+		}
 		else if (dynamic_cast<Weapon*>(object))
 		{
+			if (weapon->IsEnable() == false)
+				continue;
+
 			coObjects.push_back(player);
 
 			for (auto ground : listGrounds)
@@ -458,75 +374,15 @@ void PlayScene::Update(DWORD dt)
 
 				coObjects.push_back(ground);
 			}
-
-			if (weapon->IsEnable() == false)
-				continue;
-
-			for (auto candle : listTorchs)
+			
+			for (auto torch : listTorchs)
 			{
-				if (candle->IsEnable() == false)
+				if (torch->IsEnable() == false)
 					continue;
 
-				coObjects.push_back(candle);
-			}
-
-			for (auto zombie : listZombies)
-			{
-				if (zombie->GetState() == ZOMBIE_INACTIVE)
-					continue;
-
-				coObjects.push_back(zombie);
-			}
-
-			for (auto leopard : listLeopads)
-			{
-				if (leopard->GetState() == LEOPAD_INACTIVE)
-					continue;
-
-				coObjects.push_back(leopard);
-			}
-
-			for (auto bat : listBats)
-			{
-				if (bat->GetState() == BAT_INACTIVE)
-					continue;
-
-				coObjects.push_back(bat);
+				coObjects.push_back(torch);
 			}
 			weapon->Update(dt, &coObjects);
-		}
-		else if (dynamic_cast<Zombie*>(object))
-		{
-			if (object->GetState() != ZOMBIE_INACTIVE)
-				object->Update(dt, &listGrounds);
-		}
-		else if (dynamic_cast<Leopad*>(object))
-		{
-			if (object->GetState() != LEOPAD_INACTIVE)
-				object->Update(dt, &listGrounds);
-		}
-		else if (dynamic_cast<Bat*>(object))
-		{
-			if (object->GetState() != BAT_INACTIVE)
-			{
-				bat = dynamic_cast<Bat*>(object);
-
-				if (bat->IsSettedPosition() == false)
-				{
-					bat->SetIsSettedPosition(true);
-					float bx, by;
-
-					by = player->y + 30;
-					Game* game = Game::GetInstance();;
-
-					if (bat->GetOrientation() == -1) bx = game->GetCameraPositon().x + SCREEN_WIDTH - BAT_BBOX_WIDTH;
-					else bx = game->GetCameraPositon().x;
-
-					bat->SetPosition(bx, by);
-				}
-
-				bat->Update(dt, NULL);
-			}
 		}
 		else
 		{
@@ -540,7 +396,8 @@ void PlayScene::Update(DWORD dt)
 void PlayScene::Render()
 {
 	Game* game = Game::GetInstance();
-
+	if (game->GetRenderScene() == true)
+		return;
 	tilemaps->Get(id)->Draw(game->GetCameraPositon());
 
 	for (auto torch : listTorchs)
@@ -561,33 +418,6 @@ void PlayScene::Render()
 		items->RenderBoundingBox();
 	}
 
-	for (auto zombie : listZombies)
-	{
-		if (zombie->GetState() == ZOMBIE_INACTIVE)
-			continue;
-
-		zombie->Render();
-		zombie->RenderBoundingBox();
-	}
-
-	for (auto leopard : listLeopads)
-	{
-		if (leopard->GetState() == LEOPAD_INACTIVE)
-			continue;
-
-		leopard->Render();
-		leopard->RenderBoundingBox();
-	}
-
-	for (auto bat : listBats)
-	{
-		if (bat->GetState() == BAT_INACTIVE)
-			continue;
-
-		bat->Render();
-		bat->RenderBoundingBox();
-	}
-
 	player->Render();
 	player->RenderBoundingBox();
 
@@ -597,21 +427,13 @@ void PlayScene::Render()
 		weapon->RenderBoundingBox();
 	}
 
-	if ((player->GetState() == STANDING || player->GetState() == DUCKING ||
-		player->GetState() == ASCENDING || player->GetState() == DESCENDING)
-		&& player->IsHitSubWeapons() == false)
+	if (player->IsHit() && player->IsHitWeapons() == false)
 	{
 		whip->Render(player->animation_set->at(player->GetState())->GetCurrentFrame());
 		whip->RenderBoundingBox();
 	}
+	portal->RenderBoundingBox();
 
-	for (auto portal : listPortals)
-	{
-		if (portal->IsEnable() == false)
-			continue;
-
-		portal->Render();
-	}
 }
 
 /*
@@ -628,10 +450,7 @@ void PlayScene::Unload()
 	listStairs.clear();
 	listGrounds.clear();
 	listItems.clear();
-	listZombies.clear();
-	listLeopads.clear();
-	listBats.clear();
-	listPortals.clear();
+	portal = NULL;
 	
 }
 
@@ -656,53 +475,6 @@ void PlayScene::SetInactivation()
 	Game* game = Game::GetInstance();
 	D3DXVECTOR2 entryViewPort = game->GetCameraPositon();
 
-	for (auto zombie : listZombies)
-	{
-		Zombie* zb = dynamic_cast<Zombie*>(zombie);
-
-		if (zb->GetState() == ZOMBIE_ACTIVE)
-		{
-			float zx, zy;
-			zb->GetPosition(zx, zy);
-
-			if (zx + ZOMBIE_BBOX_WIDTH < entryViewPort.x || zx > entryViewPort.x + SCREEN_WIDTH)
-			{
-				zb->SetState(ZOMBIE_INACTIVE);
-			}
-		}
-	}
-
-	for (auto leopard : listLeopads)
-	{
-		Leopad* bl = dynamic_cast<Leopad*>(leopard);
-
-		if (bl->GetState() == LEOPAD_ACTIVE)
-		{
-			float lx, ly;
-			bl->GetPosition(lx, ly);
-
-			if (lx + LEOPAD_BBOX_WIDTH < entryViewPort.x || lx > entryViewPort.x + SCREEN_WIDTH)
-			{
-				bl->SetState(LEOPAD_INACTIVE);
-			}
-		}
-	}
-
-	for (auto bat : listBats)
-	{
-		Bat* vb = dynamic_cast<Bat*>(bat);
-
-		if (vb->GetState() == BAT_ACTIVE && vb->IsSettedPosition() == true)
-		{
-			float bx, by;
-			vb->GetPosition(bx, by);
-
-			if (bx + BAT_BBOX_WIDTH < entryViewPort.x || bx > entryViewPort.x + SCREEN_WIDTH)
-			{
-				vb->SetState(BAT_INACTIVE);
-			}
-		}
-	}
 	if (weapon->IsEnable() == true)
 	{
 		float wx, wy;
@@ -741,7 +513,14 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	Game* game = Game::GetInstance();
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 
+
 	if (simon->GetState() == JUMP && simon->IsTouchGround() == false)
+		return;
+
+	if (simon->GetState() == ASCEND && simon->animation_set->at(ASCEND)->IsOver(200) == false)
+		return;
+
+	if (simon->GetState() == DESCEND && simon->animation_set->at(DESCEND)->IsOver(200) == false)
 		return;
 
 	if (simon->GetState() == STANDING && simon->animation_set->at(STANDING)->IsOver(300) == false)
@@ -756,19 +535,20 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	if (simon->GetState() == DESCENDING && simon->animation_set->at(DESCENDING)->IsOver(300) == false)
 		return;
 
-	if (simon->GetState() == HURT && simon->animation_set->at(HURT)->IsOver(200) == false)
+	if (simon->GetState() == HURT && simon->animation_set->at(HURT)->IsOver(600) == false)
 		return;
 
-	if (simon->GetState() == UPGRADE && simon->animation_set->at(UPGRADE)->IsOver(300) == false)
+	if (simon->GetState() == UPGRADE && simon->animation_set->at(UPGRADE)->IsOver(450) == false)
 		return;
 	if (simon->GetState() == HIT && simon->animation_set->at(HIT)->IsOver(300) == false)
 		return;
+
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
 		if (StairCollisionsDetection() == true && simon->IsStandOnStair() == true)
 		{
-			if (simon->GetStairDirection() == 1) // cầu thang trái dưới - phải trên
+			if (simon->GetStairDirection() == 1)
 			{
 				Simon_Stair_Up();
 			}
@@ -785,7 +565,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	{
 		if (StairCollisionsDetection() == true && simon->IsStandOnStair() == true)
 		{
-			if (simon->GetStairDirection() == 1) // cầu thang trái dưới - phải trên
+			if (simon->GetStairDirection() == 1)
 			{
 				Simon_Stair_Down();
 			}
@@ -820,7 +600,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	}
 	else
 	{
-		simon->SetHitSubWeapons(false);
+		simon->SetHitWeapons(false);
 
 		if (StairCollisionsDetection() == true)
 		{
@@ -1032,6 +812,23 @@ void PlaySceneKeyHandler::Simon_Stair_Up()
 
 bool PlaySceneKeyHandler::Simon_Stair_Stand()
 {
+	Simon* simon = ((PlayScene*)scene)->GetPlayer();
+
+	if (simon->GetState() == ASCEND || simon->GetState() == DESCEND ||
+		simon->GetState() == ASCENDING || simon->GetState() == DESCENDING)
+	{
+		if (simon->GetState() == ASCENDING)
+		{
+			simon->SetState(ASCEND);
+		}
+		else if (simon->GetState() == DESCENDING)
+		{
+			simon->SetState(DESCEND);
+		}
+		simon->StandOnStair();
+		return true;
+	}
+
 	return false;
 }
 

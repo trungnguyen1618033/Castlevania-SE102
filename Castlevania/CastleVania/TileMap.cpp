@@ -68,7 +68,6 @@ void TileMap::Load_MapData()
 		vector<int> numInLine;
 		stringstream ss(line);	
 		int n;
-
 		while (ss >> n) {
 			numInLine.push_back(n);
 		}
@@ -81,14 +80,6 @@ void TileMap::Load_MapData()
 
 }
 
-void TileMap::Draw(int start_col, int end_col)
-{
-	for (int i = 0; i < 10; i++) {
-		for (int j = start_col; j <= end_col; j++) {
-			sprites->Get(map_Data[i][j])->Draw(1, -1, TILE_WIDTH * (j - start_col), TILE_HEIGHT * i);
-		}
-	}
-}
 
 void TileMap::Draw(D3DXVECTOR3 camPosition)
 {

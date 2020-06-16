@@ -28,11 +28,11 @@ class Animation
 	int defaultTime;
 	int currentFrame;
 	vector<LPANIMATION_FRAME> frames;
-	bool isOverAnimation = false;
+
 public:
 	Animation(int defaultTime = 100);
 	bool IsOver(DWORD dt) { return GetTickCount() - animStartTime >= dt; }
-	void Reset() { isOverAnimation = false; }
+	void Reset() { currentFrame = -1; }
 
 	void Add(int spriteID, DWORD time = 0);
 	void Render(int accordingCam, int nx, float x, float y, int alpha = 255);

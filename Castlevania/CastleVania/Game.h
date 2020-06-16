@@ -36,6 +36,8 @@ class Game
 	int screen_width;
 	int screen_height;
 
+	bool renderScene = false;
+
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
@@ -53,6 +55,9 @@ public:
 	void Load(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void SwitchScene(int scene_id);
+
+	bool GetRenderScene() { return renderScene; }
+	void SetRenderScene(bool x) { this->renderScene = x; }
 
 	static void SweptAABB(
 		float ml,			// move left góc của đối tượng di chuyển

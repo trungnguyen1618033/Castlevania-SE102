@@ -5,10 +5,13 @@
 Whip::Whip()
 {
 	SetState(WHIP);
+	timeCheck = -1;
 }
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"\n test \t");
+
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		LPGAMEOBJECT obj = coObjects->at(i);
@@ -23,46 +26,8 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (CheckCollision(left, top, right, bottom) == true)
 			{
+				//DebugOut(L"\nframe :%d \t", animation_set->at(GetState())->IsRenderingLastFrame());
 				e->SetState(EFFECTEXPLODE);
-			}
-		}
-		else if (dynamic_cast<Zombie*>(obj))
-		{
-			Zombie* e = dynamic_cast<Zombie*> (obj);
-
-			float left, top, right, bottom;
-
-			e->GetBoundingBox(left, top, right, bottom);
-
-			if (CheckCollision(left, top, right, bottom) == true)
-			{
-				e->SetState(ZOMBIE_DESTROYED);
-			}
-		}
-		else if (dynamic_cast<Leopad*>(obj))
-		{
-			Leopad* e = dynamic_cast<Leopad*> (obj);
-
-			float left, top, right, bottom;
-
-			e->GetBoundingBox(left, top, right, bottom);
-
-			if (CheckCollision(left, top, right, bottom) == true)
-			{
-				e->SetState(LEOPAD_DESTROYED);
-			}
-		}
-		else if (dynamic_cast<Bat*>(obj))
-		{
-			Bat* e = dynamic_cast<Bat*> (obj);
-
-			float left, top, right, bottom;
-
-			e->GetBoundingBox(left, top, right, bottom);
-
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và vampire bat
-			{
-				e->SetState(BAT_DESTROYED);
 			}
 		}
 	
@@ -71,12 +36,14 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Whip::Render(int currentID)
 {
-	animation_set->at(GetState())->RenderByID(currentID, nx, x, y);
+	animation_set->at(state)->RenderByID(currentID, nx, x, y);
+	
+
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)
 {	
-simonPositon.x -= 90.0f;
+	simonPositon.x -= 90.0f;
 	if (isStand == false)
 		simonPositon.y += 15.0f;
 

@@ -6,7 +6,7 @@
 
 	#define BACKGROUND_COLOR		D3DCOLOR_XRGB(0,0,0)
 	#define SCREEN_WIDTH			512
-	#define SCREEN_HEIGHT			480
+	#define SCREEN_HEIGHT			512
 
 	#define MAX_FRAME_RATE			120
 
@@ -19,6 +19,38 @@
 
 	#define ITEM_FALLING_SPEED		0.2f
 
+
+	#define ID_TEX_SIMON				0
+
+	#define SIMON_BBOX_WIDTH			30
+	#define SIMON_BBOX_HEIGHT			62
+
+	#define SIMON_WALKING_SPEED			0.13f
+	#define SIMON_JUMP_SPEED_Y			0.5f
+	#define SIMON_GRAVITY				0.002f
+	#define SIMON_GRAVITY_LOWER			0.001f
+
+	#define IDLE		0
+	#define WALK		1
+	#define JUMP		2
+	#define DUCK		3
+	#define ASCEND		4
+	#define DESCEND		5
+	#define HURT		6
+	#define STANDING	7
+	#define DUCKING		8
+	#define ASCENDING	9
+	#define DESCENDING	10
+	#define	UPGRADE		11
+	#define HIT			12
+
+	#define SIMON_STAIR_SPEED_X			0.08f
+	#define SIMON_STAIR_SPEED_Y			0.08f
+	#define SIMON_DEFLECT_SPEED_X		0.13f
+	#define SIMON_DEFLECT_SPEED_Y		0.3f
+
+
+	#define SIMON_UNTOUCHABLE_TIME 3000
 
 	// Whip
 	#define WHIP		0
@@ -79,6 +111,11 @@
 	#define BAT_BBOX_HEIGHT			32
 	#define BAT_ACTIVE_BBOX_WIDTH			400 
 	#define BAT_ACTIVE_BBOX_HEIGHT			200
+
+	#define BAT_FLYING_SPEED_X	0.12f
+	#define BAT_FLYING_SPEED_Y	0.1f
+	#define BAT_SPEED_VARIATION 0.004f
+	#define BAT_RESPAWN_TIME	5000
 
 	#define ACTIVE			0
 	#define DESTROYED		1
