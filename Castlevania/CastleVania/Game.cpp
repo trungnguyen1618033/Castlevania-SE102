@@ -396,7 +396,7 @@ void Game::SwitchScene(int scene_id)
 
 	Game::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
-	SetCamPos(0,0);
+	//SetCamPos(0,0);
 }
 
 void Game::_ParseSection_SETTINGS(string line)

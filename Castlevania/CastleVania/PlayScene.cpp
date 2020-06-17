@@ -223,15 +223,20 @@ void PlayScene::_ParseSection_TILEMAP(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 5) return; // skip invalid lines
+	if (tokens.size() < 7) return; // skip invalid lines
 
 	int mapID = atoi(tokens[0].c_str());
 	wstring path_img = ToWSTR(tokens[1]);
 	wstring path_text = ToWSTR(tokens[2]);
 	int W = atoi(tokens[3].c_str());
 	int H = atoi(tokens[4].c_str());
+	int x = atoi(tokens[5].c_str());
+	int y = atoi(tokens[6].c_str());
 
 	tilemaps->Add(mapID, path_img.c_str(), path_text.c_str(), W, H);
+
+	Game* game = Game::GetInstance();
+	game->SetCamPos(x, y);
 }
 
 void PlayScene::Load()

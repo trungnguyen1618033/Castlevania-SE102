@@ -37,6 +37,9 @@ void TileMap::LoadResources()
 	int nums_colToRead = surfaceDesc.Width / TILE_WIDTH;
 	
 	int id_sprite = 1;
+	if(ID == 2 || ID == 1)
+		id_sprite = 0;
+		
 
 	for (int i = 0; i < nums_rowToRead; i++)
 	{
@@ -88,11 +91,13 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 
 	for (int i = 0; i < nums_row; i++)
 	{
+		
 		for (int j = start_col_to_draw; j <= end_col_to_draw; j++)
 		{
 			float x = TILE_WIDTH * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32;
 			float y = TILE_HEIGHT * i + 80;
-
+			if (x / 32 == nums_col)
+				return;
 			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y);
 		}
 	}
