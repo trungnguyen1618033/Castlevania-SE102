@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
 #include "Textures.h"
 #include "Define.h"
@@ -11,6 +11,8 @@ class Weapon : public GameObject
 	bool isHolyWater = false;
 	int holyWaterCounter = 0;
 
+	int targetTypeHit = -1; // Loại mục tiêu đánh trúng (dùng để kiểm tra máu của boss...)
+
 public:
 	Weapon();
 	~Weapon() {};
@@ -22,5 +24,10 @@ public:
 	void SetState(int state);
 
 	void HolyWaterEffect() { isHolyWater = true; holyWaterCounter = GetTickCount(); }
+
+	void UpdateCollisionState();
+
+	int GetTargetTypeHit() { return targetTypeHit; }
+	void SetTargetTypeHit(int x) { targetTypeHit = x; }
 };
 

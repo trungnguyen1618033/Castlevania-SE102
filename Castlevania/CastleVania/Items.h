@@ -7,7 +7,8 @@
 
 class Items : public GameObject
 {
-	DWORD timeAppear;   
+	DWORD timeAppear;
+	float velocityVariation_x;	// biến thiên vận tốc theo chiều x để cho small heart bay lảo đảo
 public:
 	Items();
 	~Items() {};
@@ -17,6 +18,7 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	void GetRandomItem();
+	void SetState(int state);
 
 };
 

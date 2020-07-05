@@ -26,13 +26,17 @@
 
 Weapon::Weapon() : GameObject()
 {
-	SetState(0);
+	state = -1; // no subweapon
+	AnimationSets* animation_sets = AnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(4);
+	SetAnimationSet(ani_set);
 }
 
 
 void Weapon::Render()
 {
-	animation_set->at(GetState())->Render(1, nx, x, y);
+	if (this->isEnable == true)
+		animation_set->at(state)->Render(1, nx, x, y);
 }
 
 void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
@@ -110,6 +114,54 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 				x += dx;
 				y += dy;
 			}
+			else if (dynamic_cast<Knight*>(e->obj))
+			{
+				Knight* knight = dynamic_cast<Knight*>(e->obj);
+				knight->LoseHP(2);
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Bat*>(e->obj))
+			{
+				Bat* bat = dynamic_cast<Bat*>(e->obj);
+				bat->LoseHP(2);
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Ghost*>(e->obj))
+			{
+				Ghost* ghost = dynamic_cast<Ghost*>(e->obj);
+				ghost->LoseHP(2);
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<HunchBack*>(e->obj))
+			{
+				HunchBack* hunchback = dynamic_cast<HunchBack*>(e->obj);
+				hunchback->LoseHP(2);
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Raven*>(e->obj))
+			{
+				Raven* raven = dynamic_cast<Raven*>(e->obj);
+				raven->LoseHP(2);
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Skeleton*>(e->obj))
+			{
+				Skeleton* skeleton = dynamic_cast<Skeleton*>(e->obj);
+				skeleton->LoseHP(2);
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Zombie*>(e->obj))
+			{
+				Zombie* zombie = dynamic_cast<Zombie*>(e->obj);
+				zombie->LoseHP(2);
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Boss*>(e->obj))
+			{
+				Boss* boss = dynamic_cast<Boss*>(e->obj);
+				boss->LoseHP(2);
+				UpdateCollisionState();
+			}
 		}
 	}
 
@@ -175,5 +227,16 @@ void Weapon::SetState(int state)
 		break;
 	default:
 		break;
+	}
+}
+
+void Weapon::UpdateCollisionState()
+{
+	if (state == KNIFE || state == BOOMERANG)
+		this->isEnable = false;
+	else
+	{
+		x += dx;
+		y += dy;
 	}
 }

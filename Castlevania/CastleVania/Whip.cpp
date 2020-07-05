@@ -5,12 +5,14 @@
 Whip::Whip()
 {
 	SetState(WHIP);
-	timeCheck = -1;
+	AnimationSets* animation_sets = AnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(1);
+	SetAnimationSet(ani_set);
 }
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"\n test \t");
+	//DebugOut(L"\n test \t");
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -26,8 +28,123 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (CheckCollision(left, top, right, bottom) == true)
 			{
-				//DebugOut(L"\nframe :%d \t", animation_set->at(GetState())->IsRenderingLastFrame());
 				e->SetState(EFFECTEXPLODE);
+			}
+		}
+		else if (dynamic_cast<BreakWall*>(obj))
+		{
+			BreakWall* e = dynamic_cast<BreakWall*>(obj);
+
+			float left, top, right, bottom;
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true)
+			{
+				e->SetState(BREAK);
+			}
+		}
+		else if (dynamic_cast<Knight*>(obj))
+		{
+			Knight* e = dynamic_cast<Knight*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->LoseHP(1);
+			}
+		}
+		else if (dynamic_cast<Bat*>(obj))
+		{
+			Bat* e = dynamic_cast<Bat*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->LoseHP(1);
+			}
+		}
+		else if (dynamic_cast<Ghost*>(obj))
+		{
+			Ghost* e = dynamic_cast<Ghost*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->LoseHP(1);
+			}
+		}
+		else if (dynamic_cast<HunchBack*>(obj))
+		{
+			HunchBack* e = dynamic_cast<HunchBack*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->LoseHP(1);
+			}
+		}
+		else if (dynamic_cast<Raven*>(obj))
+		{
+			Raven* e = dynamic_cast<Raven*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->LoseHP(1);
+			}
+		}
+		else if (dynamic_cast<Skeleton*>(obj))
+		{
+			Skeleton* e = dynamic_cast<Skeleton*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->LoseHP(1);
+			}
+		}
+		else if (dynamic_cast<Zombie*>(obj))
+		{
+			Zombie* e = dynamic_cast<Zombie*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			{
+				e->LoseHP(1);
+			}
+		}
+		else if (dynamic_cast<Boss*>(obj))
+		{
+			Boss* e = dynamic_cast<Boss*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
+			{
+				e->LoseHP(1);
 			}
 		}
 	
@@ -36,9 +153,8 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Whip::Render(int currentID)
 {
-	animation_set->at(state)->RenderByID(currentID, nx, x, y);
-	
-
+	if (currentID >= 0)
+		animation_set->at(state)->RenderByID(currentID, nx, x, y);
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)

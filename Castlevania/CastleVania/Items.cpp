@@ -1,4 +1,10 @@
-#include "Items.h"
+﻿#include "Items.h"
+
+#define ITEM_FALLING_SPEED_X			0.15f
+#define ITEM_FALLING_SPEED_X_VARIATION	0.01f
+#define ITEM_FALLING_SPEED_Y			0.15f
+#define ITEM_SMALLHEART_FALLING_SPEED_Y	0.1f
+#define ITEM_TIME_DESTROYED				4000
 
 Items::Items() :GameObject()
 {
@@ -33,6 +39,12 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	}
 
 	GameObject::Update(dt);
+	if (state == SMALL_HEART && vy != 0)
+	{
+		vx += velocityVariation_x;
+		if (vx >= ITEM_FALLING_SPEED_X || vx <= -ITEM_FALLING_SPEED_X)
+			velocityVariation_x *= -1; // đổi chiều
+	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -53,7 +65,11 @@ void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		y += min_ty * dy + ny * 0.1f;
-		if (ny != 0) vy = 0;
+		if (ny != 0) 
+		{
+			vx = 0;
+			vy = 0;
+		}
 	}
 
 	// clean up collision events
@@ -71,15 +87,18 @@ void Items::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		right = left + 32;
 		bottom = top + 32;
 		break;
-	case HEART_SMALL:
+	case SMALL_HEART:
 		right = left + 16;
 		bottom = top + 16;
 		break;
-	case HEART_BIG:
+	case BIG_HEART:
 		right = left + 24;
 		bottom = top + 20;
 		break;
-	case MONEYBAG:
+	case MONEY_BAG_RED:
+	case MONEY_BAG_BLUE:
+	case MONEY_BAG_WHITE:
+	case MONEY_BAG:
 		right = left + 30;
 		bottom = top + 30;
 		break;
@@ -99,6 +118,11 @@ void Items::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		right = left + 28;
 		bottom = top + 28;
 		break;
+	case DOUBLE_SHOT:
+	case TRIPLE_SHOT:
+		right = left + 28;
+		bottom = top + 28;
+		break;
 	default:
 		right = left;
 		bottom = top;
@@ -111,6 +135,24 @@ void Items::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Items::GetRandomItem()
 {
 	srand(time(NULL));
-	state = rand() % 6;
+	state = rand() % 12;
+}
+
+void Items::SetState(int state)
+{
+	GameObject::SetState(state);
+
+	switch (state)
+	{
+	case SMALL_HEART:
+		velocityVariation_x = ITEM_FALLING_SPEED_X_VARIATION;
+		vx = 0;
+		vy = ITEM_SMALLHEART_FALLING_SPEED_Y;
+		break;
+	default:
+		vx = 0;
+		vy = ITEM_FALLING_SPEED_Y;
+		break;
+	}
 }
 

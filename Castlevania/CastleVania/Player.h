@@ -8,11 +8,12 @@
 
 class Player
 {
-private:
+protected:
 	Game* game;
 	PlayScene * scene;
 	Simon* simon;
-
+	
+	bool temp;
 
 	vector<LPSPRITE> playerHP;
 	vector<LPSPRITE> enemyHP;
@@ -33,12 +34,21 @@ private:
 	int simonHP;
 	int bossHP;
 
+	int temporary[7];
 
 public:
+
+	
 	Player(Game* game, PlayScene * scene);
 	~Player();
 
 	void Init();
 	void Update(DWORD dt);
+	void GetTemporary();
 	void Render();
+	void Delete();
+
+	void SetTemp(bool x) { temp = x; }
+	bool GetTemp() { return temp; }
+
 };

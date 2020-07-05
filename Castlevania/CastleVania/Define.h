@@ -15,7 +15,8 @@
 	#define KEYBOARD_BUFFER_SIZE	1024
 
 	// special texture to draw object bounding box
-	#define ID_TEX_BBOX				-100		
+	#define ID_TEX_BBOX				-100
+	#define ID_TEX_BBOX_2			-200
 
 	#define ITEM_FALLING_SPEED		0.2f
 
@@ -42,7 +43,7 @@
 	#define ASCENDING	9
 	#define DESCENDING	10
 	#define	UPGRADE		11
-	#define HIT			12
+	#define DEAD		12
 
 	#define SIMON_STAIR_SPEED_X			0.08f
 	#define SIMON_STAIR_SPEED_Y			0.08f
@@ -50,8 +51,8 @@
 	#define SIMON_DEFLECT_SPEED_Y		0.3f
 
 
-	#define SIMON_UNTOUCHABLE_TIME 3000
-
+	#define SIMON_UNTOUCHABLE_TIME		2000
+	#define SIMON_DEAD_TIME				3000
 	// Whip
 	#define WHIP		0
 	#define WHIP_1		1
@@ -64,12 +65,18 @@
 
 	#define KNIFE			0
 	#define WHIPITEM		1
-	#define HEART_BIG		2
-	#define HEART_SMALL		3
-	#define MONEYBAG		4
-	#define	AXE				5
-	#define BOOMERANG		6
-	#define HOLY_WATER		7
+	#define SMALL_HEART		2
+	#define BIG_HEART		3
+	#define MONEY_BAG_RED	4
+	#define MONEY_BAG_BLUE	5
+	#define MONEY_BAG_WHITE 6
+	#define MONEY_BAG		7
+	#define	AXE				8
+	#define BOOMERANG		9
+	#define HOLY_WATER		10
+	#define DOUBLE_SHOT		11
+	#define TRIPLE_SHOT		12
+	
 
 	#define ITEM_TIME_DESTROYED			5000
 
@@ -88,33 +95,19 @@
 	#define ZOMBIE_ACTIVE_BBOX_WIDTH			260
 	#define ZOMBIE_ACTIVE_BBOX_HEIGHT			150
 
-	#define LEOPAD_ACTIVE			0    
-	#define LEOPAD_DESTROYED		1
-	#define LEOPAD_INACTIVE			2
-	#define LEOPAD_IDLE				3
-	#define LEOPAD_JUMP				4
+	#define BAT_ACTIVE			0
+	#define BAT_DESTROYED		1
+	#define BAT_INACTIVE		3
+	#define BAT_IDLE			2
 
-	#define LEOPAD_RUNNING_SPEED_X		0.3f
-	#define LEOPAD_RUNNING_SPEED_Y		0.2f
-	#define LEOPAD_GRAVITY				0.001f
-	#define LEOPAD_RESPAWN_TIME			20000
-
-	#define LEOPAD_BBOX_WIDTH			10
-	#define LEOPAD_BBOX_HEIGHT			32
-	#define LEOPAD_ACTIVE_BBOX_WIDTH		100
-	#define LEOPAD_ACTIVE_BBOX_HEIGHT	200
-
-	#define BAT_ACTIVE		0
-	#define BAT_DESTROYED	1
-	#define BAT_INACTIVE		2
 	#define BAT_BBOX_WIDTH			10
 	#define BAT_BBOX_HEIGHT			32
-	#define BAT_ACTIVE_BBOX_WIDTH			400 
-	#define BAT_ACTIVE_BBOX_HEIGHT			200
+	#define BAT_ACTIVE_BBOX_WIDTH			100 
+	#define BAT_ACTIVE_BBOX_HEIGHT			100
 
-	#define BAT_FLYING_SPEED_X	0.12f
-	#define BAT_FLYING_SPEED_Y	0.1f
-	#define BAT_SPEED_VARIATION 0.004f
+	#define BAT_FLYING_SPEED_X	0.1f
+	#define BAT_FLYING_SPEED_Y	0.15f
+	#define BAT_SPEED_VARIATION 0.006f
 	#define BAT_RESPAWN_TIME	5000
 
 	#define ACTIVE			0
@@ -123,3 +116,48 @@
 
 	#define GROUND_BBOX_WIDTH 32
 	#define GROUND_BBOX_HEIGHT 32
+
+
+	#define BOSS_ACTIVE			0
+	#define BOSS_DESTROYED		1
+	#define BOSS_INACTIVE		2
+
+	#define BOSS_HP						16
+	#define BOSS_DEFAULT_TIME_TO_FLY	1000
+	#define BOSS_FAST_TIME_TO_FLY		750
+	#define BOSS_STOP_TIME_WAITING		1500
+
+	#define BOSS_BBOX_WIDTH						70
+	#define BOSS_BBOX_HEIGHT					46
+	#define BOSS_ACTIVE_BBOX_WIDTH				50
+	#define BOSS_ACTIVE_BBOX_HEIGHT				400
+	#define BOSS_RECT_RANDOMSPOT_BBOX_WIDTH		200
+	#define BOSS_RECT_RANDOMSPOT_BBOX_HEIGHT	200
+
+	#define ENEMY_DEFAULT_BBOX_WIDTH	32
+	#define ENEMY_DEFAULT_BBOX_HEIGHT	32
+
+	#define NORMAL				0
+	#define BREAK				1
+	// Wall pieces
+	#define	WALLPIECES_GRAVITY			0.0005f
+	#define WALLPIECES_TIME				2000
+
+	#define HUNCHBACK_ACTIVE			0
+	#define HUNCHBACK_DESTROYED			1
+	#define HUNCHBACK_INACTIVE			4
+	#define HUNCHBACK_IDLE				3
+	#define HUNCHBACK_JUMP				2
+
+	#define HUNCHBACK_RUNNING_SPEED_X	0.26f
+	#define HUNCHBACK_RUNNING_SPEED_Y	0.18f
+	#define HUNCHBACK_GRAVITY			0.001f
+
+
+
+	#define GHOST_ACTIVE			0
+	#define GHOST_DESTROYED			1
+	#define GHOST_INACTIVE			2
+
+	#define GHOST_FLYING_SPEED_X	0.12f
+	#define GHOST_FLYING_SPEED_Y	0.012f

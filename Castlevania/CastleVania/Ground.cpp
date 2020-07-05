@@ -1,5 +1,6 @@
 #include "Ground.h"
 
+
 Ground::Ground() : GameObject()
 {
 
@@ -7,7 +8,7 @@ Ground::Ground() : GameObject()
 
 void Ground::Render()
 {
-	/*RenderBoundingBox();*/
+	RenderBoundingBox();
 }
 
 void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -17,3 +18,4 @@ void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = l + GROUND_BBOX_WIDTH;
 	b = t + GROUND_BBOX_HEIGHT;
 }
+

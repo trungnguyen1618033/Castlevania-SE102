@@ -1,16 +1,25 @@
-#pragma once
+﻿#pragma once
 
 #include "GameObject.h"
 #include "Textures.h"
 #include "Define.h"
 #include "Animations.h"
 #include "Torch.h"
+#include "BreakWall.h"
+#include "Bat.h"
+#include "Knight.h"
+#include "Ghost.h"
+#include "HunchBack.h"
+#include "Raven.h"
+#include "Skeleton.h"
+#include "Zombie.h"
+#include "Boss.h"
 
 
 
 class Whip : public GameObject
 {
-	DWORD timeCheck;
+	int targetTypeHit = -1; // Loại mục tiêu đánh trúng (dùng để kiểm tra máu của boss...)
 public:
 	Whip();
 	~Whip() {};
@@ -26,6 +35,7 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	void Upgrade();
+	void SetTargetTypeHit(int x) { targetTypeHit = x; }
 
 };
 

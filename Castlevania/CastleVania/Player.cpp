@@ -6,6 +6,7 @@
 #define FILEPATH_TEX_HP				L"textures\\HP.png"
 #define FILEPATH_TEX_RECT			L"textures\\Rect.png"
 
+
 Player::Player(Game* game, PlayScene* scene)
 {
 	this->game = game;
@@ -18,11 +19,11 @@ Player::Player(Game* game, PlayScene* scene)
 
 Player::~Player()
 {
+	delete temporary;
 }
 
 void Player::Init()
 {
-	
 	// textures HP 
 	Textures* textures = Textures::GetInstance();
 	textures->Add(ID_TEX_HP, FILEPATH_TEX_HP, D3DCOLOR_XRGB(255, 255, 255));
@@ -70,17 +71,35 @@ void Player::Init()
 	information = "SCORE-000000 TIME 0000 SCENE 00\n";
 	information += "PLAYER                  -00\n";
 	information += "ENEMY                   -00\n";
+
+	
 }
 
 void Player::Update(DWORD dt)
 {
-	time += dt;
-	score = simon->GetScore();
-	energy = simon->GetEnergy();
-	life = simon->GetLife();
-	simonHP = simon->GetHP();
-	subWeapon = simon->GetSubWeapon();
-	this->stage = scene->GetId() + 1;
+	if (temp == true)
+	{
+		score = temporary[0];
+		energy = temporary[4];
+		life = temporary[5];
+		simonHP = temporary[1];
+		subWeapon = temporary[3];
+		SetTemp(false);
+	}
+	else
+	{
+		time += dt;
+		score = simon->GetScore();
+		energy = simon->GetEnergy();
+		life = simon->GetLife();
+		simonHP = simon->GetHP();
+		subWeapon = simon->GetSubWeapon();
+		//DebugOut(L"\n subWeapon: %d", subWeapon);
+		this->stage = scene->GetId() + 1;
+		GetTemporary();
+	}
+	
+
 
 	int remainTime = DEFAULT_TIME_PLAY - time / 1000;
 
@@ -105,6 +124,18 @@ void Player::Update(DWORD dt)
 	information += "ENEMY                   -" + life_str + "\n";
 }
 
+void Player::GetTemporary()
+{
+	temporary[0] = score;
+	temporary[1] = simonHP;
+	temporary[2] = stage;
+	temporary[3] = subWeapon;
+	temporary[4] = energy;
+	temporary[5] = life;
+	temporary[6] = bossHP;
+}
+
+
 void Player::Render()
 {
 	RECT rect;
@@ -116,7 +147,10 @@ void Player::Render()
 	}
 
 	// draw subWeaponBox
+	float x = game->GetCameraPositon().x;
+	float y = game->GetCameraPositon().y;
 	subWeaponBox->Draw(0, -1, 288, 32);
+	//DebugOut(L"\n subWeapon: %d", subWeapon);
 
 	if (subWeapon != -1) // simon get subweapon
 	{
@@ -140,3 +174,13 @@ void Player::Render()
 	}
 
 }
+
+void Player::Delete()
+{
+	subWeaponList.clear();
+	playerHP.clear();
+	enemyHP.clear();
+	loseHP.clear();
+}
+
+

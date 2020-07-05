@@ -384,7 +384,7 @@ void Game::Load(LPCWSTR gameFile)
 void Game::SwitchScene(int scene_id)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
-	SetRenderScene(true);
+	
 	current_scene = scene_id;
 
 	LPSCENE s = scenes[current_scene];
@@ -396,7 +396,9 @@ void Game::SwitchScene(int scene_id)
 
 	Game::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
-	//SetCamPos(0,0);
+
+	SetChangeScene(true);
+
 }
 
 void Game::_ParseSection_SETTINGS(string line)

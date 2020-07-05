@@ -14,8 +14,8 @@ TileMap::TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_wi
 	this->map_Width = map_width;
 	this->map_Height = map_height;
 
-	nums_row = map_Height / TILE_WIDTH;
-	nums_col = map_Width / TILE_HEIGHT;
+	nums_row = map_Height / TILE_HEIGHT;
+	nums_col = map_Width / TILE_WIDTH;
 
 	LoadResources();
 	Load_MapData();
@@ -94,13 +94,14 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 		
 		for (int j = start_col_to_draw; j <= end_col_to_draw; j++)
 		{
+			if (j >= nums_col + 1)
+				return;
 			float x = TILE_WIDTH * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32;
 			float y = TILE_HEIGHT * i + 80;
-			if (x / 32 == nums_col)
-				return;
 			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y);
 		}
 	}
+
 }
 
 TileMaps* TileMaps::_instance = NULL;

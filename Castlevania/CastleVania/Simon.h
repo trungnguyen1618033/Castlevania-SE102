@@ -9,7 +9,15 @@
 #include "Items.h"
 #include "Ground.h"
 #include "Portal.h"
-
+#include "BlockMove.h"
+#include "Knight.h"
+#include "Bat.h"
+#include "Ghost.h"
+#include "HunchBack.h"
+#include "Skeleton.h"
+#include "Raven.h"
+#include "Zombie.h"
+#include "Boss.h"
 
 using namespace std;
 
@@ -18,11 +26,16 @@ class Simon : public GameObject
 	bool isUntouchable = false;
 	DWORD untouchable_start = 0;
 
+
 	int score;
 	int life;
-	int HP;
+	int hp;
 	int energy;
 	int subWeapon;
+
+	float autoWalkDistance = 0;		// Khoảng cách 
+	int stateAfterAutoWalk = -1;	// Trạng thái sau khi auto-walk
+	int nxAfterAutoWalk = 0;		// Hướng Simon sau khi auto-walk
 
 public:
 	Simon();
@@ -33,15 +46,19 @@ public:
 	bool isGotChainItem = false;
 	bool isHitWeapons = false;
 
+	bool isFalling = false;
 	bool isTouchGround = false; 
-	bool isStandOnStair = false;
-	bool isMovingUp = false;
-	bool isMovingDown = false;
-	int stairDirection = 0; 
+	bool isStandOnStair = false; // trạng thái đang đứng trên cầu thang 
+	bool canMoveUpStair = false;	// có thể di chuyển lên cầu thang
+	bool canMoveDownStair = false;	// có thể di chuyển xuống cầu thang
+	bool isAutoWalk = false;		// tự động đi
+	int stairDirection = 0;			// 1: trái dưới - phải trên, -1: trái trên - phải dưới
+
+	bool isDead = false;
+
 
 	LPGAMEOBJECT stairCollided = nullptr;
 
-	bool IsTouchGround() { return isTouchGround; }
 	
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	void Render();
@@ -53,13 +70,15 @@ public:
 	bool IsStand() { return this->isStand; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
-	int GetHP() { return this->HP; }
+	int GetHP() { return this->hp; }
 	int GetEnergy() { return this->energy; }
 	int GetSubWeapon() { return this->subWeapon; }
 	
 
 	void LoseEnergy(int amount) { energy -= amount; }
 	void SetSubWeapon(int x) { subWeapon = x; }
+
+	// Kiểm tra va chạm với danh sách items
 	bool CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem);
 
 	bool IsGotChainItem() { return isGotChainItem; }
@@ -68,18 +87,26 @@ public:
 	bool IsHitWeapons() { return isHitWeapons; }
 	void SetHitWeapons(bool x) { isHitWeapons = x; }
 
+	// Kiểm tra va chạm với danh sách stairs
+	bool CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair);
 	bool IsStandOnStair() { return this->isStandOnStair; }
 	void SetStandOnStair(bool x) { this->isStandOnStair = x; }
-
-	bool IsMovingUp() { return this->isMovingUp; }
-	bool IsMovingDown() { return this->isMovingDown; }
 	int GetStairDirection() { return this->stairDirection; }
 	LPGAMEOBJECT GetStairCollided() { return this->stairCollided; }
-	bool CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair);
-	//
-	void StandOnStair();
 
+	// Simon đứng yên trên stairs
+	void StandOnStair();
+	// Auto-walk
+	void AutoWalk(float distance, int new_state, int new_nx);
+	void DoAutoWalk();
+
+	// Xác định trạng thái đang đánh
 	bool IsHit();
+
+	// Kiểm tra va chạm với vùng hoạt động của enemy
+	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects);
+
+	void LoseHP(int x);
 
 	
 };

@@ -15,7 +15,7 @@ void Sprite::Draw(int accordingCam, int nx, float x, float y, int alpha)
 {
 	Game* game = Game::GetInstance();
 	game->Draw(accordingCam, nx, x, y, texture, left, top, right, bottom, alpha);
-}
+}	
 
 
 Sprites* Sprites::_instance = NULL;

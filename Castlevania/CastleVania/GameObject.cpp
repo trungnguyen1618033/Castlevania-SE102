@@ -25,7 +25,7 @@ void GameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	Game::GetInstance()->Draw(1, nx, l, t, bbox, 0, 0, rect.right, rect.bottom, 90);
+	Game::GetInstance()->Draw(1, nx, l, t, bbox, 0, 0, rect.right, rect.bottom, 180);
 }
 
 /*
@@ -123,6 +123,7 @@ void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 	this->dt = dt;
 	dx = vx * dt;
 	dy = vy * dt;
+	
 }
 
 

@@ -39,6 +39,7 @@ public:
 
 	bool IsRenderingLastFrame() { return currentFrame == frames.size() - 1; }
 	int GetCurrentFrame() { return currentFrame; }
+	void SetCurrentFrame(int x) { currentFrame = x; }
 	int GetFramesSize() { return frames.size(); }
 	void SetAniStartTime(DWORD t) { animStartTime = t; }
 	void RenderByID(int currentID, int nx, float x, float y, int alpha = 255); // hàm dùng riêng để render whip -> giải quyết bài toán đồng bộ whip cử động tay của simon

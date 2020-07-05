@@ -35,6 +35,14 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void Update(DWORD dt)
 {
 	Game::GetInstance()->GetCurrentScene()->Update(dt);
+	if (Game::GetInstance()->GetChangeScene() == true)
+	{
+		player->Delete();
+		player = new Player(game, (PlayScene*)game->GetCurrentScene());
+		player->Init();
+		player->SetTemp(true);
+		Game::GetInstance()->SetChangeScene(false);
+	}
 	player->Update(dt);
 
 }

@@ -17,8 +17,10 @@ void Torch::Render()
 
 void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (state == EFFECTEXPLODE && animation_set->at(state)->IsOver(150))
-		this->isEnable = false;
+	if (state == EFFECTEXPLODE && animation_set->at(state)->IsOver(300) == true)
+	{
+		this->SetEnable(false);
+	}
 }
 
 void Torch::GetBoundingBox(float& left, float& top, float& right, float& bottom)
