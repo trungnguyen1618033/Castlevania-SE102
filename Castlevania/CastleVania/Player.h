@@ -13,8 +13,6 @@ protected:
 	PlayScene * scene;
 	Simon* simon;
 	
-	bool temp;
-
 	vector<LPSPRITE> playerHP;
 	vector<LPSPRITE> enemyHP;
 	vector<LPSPRITE> loseHP;
@@ -25,6 +23,8 @@ protected:
 	Sprite* subWeaponBox;
 	vector<LPSPRITE> subWeaponList;
 
+	/*bool checkIn = false;*/
+
 	int score;
 	int time;
 	int stage;
@@ -34,8 +34,6 @@ protected:
 	int simonHP;
 	int bossHP;
 
-	int temporary[7];
-
 public:
 
 	
@@ -44,11 +42,11 @@ public:
 
 	void Init();
 	void Update(DWORD dt);
-	void GetTemporary();
 	void Render();
 	void Delete();
 
-	void SetTemp(bool x) { temp = x; }
-	bool GetTemp() { return temp; }
+	//void SetCheckIn(bool x) { checkIn = x; }
+	//bool GetCheckIn() { return checkIn; }
 
+	//void SaveProperties(int s, int l, int h, int e, int w);
 };

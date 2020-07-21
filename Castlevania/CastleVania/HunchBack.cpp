@@ -8,8 +8,7 @@ HunchBack::HunchBack()
 	hp = 1;
 	score = 500;
 	attack = 2;
-	respawnWaitingTime = 0;
-	isJumping = false;
+	respawnWaitingTime = 5000;
 }
 
 void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -21,7 +20,6 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(HUNCHBACK_INACTIVE);
 		return;
 	}
-
 
 	vy += HUNCHBACK_GRAVITY * dt;
 	Enemy::Update(dt);
@@ -41,11 +39,6 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		x += dx;
 		y += dy;
-
-	/*	if (state == HUNCHBACK_JUMP)
-		{
-			SetState(HUNCHBACK_ACTIVE);
-		}*/
 	}
 	else
 	{
@@ -55,15 +48,13 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		x += dx;
 		y += min_ty * dy + ny * 0.1f;
-
 		if (ny == -1.0f)
 		{
-			vy = 0;
-
-			if (state == HUNCHBACK_JUMP)
+			if (state == HUNCHBACK_ACTIVE)
 			{
-				SetState(HUNCHBACK_ACTIVE);
+				vy = -HUNCHBACK_RUNNING_SPEED_Y;
 			}
+
 		}
 	}
 
@@ -88,6 +79,7 @@ void HunchBack::SetState(int state)
 			vx = HUNCHBACK_RUNNING_SPEED_X;
 		else 
 			vx = -HUNCHBACK_RUNNING_SPEED_X;
+		vy = -HUNCHBACK_RUNNING_SPEED_Y;
 		break;
 	case HUNCHBACK_DESTROYED:
 		vx = 0;
@@ -98,11 +90,8 @@ void HunchBack::SetState(int state)
 		y = entryPosition.y;
 		vx = 0;
 		vy = 0;
+		isSettedPosition = false;
 		StartRespawnTimeCounter();
-		break;
-	case HUNCHBACK_JUMP:
-		vy = HUNCHBACK_RUNNING_SPEED_Y;
-		isJumping = true;
 		break;
 	case HUNCHBACK_IDLE:
 		vx = 0;
@@ -129,8 +118,8 @@ void HunchBack::GetActiveBoundingBox(float& left, float& top, float& right, floa
 {
 	left = entryPosition.x + 160;
 	right = entryPosition.x + 180;
-	top = entryPosition.y ;
-	bottom = entryPosition.y + 96;
+	top = entryPosition.y + 32 ;
+	bottom = entryPosition.y + 160;
 }
 
 void HunchBack::LoseHP(int x)

@@ -8,12 +8,6 @@
 
 class Raven : public Enemy
 {
-	float velocityVariation;
-	bool isFlyToTarget = false;
-	bool isFlyToSimon = false;
-
-	int startTimeWaiting = 0;
-	bool isStopWaiting = false;
 public:
 	Raven();
 
@@ -26,6 +20,5 @@ public:
 
 	virtual void LoseHP(int x);
 
-	void StartStopTimeCounter() { isStopWaiting = true; startTimeWaiting = GetTickCount(); }
 };
 

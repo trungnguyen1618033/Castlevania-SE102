@@ -83,9 +83,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						isFalling = false;
 					}
 					else
-					{
-						y += dy;	
-					}
+						y += dy;
 				}
 				// Khi đang lên/xuống cầu thang, va chạm theo trục x sẽ không được xét tới
 				if (state == ASCEND || state == DESCEND)
@@ -101,6 +99,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						vy = 0;
 						isTouchGround = true;
 						isFalling = false;
+
 						x += e->obj->dx * 2;
 						
 					}
@@ -116,11 +115,14 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (dynamic_cast<Knight*>(e->obj))
 					{
 						Knight* knight = dynamic_cast<Knight*>(e->obj);
+						DebugOut(L"collision knight\n");
 						LoseHP(knight->GetAttack());
 					}
 					else if (dynamic_cast<Bat*>(e->obj))
 					{
 						Bat* bat = dynamic_cast<Bat*>(e->obj);
+						bat->SetState(BAT_DESTROYED);
+						DebugOut(L"collision bat\n");
 						LoseHP(bat->GetAttack());
 					}
 					else if (dynamic_cast<Ghost*>(e->obj))
@@ -220,6 +222,7 @@ void Simon::SetState(int state)
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		break;	
 	case ASCEND:
+		isStand = true;
 		if (nx > 0) 
 			vx = SIMON_STAIR_SPEED_X;
 		else 
@@ -352,6 +355,7 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem)
 			return true;
 		}
 	}
+	return false;
 }
 
 
@@ -377,16 +381,19 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 		{
 			//DebugOut(L"collision\n");
 
-			if (listStair->at(i)->GetState() == 0) stairDirection = 1;
-			else stairDirection = -1;
+			if (listStair->at(i)->GetState() == 0) 
+				stairDirection = 1;
+			else 
+				stairDirection = -1;
 
 			stairCollided = listStair->at(i);
 
 			// bậc thang ở dưới so với chân Simon->có thể di chuyển xuống.
-			if (simon_b < stair_b) 
-				canMoveDownStair = true;
+			
 			if (y >= stair_t - 35) 
 				canMoveUpStair = true;
+			if (simon_b < stair_b)
+				canMoveDownStair = true;
 
 			// kiểm tra xem simon có thể di chuyển lên/xuống hay ko
 			// (dựa vào toạ độ của 2 bậc liền kề hơn/kém nhau 32)
@@ -494,19 +501,32 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 			{
 				HunchBack* hunchback = dynamic_cast<HunchBack*>(enemy);
 				if (hunchback->GetState() == HUNCHBACK_IDLE)
-					hunchback->SetState(HUNCHBACK_JUMP);
+					hunchback->SetState(HUNCHBACK_ACTIVE);
 			}
 			else if (dynamic_cast<Bat*>(enemy))
 			{
 				Bat* bat = dynamic_cast<Bat*>(enemy);
-				bat->SetState(BAT_ACTIVE);
+				if (bat->IsEnable() == true)
+					bat->SetState(BAT_ACTIVE);
+			}
+			else if (dynamic_cast<Raven*>(enemy))
+			{
+				Raven* raven = dynamic_cast<Raven*>(enemy);
+				if (raven->IsEnable() == true)
+					raven->SetState(RAVEN_ACTIVE);
 			}
 			else if (dynamic_cast<Zombie*>(enemy))
 			{
 				Zombie* zombie = dynamic_cast<Zombie*>(enemy);
-
-				if (zombie->GetState() == ZOMBIE_INACTIVE && zombie->IsAbleToActivate() == true)
+				if (zombie->GetState() == ZOMBIE_INACTIVE && zombie->IsAbleToActivate())
 					zombie->SetState(ZOMBIE_ACTIVE);
+			}
+			else if (dynamic_cast<Skeleton*>(enemy))
+			{
+				Skeleton* skeleton = dynamic_cast<Skeleton*>(enemy);
+
+				if (skeleton->GetState() == SKELETON_INACTIVE)
+					skeleton->SetState(SKELETON_ACTIVE);
 			}
 			else if (dynamic_cast<Boss*>(enemy))
 			{
@@ -524,6 +544,17 @@ void Simon::LoseHP(int x)
 	if (hp <= 0)
 		hp = 0;
 }
+
+void Simon::SetSimon(int s, int l, int h, int e, int w)
+{
+	score = s;
+	life = l;
+	hp = h;
+	energy = e;
+	subWeapon = s;
+}
+
+
 
 
 

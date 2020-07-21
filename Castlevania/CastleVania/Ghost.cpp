@@ -7,9 +7,8 @@ Ghost::Ghost()
 	hp = 2;
 	score = 300;
 	attack = 2;
-	respawnWaitingTime = 5000;
+	respawnWaitingTime = 10000;
 
-	velocityVariation = 0.004f;
 }
 
 void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -24,11 +23,6 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	Enemy::Update(dt);
-
-	vy += velocityVariation;
-
-	if (vy >= GHOST_FLYING_SPEED_Y || vy <= -GHOST_FLYING_SPEED_Y)
-		velocityVariation *= -1;
 
 	x += dx;
 	y += dy;
@@ -83,9 +77,9 @@ void Ghost::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Ghost::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = entryPosition.x - 100;
+	left = entryPosition.x - 166;
 	top = entryPosition.y - 60;
-	right = entryPosition.x - 80;
+	right = entryPosition.x - 150;
 	bottom = entryPosition.y + 60;
 }
 

@@ -7,6 +7,7 @@
 4	textures\Items\Items.png	255	255	255
 8	textures\Weapons\Axe.png	255	255	255
 9	textures\Weapons\Bomerang.png	255	255	255
+10	textures\BreakWall.png	255	255	255
 13	textures\Candle.png	255	255	255
 14	textures\Weapons\HolyWater.png	255	255	255
 18	textures\Enemys\Ghost.png	255	255	255
@@ -118,6 +119,11 @@
 1402	32	0	64	26	14
 1403	64	0	96	26	14
 
+#BREAK WALL
+1001	0	0	32	32	10
+1002	32	0	64	32	10
+
+
 #GHOST
 1801	0	0	28	28	18
 1802	28	0	28	28	18
@@ -200,6 +206,12 @@
 # ==== Boomerang =========
 901	901	100
 902	901	100	902	100	903	100
+
+#Break wall
+1001	1001	100
+#Piece wall
+1002	1002	100
+
 
 #HOLY WATER
 1401	1401	100
@@ -340,18 +352,23 @@
 8	256	208	8	1
 8	288	240	8	1
 
+# BREAK WALL
+10	576	336	10
+
 # GHOST
-18	1244	368	18
+18	1308	368	18
 
 # HUNCHBACK
 19	852	272	19
+19	608	272	19
+19	352	208	19
 
 # SKELETON
-20	300	200	20
+20	96	272	20
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	400	336	0	432	400	4
+50	96	80	0	160	100	4
 
 # id	file_image_path	file_text	width	height
 [TILEMAP]

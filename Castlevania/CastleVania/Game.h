@@ -42,6 +42,13 @@ class Game
 	void _ParseSection_SCENES(string line);
 
 public:
+	int score;
+	int life;
+	int hp;
+	int energy;
+	int subWeapon;
+	int stateWhip;
+
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 	void Init(HWND hWnd);
@@ -88,5 +95,3 @@ public:
 
 	~Game();
 };
-
-

@@ -14,7 +14,7 @@ void Stair::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Stair::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Stair::GetBoundingBox(float& l, float& t, float& r, float& b)

@@ -8,7 +8,6 @@ Bat::Bat()
 	hp = 1;
 	score = 200;
 	attack = 2;
-	respawnWaitingTime = 0;
 }
 
 void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -21,6 +20,8 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(BAT_INACTIVE);
 		return;
 	}
+	if (state == BAT_IDLE)
+		return;
 
 	Enemy::Update(dt);
 
@@ -82,26 +83,23 @@ void Bat::SetState(int state)
 			-BAT_FLYING_SPEED_X;
 		vy = 0;
 		isDroppedItem = false;
-		respawnTime_Start = 0;
-		isRespawnWaiting = false;
 		break;
 	case BAT_DESTROYED:
 		vx = 0;
 		vy = 0;
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
+		SetEnable(false);
 		break;
 	case BAT_INACTIVE:
 		x = entryPosition.x;
 		y = entryPosition.y;
 		vx = 0;
 		vy = 0;
-		isSettedPosition = false;
 		StartRespawnTimeCounter();
 		break;
 	case BAT_IDLE:
 		vx = 0;
 		vy = 0;
-		isSettedPosition = false;
 		break;
 	default:
 		break;

@@ -57,7 +57,7 @@ void Game::Init(HWND hWnd)
 	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
 
 	// Initialize sprite helper from Direct3DX helper library
-	if(spriteHandler != NULL)
+	if (spriteHandler != NULL)
 		spriteHandler->Release();
 	D3DXCreateSprite(d3ddv, &spriteHandler);
 
@@ -201,7 +201,7 @@ void Game::ProcessKeyboard()
 	}
 
 
- 	keyHandler->KeyState((BYTE*)&keyStates);
+	keyHandler->KeyState((BYTE*)&keyStates);
 
 
 	// Collect all buffered events
@@ -384,18 +384,49 @@ void Game::Load(LPCWSTR gameFile)
 void Game::SwitchScene(int scene_id)
 {
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
-	
+	Game* game = Game::GetInstance();
 	current_scene = scene_id;
 
 	LPSCENE s = scenes[current_scene];
+
+	//Lấy các thuộc tính của simon ở màn trước
+	if (current_scene != 0)
+	{
+		PlayScene* scene = (PlayScene*)scenes[current_scene - 1];
+		Simon* simon = scene->GetPlayer();
+		game->score = simon->GetScore();
+		game->life = simon->GetLife();
+		game->hp = simon->GetHP();
+		game->energy = simon->GetEnergy();
+		game->subWeapon = simon->GetSubWeapon();
+
+		Whip* whip = scene->GetWhip();
+		game->stateWhip = whip->GetState();
+	}
+
 	s->Unload();
 
 	Textures::GetInstance()->Clear();
 	Sprites::GetInstance()->Clear();
 	Animations::GetInstance()->Clear();
 
-	Game::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+	game->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+
+	//Cập nhập các thuộc tính của simon từ màn trước đến màn tiếp theo
+	if (current_scene != 0)
+	{
+		PlayScene* scene = (PlayScene*)scenes[current_scene];
+		Simon* simon = scene->GetPlayer();
+		simon->SetScore(game->score);
+		simon->SetLife(game->life);
+		simon->SetHP(game->hp);
+		simon->SetEnergy(game->energy);
+		simon->SetSubWeapon(game->subWeapon);
+
+		Whip* whip = scene->GetWhip();
+		whip->SetState(game->stateWhip);
+	}
 
 	SetChangeScene(true);
 

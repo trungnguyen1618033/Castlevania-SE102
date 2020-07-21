@@ -4,15 +4,10 @@
 #define RAVEN_FLYING_SPEED_Y 0.1f
 Raven::Raven()
 {
-	velocityVariation = 0.05;
 	hp = 1;
 	score = 200;
 	attack = 2;
 	respawnWaitingTime = 0;
-	isFlyToTarget = false;
-	isFlyToSimon = false;
-	startTimeWaiting = 0;
-	isStopWaiting = false;
 }
 
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -25,28 +20,11 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(RAVEN_INACTIVE);
 		return;
 	}
-	if (isStopWaiting == true)
-	{
-		if (GetTickCount() - startTimeWaiting > 1000)
-		{
-			vx = vy = 0;
-			isStopWaiting = false;
-			startTimeWaiting = 0;
-			return;
-		}
-		else
-		{
-			Enemy::Update(dt);
-			vy += velocityVariation;
-			vx = -RAVEN_FLYING_SPEED_X;
 
-			x += dx;
-			y += dy;
-		}
-	}
-	
-	StartStopTimeCounter();
-	
+	GameObject::Update(dt);
+
+	x += dx;
+	y += dy;
 
 }
 
@@ -107,10 +85,10 @@ void Raven::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void Raven::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = entryPosition.x - 300;
-	top = entryPosition.y ;
-	right = entryPosition.x +100 ;
-	bottom = entryPosition.y  + 100;
+	left = entryPosition.x - 192;
+	top = entryPosition.y - 96 ;
+	right = entryPosition.x - 160;
+	bottom = entryPosition.y  + 160;
 }
 
 void Raven::LoseHP(int x)

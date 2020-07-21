@@ -12,7 +12,7 @@ Skeleton::Skeleton()
 	hp = 1;
 	score = 300;
 	attack = 2 + rand() % 3;
-	respawnWaitingTime = 3000;
+	respawnWaitingTime = 5000;
 	isJumping = false;
 }
 
@@ -26,10 +26,17 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
+	if (state == SKELETON_HIT && animation_set->at(state)->IsOver(200) == true)
+	{
+		SetState(SKELETON_ACTIVE);
+		return;
+	}
 
-	vy += SKELETON_GRAVITY * dt;
+	if (state == SKELETON_INACTIVE)
+		return;
+
 	Enemy::Update(dt);
-
+	vy += SKELETON_GRAVITY * dt;
 
 	// Check collision between zombie and ground (jumping on ground)
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -106,6 +113,13 @@ void Skeleton::SetState(int state)
 		StartRespawnTimeCounter();
 		break;
 	case SKELETON_JUMP:
+		vx = 0.1;
+		vy = -0.7;
+		isDroppedItem = false;
+		respawnTime_Start = 0;
+		isRespawnWaiting = false;
+		break;
+	case SKELETON_HIT:
 		vx = vy = 0;
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		break;
@@ -124,10 +138,10 @@ void Skeleton::GetBoundingBox(float& left, float& top, float& right, float& bott
 
 void Skeleton::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = entryPosition.x ;
-	right = entryPosition.x ;
+	left = entryPosition.x + 224;
+	right = entryPosition.x + 256;
 	top = entryPosition.y ;
-	bottom = entryPosition.y;
+	bottom = entryPosition.y + 160;
 }
 
 void Skeleton::LoseHP(int x)

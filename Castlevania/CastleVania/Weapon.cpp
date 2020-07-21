@@ -94,10 +94,19 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 			if (dynamic_cast<Torch*>(e->obj))
 			{
 				Torch* torch = dynamic_cast<Torch*>(e->obj);
+				
+				if(torch->IsEnable() == true)
+				{ 
 				torch->SetState(EFFECTEXPLODE);
 				this->isEnable = false;
 				if (state == KNIFE || state == AXE || state == BOOMERANG)
 					this->isEnable = false;
+				}
+				else
+				{
+					x += dx;
+					y += dy;
+				}
 			}
 			else if (dynamic_cast<Simon*>(e->obj))
 			{
@@ -106,8 +115,6 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 			}
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
-				if (state == AXE)
-					SetEnable(false);
 				if (state == HOLY_WATER && e->ny == -1)
 					SetState(HOLY_WATER_BROKEN);
 
@@ -203,13 +210,17 @@ void Weapon::SetState(int state)
 	switch (state)
 	{
 	case KNIFE:
-		if (nx > 0) vx = KNIFE_SPEED;
-		else vx = -KNIFE_SPEED;
+		if (nx > 0)
+			vx = KNIFE_SPEED;
+		else 
+			vx = -KNIFE_SPEED;
 		vy = 0;
 		break;
 	case AXE:
-		if (nx > 0) vx = AXE_SPEED_X;
-		else vx = -AXE_SPEED_X;
+		if (nx > 0) 
+			vx = AXE_SPEED_X;
+		else 
+			vx = -AXE_SPEED_X;
 		vy = -AXE_SPEED_Y;
 		break;
 	case BOOMERANG:

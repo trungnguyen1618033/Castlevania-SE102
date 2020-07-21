@@ -12,7 +12,7 @@ Torch::Torch()
 void Torch::Render()
 {
 	animation_set->at(GetState())->Render(1, nx, x, y);
-
+	RenderBoundingBox();
 }
 
 void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

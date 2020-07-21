@@ -19,7 +19,6 @@ Player::Player(Game* game, PlayScene* scene)
 
 Player::~Player()
 {
-	delete temporary;
 }
 
 void Player::Init()
@@ -72,35 +71,38 @@ void Player::Init()
 	information += "PLAYER                  -00\n";
 	information += "ENEMY                   -00\n";
 
-	
 }
 
 void Player::Update(DWORD dt)
 {
-	if (temp == true)
+	time += dt;
+	score = simon->GetScore();
+	energy = simon->GetEnergy();
+	life = simon->GetLife();
+	simonHP = simon->GetHP();
+	subWeapon = simon->GetSubWeapon();
+	//DebugOut(L"\n subWeapon: %d", subWeapon);
+
+	switch (scene->GetId())
 	{
-		score = temporary[0];
-		energy = temporary[4];
-		life = temporary[5];
-		simonHP = temporary[1];
-		subWeapon = temporary[3];
-		SetTemp(false);
-	}
-	else
-	{
-		time += dt;
-		score = simon->GetScore();
-		energy = simon->GetEnergy();
-		life = simon->GetLife();
-		simonHP = simon->GetHP();
-		subWeapon = simon->GetSubWeapon();
-		//DebugOut(L"\n subWeapon: %d", subWeapon);
-		this->stage = scene->GetId() + 1;
-		GetTemporary();
+	case 0:
+		this->stage = 1;
+		break;
+	case 1:
+	case 2:
+		this->stage = 2;
+		break;
+	case 3:
+	case 4:
+		this->stage = 3;
+		break;
+	case 5:
+		this->stage = 4;
+		break;
+	default:
+		break;
 	}
 	
-
-
 	int remainTime = DEFAULT_TIME_PLAY - time / 1000;
 
 	string score_str = to_string(score);
@@ -124,16 +126,6 @@ void Player::Update(DWORD dt)
 	information += "ENEMY                   -" + life_str + "\n";
 }
 
-void Player::GetTemporary()
-{
-	temporary[0] = score;
-	temporary[1] = simonHP;
-	temporary[2] = stage;
-	temporary[3] = subWeapon;
-	temporary[4] = energy;
-	temporary[5] = life;
-	temporary[6] = bossHP;
-}
 
 
 void Player::Render()
@@ -182,5 +174,15 @@ void Player::Delete()
 	enemyHP.clear();
 	loseHP.clear();
 }
+//
+//void Player::SaveProperties(int s, int l, int h, int e, int w)
+//{
+//	SetCheckIn(true);
+//	score = s;
+//	life = l;
+//	simonHP = h;
+//	energy = e;
+//	subWeapon = s;
+//}
 
 

@@ -73,10 +73,17 @@ public:
 	int GetHP() { return this->hp; }
 	int GetEnergy() { return this->energy; }
 	int GetSubWeapon() { return this->subWeapon; }
+
+	void AddScore(int x) { score += x; }
+	void LoseEnergy(int x) { energy -= x; }
+	void LoseHP(int x);
+	void SetScore(int x) { score = x; }
+	void SetLife(int x) { life = x; }
+	void SetHP(int x) { hp = x; }
+	void SetEnergy(int x) { energy = x; }
+	void SetSubWeapon(int x) { subWeapon = x; }
 	
 
-	void LoseEnergy(int amount) { energy -= amount; }
-	void SetSubWeapon(int x) { subWeapon = x; }
 
 	// Kiểm tra va chạm với danh sách items
 	bool CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem);
@@ -106,8 +113,10 @@ public:
 	// Kiểm tra va chạm với vùng hoạt động của enemy
 	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects);
 
-	void LoseHP(int x);
 
+
+	void SetSimon(int s, int l, int h, int e ,int w);
+	
 	
 };
 

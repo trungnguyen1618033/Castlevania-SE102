@@ -18,6 +18,7 @@
 #include "HunchBack.h"
 #include "Raven.h"
 #include "Skeleton.h"
+#include "Bone.h"
 
 
 
@@ -65,7 +66,9 @@ public:
 	virtual void Unload();	
 
 	Simon* GetPlayer() { return player; }
+	Whip* GetWhip() { return whip; }
 	Weapon* GetWeapon() { return this->weapon; }
+	
 
 	void SetDropItems();
 	void SetInactivation();

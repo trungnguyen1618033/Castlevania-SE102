@@ -3,7 +3,6 @@
 
 class HunchBack : public Enemy
 {
-	bool isJumping;
 public:
 	HunchBack();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);

@@ -1,7 +1,7 @@
 ﻿#include "Knight.h"
 
 
-#define BLACK_KNIGHT_SPEED	0.03f
+#define KNIGHT_SPEED	0.03f
 
 Knight::Knight()
 {
@@ -23,11 +23,21 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (x < left) {
 		nx = 1;
-		vx = BLACK_KNIGHT_SPEED;
+		vx = KNIGHT_SPEED;
 	}
 	else if (x > right) {
 		nx = -1;
-		vx = -BLACK_KNIGHT_SPEED;
+		vx = -KNIGHT_SPEED;
+	}
+	else
+	{
+		if (x > left && x < right)
+		{
+			if (nx == 1)
+				vx = KNIGHT_SPEED;
+			else
+				vx = -KNIGHT_SPEED;
+		}
 	}
 	
 	Enemy::Update(dt);
@@ -84,9 +94,9 @@ void Knight::SetState(int state)
 	{
 	case KNIGHT_ACTIVE:
 		if (nx > 0) 
-			vx = BLACK_KNIGHT_SPEED;
+			vx = KNIGHT_SPEED;
 		else 
-			vx = -BLACK_KNIGHT_SPEED;
+			vx = -KNIGHT_SPEED;
 		vy = 0;
 		isDroppedItem = false;
 		respawnTime_Start = 0;
@@ -95,12 +105,12 @@ void Knight::SetState(int state)
 	case KNIGHT_DESTROYED:
 		vx = 0;
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
+		SetEnable(false);
 		break;
 	case KNIGHT_INACTIVE:
 		x = entryPosition.x;
 		y = entryPosition.y;
 		vx = 0;
-		isSettedPosition = false;
 		StartRespawnTimeCounter();
 		break;
 	default:

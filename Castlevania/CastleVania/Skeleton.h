@@ -3,8 +3,9 @@
 #include "Ground.h"
 #define SKELETON_ACTIVE			0
 #define SKELETON_DESTROYED		1
-#define SKELETON_INACTIVE		3
+#define SKELETON_INACTIVE		4
 #define SKELETON_JUMP			2
+#define SKELETON_HIT			3
 
 
 class Skeleton : public Enemy

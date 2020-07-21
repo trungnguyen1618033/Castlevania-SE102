@@ -39,8 +39,8 @@ void Update(DWORD dt)
 	{
 		player->Delete();
 		player = new Player(game, (PlayScene*)game->GetCurrentScene());
+
 		player->Init();
-		player->SetTemp(true);
 		Game::GetInstance()->SetChangeScene(false);
 	}
 	player->Update(dt);
