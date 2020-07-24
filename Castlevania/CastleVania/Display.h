@@ -6,24 +6,25 @@
 #include "PlayScene.h"
 
 
-class Player
+class Display
 {
 protected:
 	Game* game;
 	PlayScene * scene;
 	Simon* simon;
-	
-	vector<LPSPRITE> playerHP;
-	vector<LPSPRITE> enemyHP;
-	vector<LPSPRITE> loseHP;
+	Boss* boss;
 
 	ID3DXFont* font;
 	string information;
 	
+	vector<LPSPRITE> playerHP;
+	vector<LPSPRITE> enemyHP;
+	vector<LPSPRITE> loseHP;
+	
 	Sprite* subWeaponBox;
 	vector<LPSPRITE> subWeaponList;
+	vector<LPSPRITE> itemList;
 
-	/*bool checkIn = false;*/
 
 	int score;
 	int time;
@@ -33,15 +34,16 @@ protected:
 	int life;
 	int simonHP;
 	int bossHP;
+	int item;
 
 public:
 
 	
-	Player(Game* game, PlayScene * scene);
-	~Player();
+	Display(Game* game, PlayScene * scene);
+	~Display();
 
 	void Init();
-	void Update(DWORD dt);
+	void Update(DWORD dt, bool stopwatch);
 	void Render();
 	void Delete();
 

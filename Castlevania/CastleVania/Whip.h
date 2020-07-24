@@ -12,6 +12,7 @@
 #include "HunchBack.h"
 #include "Raven.h"
 #include "Skeleton.h"
+#include "Bone.h"
 #include "Zombie.h"
 #include "Boss.h"
 
@@ -19,6 +20,7 @@
 
 class Whip : public GameObject
 {
+	int scoreReceived = 0;  // Điểm nhận được sau khi trúng mục tiêu
 	int targetTypeHit = -1; // Loại mục tiêu đánh trúng (dùng để kiểm tra máu của boss...)
 public:
 	Whip();

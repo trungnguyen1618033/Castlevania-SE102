@@ -118,10 +118,22 @@ void Items::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		right = left + 28;
 		bottom = top + 28;
 		break;
+	case STOP_WATCH:
+		right = left + 26;
+		bottom = top + 28;
+		break;
 	case DOUBLE_SHOT:
 	case TRIPLE_SHOT:
 		right = left + 28;
 		bottom = top + 28;
+		break;
+	case MAGIC_CRYSTAL:
+		right = left + 28;
+		bottom = top + 32;
+		break;
+	case CROWN:
+		right = left + 28;
+		bottom = top + 32;
 		break;
 	default:
 		right = left;

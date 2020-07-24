@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Display.h"
 #define FILEPATH_FONT				L"font\\prstart.ttf"
 #define DEFAULT_TIME_PLAY			300
 #define ID_TEX_HP					97
@@ -7,21 +7,22 @@
 #define FILEPATH_TEX_RECT			L"textures\\Rect.png"
 
 
-Player::Player(Game* game, PlayScene* scene)
+Display::Display(Game* game, PlayScene* scene)
 {
 	this->game = game;
 	this->scene = scene;
 	this->simon = scene->GetPlayer();
+	this->boss = scene->GetBoss();
 
 	time = 0;
 }
 
 
-Player::~Player()
+Display::~Display()
 {
 }
 
-void Player::Init()
+void Display::Init()
 {
 	// textures HP 
 	Textures* textures = Textures::GetInstance();
@@ -33,13 +34,13 @@ void Player::Init()
 
 	for (int i = 0; i < 16; i++)
 	{
-		Sprite* player = new Sprite(100000, 0, 0, 8, 15, texHP);
+		Sprite* player = new Sprite(10000, 0, 0, 8, 15, texHP);
 		playerHP.push_back(player);
 
-		Sprite* lose = new Sprite(100001, 8, 0, 16, 15, texHP);
+		Sprite* lose = new Sprite(10001, 8, 0, 16, 15, texHP);
 		loseHP.push_back(lose);
 
-		Sprite* enemy = new Sprite(100002, 16, 0, 24, 15, texHP);
+		Sprite* enemy = new Sprite(10002, 16, 0, 24, 15, texHP);
 		enemyHP.push_back(enemy);
 	}
 
@@ -51,6 +52,11 @@ void Player::Init()
 	subWeaponList.push_back(sprites->Get(801));
 	subWeaponList.push_back(sprites->Get(901));
 	subWeaponList.push_back(sprites->Get(1401));
+	subWeaponList.push_back(sprites->Get(407));
+
+	// Khởi tạo list item (double shot, triple shot)
+	itemList.push_back(sprites->Get(408));
+	itemList.push_back(sprites->Get(409));
 
 	// Font
 	font = NULL;
@@ -73,15 +79,13 @@ void Player::Init()
 
 }
 
-void Player::Update(DWORD dt)
+void Display::Update(DWORD dt, bool stopwatch)
 {
-	time += dt;
 	score = simon->GetScore();
 	energy = simon->GetEnergy();
 	life = simon->GetLife();
 	simonHP = simon->GetHP();
 	subWeapon = simon->GetSubWeapon();
-	//DebugOut(L"\n subWeapon: %d", subWeapon);
 
 	switch (scene->GetId())
 	{
@@ -102,9 +106,28 @@ void Player::Update(DWORD dt)
 	default:
 		break;
 	}
+
+	if (scene->IsDoubleShot()) 
+		item = 0;		// double shot
+	else if (scene->IsTripleShot()) 
+		item = 1;		// trip shot
+	else 
+		item = -1;
+
+	if (stopwatch == false) // khi sử dụng stop watch thì không đếm thời gian
+		time += dt;
 	
 	int remainTime = DEFAULT_TIME_PLAY - time / 1000;
+	if (remainTime <= 0)
+	{
+		remainTime = 0;
 
+		if (simon->isTouchGround == true && simon->GetState() != DEAD)
+			simon->SetState(DEAD);
+	}
+
+
+	// Chuẩn hoá chuỗi
 	string score_str = to_string(score);
 	while (score_str.length() < 6) score_str = "0" + score_str;
 
@@ -128,7 +151,7 @@ void Player::Update(DWORD dt)
 
 
 
-void Player::Render()
+void Display::Render()
 {
 	RECT rect;
 	SetRect(&rect, 0, 15, SCREEN_WIDTH, 80);
@@ -139,15 +162,15 @@ void Player::Render()
 	}
 
 	// draw subWeaponBox
-	float x = game->GetCameraPositon().x;
-	float y = game->GetCameraPositon().y;
 	subWeaponBox->Draw(0, -1, 288, 32);
-	//DebugOut(L"\n subWeapon: %d", subWeapon);
 
 	if (subWeapon != -1) // simon get subweapon
 	{
-		subWeaponList[subWeapon]->Draw(0, -1, 303, 40);
+		subWeaponList[subWeapon]->Draw(0, -1, 305, 38);
 	}
+
+	if (item != -1)
+		itemList[item]->Draw(0, -1, 450, 38);
 
 	for (int i = 0; i < simonHP; i++)
 	{
@@ -165,24 +188,19 @@ void Player::Render()
 		enemyHP[i]->Draw(0, -1, 106 + i * 9, 47);
 	}
 
+	for (int i = bossHP; i < 16; i++)
+		loseHP[i]->Draw(0, -1, 106 + i * 9, 47);
+
 }
 
-void Player::Delete()
+void Display::Delete()
 {
 	subWeaponList.clear();
 	playerHP.clear();
 	enemyHP.clear();
 	loseHP.clear();
 }
-//
-//void Player::SaveProperties(int s, int l, int h, int e, int w)
-//{
-//	SetCheckIn(true);
-//	score = s;
-//	life = l;
-//	simonHP = h;
-//	energy = e;
-//	subWeapon = s;
-//}
+
+
 
 

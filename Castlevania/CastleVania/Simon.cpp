@@ -17,6 +17,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	GameObject::Update(dt);
 	
+	// Update vy
 	if (isStandOnStair == false && isAutoWalk == false)
 	{
 		if (vy > -0.2 && vy < 0.2)
@@ -29,6 +30,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isAutoWalk == true)
 		DoAutoWalk();
 
+	// Reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > SIMON_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
@@ -159,6 +161,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 						SetState(HURT);
 					}
+					StartUntouchable();
+					LoseHP(2);
 				}
 				else
 				{
@@ -263,13 +267,17 @@ void Simon::SetState(int state)
 	case STANDING:
 	case DUCKING:
 	case UPGRADE:
+		vx = 0;
+		vy = 0;
 		animation_set->at(state)->Reset();
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		isStandOnStair = false;
 		break;
 	case DEAD:
+		isUntouchable = false;
 		vx = 0;
 		vy = 0;
+		life -= 1;
 		break;
 	default:
 		break;
@@ -318,6 +326,12 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem)
 			case BOOMERANG:
 				subWeapon = 2;
 				break;
+			case HOLY_WATER:
+				subWeapon = 3;
+				break;
+			case STOP_WATCH:
+				subWeapon = 4;
+				break;
 			case SMALL_HEART:
 				energy += 1;
 				break;
@@ -342,12 +356,14 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem)
 				score += 1000;
 				break;
 			case DOUBLE_SHOT:
+				stateShot = idItem;
+				isGotDoubleShotItem = true;
 				break;
 			case TRIPLE_SHOT:
+				stateShot = idItem;
+				isGotTripleShotItem = true;
 				break;
-			case HOLY_WATER:
-				subWeapon = 3;
-				break;
+			
 			default:
 				break;
 			}

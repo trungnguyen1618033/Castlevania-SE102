@@ -12,7 +12,6 @@ Whip::Whip()
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//DebugOut(L"\n test \t");
 
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
@@ -29,6 +28,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->SetState(EFFECTEXPLODE);
+				targetTypeHit = CANDLE;
 			}
 		}
 		else if (dynamic_cast<BreakWall*>(obj))
@@ -41,6 +41,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->SetState(BREAK);
+				targetTypeHit = BREAKWALL;
 			}
 		}
 		else if (dynamic_cast<Knight*>(obj))
@@ -51,9 +52,13 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->LoseHP(1);
+				targetTypeHit = KNIGHT;
+
+				if (e->GetState() == KNIGHT_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
 		else if (dynamic_cast<Bat*>(obj))
@@ -64,9 +69,13 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->LoseHP(1);
+				targetTypeHit = BAT;
+
+				if (e->GetState() == BAT_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
 		else if (dynamic_cast<Ghost*>(obj))
@@ -77,9 +86,13 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->LoseHP(1);
+				targetTypeHit = GHOST;
+
+				if (e->GetState() == GHOST_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
 		else if (dynamic_cast<HunchBack*>(obj))
@@ -90,9 +103,13 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->LoseHP(1);
+				targetTypeHit = HUNCHBACK;
+
+				if (e->GetState() == HUNCHBACK_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
 		else if (dynamic_cast<Raven*>(obj))
@@ -103,9 +120,13 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->LoseHP(1);
+				targetTypeHit = RAVEN;
+
+				if (e->GetState() == RAVEN_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
 		else if (dynamic_cast<Skeleton*>(obj))
@@ -116,9 +137,27 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->LoseHP(1);
+				targetTypeHit = SKELETON;
+
+				if (e->GetState() == SKELETON_DESTROYED)
+					scoreReceived += e->GetScore();
+			}
+		}
+		else if (dynamic_cast<Bone*>(obj))
+		{
+			Bone* e = dynamic_cast<Bone*> (obj);
+
+			float left, top, right, bottom;
+
+			e->GetBoundingBox(left, top, right, bottom);
+
+			if (CheckCollision(left, top, right, bottom) == true)
+			{
+				e->SetEnable(false);
+				targetTypeHit = BONE;
 			}
 		}
 		else if (dynamic_cast<Zombie*>(obj))
@@ -129,9 +168,13 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			e->GetBoundingBox(left, top, right, bottom);
 
-			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và zombie
+			if (CheckCollision(left, top, right, bottom) == true)
 			{
 				e->LoseHP(1);
+				targetTypeHit = ZOMBIE;
+
+				if (e->GetState() == ZOMBIE_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
 		else if (dynamic_cast<Boss*>(obj))
@@ -145,9 +188,12 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (CheckCollision(left, top, right, bottom) == true) // va chạm giữa roi và boss
 			{
 				e->LoseHP(1);
+				targetTypeHit = BOSS;
+
+				if (e->GetState() == BOSS_DESTROYED)
+					scoreReceived += e->GetScore();
 			}
 		}
-	
 	}
 }
 

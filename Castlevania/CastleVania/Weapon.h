@@ -8,10 +8,11 @@
 
 class Weapon : public GameObject
 {
+	int scoreReceived = 0;  // Điểm nhận được sau khi trúng mục tiêu
+	int targetTypeHit = -1; // Loại mục tiêu đánh trúng (dùng để kiểm tra máu của boss...)
+
 	bool isHolyWater = false;
 	int holyWaterCounter = 0;
-
-	int targetTypeHit = -1; // Loại mục tiêu đánh trúng (dùng để kiểm tra máu của boss...)
 
 public:
 	Weapon();

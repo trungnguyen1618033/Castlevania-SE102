@@ -74,9 +74,11 @@
 	#define	AXE				8
 	#define BOOMERANG		9
 	#define HOLY_WATER		10
-	#define DOUBLE_SHOT		11
-	#define TRIPLE_SHOT		12
-	
+	#define STOP_WATCH		11
+	#define DOUBLE_SHOT		12
+	#define TRIPLE_SHOT		13
+	#define MAGIC_CRYSTAL	14
+	#define CROWN			15
 
 	#define ITEM_TIME_DESTROYED			5000
 
@@ -161,3 +163,42 @@
 
 	#define GHOST_FLYING_SPEED_X	0.1f
 	#define GHOST_FLYING_SPEED_Y	0.012f
+
+	#define TORCH		0
+	#define KNIGHT		1
+	#define BAT			2
+	#define	GHOST		3
+	#define	HUNCHBACK	4
+	#define SKELETON	5
+	#define BONE		6
+	#define RAVEN		7
+	#define ZOMBIE		8
+	#define BOSS		9
+	#define BREAKWALL	10
+
+
+	#define KNIFE_SPEED					0.2f
+	#define KNIFE_BBOX_WIDTH			32
+	#define KNIFE_BBOX_HEIGHT			32
+	#define AXE_BBOX_WIDTH				30
+	#define AXE_BBOX_HEIGHT				28
+
+	#define WEAPON_KNIFE				0
+	#define	WEAPON_AXE					1
+	#define WEAPON_BOOMERANG			2
+	#define WEAPON_HOLY_WATER			3
+	#define	WEAPON_STOP_WATCH			4
+	#define HOLY_WATER_BROKEN			5
+
+
+	#define AXE_SPEED_X			0.2f
+	#define AXE_SPEED_Y			0.5f
+	#define AXE_GRAVITY			0.001f
+
+	#define BOOMERANG_SPEED		0.5f
+	#define BOOMERANG_TURNBACK_SPEED		0.01f
+
+	#define HOLY_WATER_GRAVITY	0.001f
+	#define HOLY_WATER_SPEED_X	0.25f
+	#define HOLY_WATER_SPEED_Y	0.1f
+	#define HOLY_WATER_TIME_EFFECT	1000

@@ -1,28 +1,5 @@
 ﻿#include "Weapon.h"
 
-#define KNIFE_SPEED					0.2f
-#define KNIFE_BBOX_WIDTH			32
-#define KNIFE_BBOX_HEIGHT			32
-#define AXE_BBOX_WIDTH				30
-#define AXE_BBOX_HEIGHT				28
-
-#define KNIFE				0
-#define	AXE					1
-#define BOOMERANG			2
-#define HOLY_WATER			3
-#define HOLY_WATER_BROKEN	4
-
-#define AXE_SPEED_X			0.2f
-#define AXE_SPEED_Y			0.5f
-#define AXE_GRAVITY			0.001f
-
-#define BOOMERANG_SPEED		0.5f
-#define BOOMERANG_TURNBACK_SPEED		0.01f
-
-#define HOLY_WATER_GRAVITY	0.001f
-#define HOLY_WATER_SPEED_X	0.25f
-#define HOLY_WATER_SPEED_Y	0.1f
-#define HOLY_WATER_TIME_EFFECT	1000
 
 Weapon::Weapon() : GameObject()
 {
@@ -35,7 +12,7 @@ Weapon::Weapon() : GameObject()
 
 void Weapon::Render()
 {
-	if (this->isEnable == true)
+	if (this->isEnable == true && state != WEAPON_STOP_WATCH)
 		animation_set->at(state)->Render(1, nx, x, y);
 }
 
@@ -54,14 +31,14 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 
 	switch (state)
 	{
-	case AXE:
+	case WEAPON_AXE:
 		vy += AXE_GRAVITY * dt;
 		break;
-	case BOOMERANG:
+	case WEAPON_BOOMERANG:
 		if (nx > 0) vx -= BOOMERANG_TURNBACK_SPEED;
 		else vx += BOOMERANG_TURNBACK_SPEED;
 		break;
-	case HOLY_WATER:
+	case WEAPON_HOLY_WATER:
 		vy += HOLY_WATER_GRAVITY * dt;
 		break;
 	default:
@@ -94,80 +71,118 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
 			if (dynamic_cast<Torch*>(e->obj))
 			{
 				Torch* torch = dynamic_cast<Torch*>(e->obj);
-				
-				if(torch->IsEnable() == true)
-				{ 
 				torch->SetState(EFFECTEXPLODE);
-				this->isEnable = false;
-				if (state == KNIFE || state == AXE || state == BOOMERANG)
-					this->isEnable = false;
-				}
-				else
-				{
-					x += dx;
-					y += dy;
-				}
-			}
-			else if (dynamic_cast<Simon*>(e->obj))
-			{
-				if (state == BOOMERANG)
-					SetEnable(false);
+				targetTypeHit = TORCH;
+				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
-				if (state == HOLY_WATER && e->ny == -1)
+				if (state == WEAPON_HOLY_WATER && e->ny == -1)
 					SetState(HOLY_WATER_BROKEN);
 
 				x += dx;
 				y += dy;
 			}
+			
 			else if (dynamic_cast<Knight*>(e->obj))
 			{
 				Knight* knight = dynamic_cast<Knight*>(e->obj);
 				knight->LoseHP(2);
+				targetTypeHit = KNIGHT;
+
+				if (knight->GetState() == KNIGHT_DESTROYED)
+					scoreReceived += knight->GetScore();
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Bat*>(e->obj))
 			{
 				Bat* bat = dynamic_cast<Bat*>(e->obj);
 				bat->LoseHP(2);
+				targetTypeHit = BAT;
+
+				if (bat->GetState() == BAT_DESTROYED)
+					scoreReceived += bat->GetScore();
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Ghost*>(e->obj))
 			{
 				Ghost* ghost = dynamic_cast<Ghost*>(e->obj);
 				ghost->LoseHP(2);
+				targetTypeHit = GHOST;
+
+				if (ghost->GetState() == GHOST_DESTROYED)
+					scoreReceived += ghost->GetScore();
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<HunchBack*>(e->obj))
 			{
 				HunchBack* hunchback = dynamic_cast<HunchBack*>(e->obj);
 				hunchback->LoseHP(2);
+				targetTypeHit = HUNCHBACK;
+
+				if (hunchback->GetState() == HUNCHBACK_DESTROYED)
+					scoreReceived += hunchback->GetScore();
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Raven*>(e->obj))
 			{
 				Raven* raven = dynamic_cast<Raven*>(e->obj);
 				raven->LoseHP(2);
+				targetTypeHit = RAVEN;
+
+				if (raven->GetState() == HUNCHBACK_DESTROYED)
+					scoreReceived += raven->GetScore();
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Skeleton*>(e->obj))
 			{
 				Skeleton* skeleton = dynamic_cast<Skeleton*>(e->obj);
 				skeleton->LoseHP(2);
+				targetTypeHit = SKELETON;
+
+				if (skeleton->GetState() == SKELETON_DESTROYED)
+					scoreReceived += skeleton->GetScore();
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Zombie*>(e->obj))
 			{
 				Zombie* zombie = dynamic_cast<Zombie*>(e->obj);
 				zombie->LoseHP(2);
+
+				targetTypeHit = ZOMBIE;
+
+				if (zombie->GetState() == ZOMBIE_DESTROYED)
+					scoreReceived += zombie->GetScore();
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Bone*>(e->obj))
+			{
+				Bone* bone = dynamic_cast<Bone*>(e->obj);
+				bone->SetEnable(false);
+				targetTypeHit = BONE;
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Boss*>(e->obj))
 			{
 				Boss* boss = dynamic_cast<Boss*>(e->obj);
 				boss->LoseHP(2);
+				targetTypeHit = BOSS;
+
+				if (boss->GetState() == BOSS_DESTROYED)
+					scoreReceived += boss->GetScore();
+
 				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Simon*>(e->obj))
+			{
+				if (state == BOOMERANG)
+					SetEnable(false);
 			}
 		}
 	}
@@ -183,16 +198,16 @@ void Weapon::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	
 	switch (state)
 	{
-	case KNIFE:
+	case WEAPON_KNIFE:
 		right = left + KNIFE_BBOX_WIDTH;
 		bottom = top + KNIFE_BBOX_HEIGHT;
-	case AXE:
+	case WEAPON_AXE:
 		right = left + AXE_BBOX_WIDTH;
 		bottom = top + AXE_BBOX_HEIGHT;
-	case BOOMERANG:
+	case WEAPON_BOOMERANG:
 		right = left + AXE_BBOX_WIDTH;
 		bottom = top + AXE_BBOX_HEIGHT;
-	case HOLY_WATER:
+	case WEAPON_HOLY_WATER:
 		right = left + KNIFE_BBOX_HEIGHT;
 		bottom = top + AXE_BBOX_HEIGHT;
 		break;
@@ -209,25 +224,25 @@ void Weapon::SetState(int state)
 
 	switch (state)
 	{
-	case KNIFE:
+	case WEAPON_KNIFE:
 		if (nx > 0)
 			vx = KNIFE_SPEED;
 		else 
 			vx = -KNIFE_SPEED;
 		vy = 0;
 		break;
-	case AXE:
+	case WEAPON_AXE:
 		if (nx > 0) 
 			vx = AXE_SPEED_X;
 		else 
 			vx = -AXE_SPEED_X;
 		vy = -AXE_SPEED_Y;
 		break;
-	case BOOMERANG:
+	case WEAPON_BOOMERANG:
 		vx = nx * BOOMERANG_SPEED;
 		vy = 0;
 		break;
-	case HOLY_WATER:
+	case WEAPON_HOLY_WATER:
 		vx = nx * HOLY_WATER_SPEED_X;
 		vy = -HOLY_WATER_SPEED_Y;
 		break;
@@ -243,7 +258,7 @@ void Weapon::SetState(int state)
 
 void Weapon::UpdateCollisionState()
 {
-	if (state == KNIFE || state == BOOMERANG)
+	if (state == WEAPON_KNIFE || state == WEAPON_BOOMERANG)
 		this->isEnable = false;
 	else
 	{

@@ -406,6 +406,15 @@ void PlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
+	// Cập nhật bộ đếm thời gian
+	UpdateTimeCounter();
+
+	// double shot
+	DoubleShotEffect();
+
+	// triple shot
+	TripleShotEffect();
+
 	SetDropItems();
 
 	// Vị trí xuất hiện của quái
@@ -498,11 +507,11 @@ void PlayScene::Render()
 	{
 		//obj->RenderBoundingBox();
 	}
-	for (auto obj : listObjects)
+	/*for (auto obj : listObjects)
 	{
 		if(dynamic_cast<Ground*>(obj))
 			obj->RenderBoundingBox();
-	}
+	}*/
 
 	for (auto obj : listMovingObjectsToRender)
 	{
@@ -674,6 +683,38 @@ void PlayScene::UpdateCameraPosition()
 	}
 }
 
+void PlayScene::UpdateTimeCounter()
+{
+	// Stop Watch
+	if (isUsingStopWatch == true && GetTickCount() - stopWatchCounter > 2000)
+	{
+		isUsingStopWatch = false;
+		stopWatchCounter = 0;
+	}
+
+	// Simon dead
+	if (isSimonDead == true && GetTickCount() - simonDeadTimeCounter > SIMON_DEAD_TIME)
+	{
+		isSimonDead = false;
+		simonDeadTimeCounter = 0;
+		/*ResetGame();*/
+	}
+
+	// Double shot
+	if (isDoubleShot == true && GetTickCount() - doubleShotTimeCounter > 10000)
+	{
+		isDoubleShot = false;
+		doubleShotTimeCounter = 0;
+	}
+
+	// Triple shot
+	if (isTripleShot == true && GetTickCount() - tripleShotTimeCounter > 10000)
+	{
+		isTripleShot = false;
+		tripleShotTimeCounter = 0;
+	}
+}
+
 void PlayScene::Simon_Update(DWORD dt)
 {
 	vector<LPGAMEOBJECT> coObjects;
@@ -826,6 +867,48 @@ void PlayScene::GetColliableObjects(LPGAMEOBJECT curObj, vector<LPGAMEOBJECT>& c
 	}
 }
 
+void PlayScene::GetObjectFromGrid()
+{
+	listUnits.clear();
+	listObjects.clear();
+	listStairs.clear();
+	listStaticObjectsToRender.clear();
+	listMovingObjectsToRender.clear();
+
+	grid->Get(Game::GetInstance()->GetCameraPositon(), listUnits);
+	//DebugOut(L"%d \n", listUnits.size());
+
+	for (UINT i = 0; i < listUnits.size(); i++)
+	{
+		LPGAMEOBJECT obj = listUnits[i]->GetObj();
+		listObjects.push_back(obj);
+
+		if (dynamic_cast<Ground*>(obj))
+			continue;
+		else if (dynamic_cast<Stair*>(obj))
+			listStairs.push_back(obj);
+		else if (dynamic_cast<Torch*>(obj) || dynamic_cast<BreakWall*>(obj))
+			listStaticObjectsToRender.push_back(obj);
+		else
+			listMovingObjectsToRender.push_back(obj);
+	}
+}
+
+void PlayScene::UpdateGrid()
+{
+	for (int i = 0; i < listUnits.size(); i++)
+	{
+		LPGAMEOBJECT obj = listUnits[i]->GetObj();
+
+		if (obj->IsEnable() == false)
+			continue;
+
+		float newPos_x, newPos_y;
+		obj->GetPosition(newPos_x, newPos_y);
+		listUnits[i]->Move(newPos_x, newPos_y);
+	}
+}
+
 void PlayScene::SetEnemiesSpawnPositon()
 {
 	Game* game = Game::GetInstance();
@@ -933,6 +1016,26 @@ void PlayScene::SetEnemiesSpawnPositon()
 			}
 		}
 		
+	}
+}
+
+void PlayScene::DoubleShotEffect()
+{
+	if (player->isGotDoubleShotItem == true)
+	{
+		player->isGotDoubleShotItem = false;
+		isDoubleShot = true;
+		doubleShotTimeCounter = GetTickCount();
+	}
+}
+
+void PlayScene::TripleShotEffect()
+{
+	if (player->isGotTripleShotItem == true)
+	{
+		player->isGotTripleShotItem = false;
+		isTripleShot = true;
+		tripleShotTimeCounter = GetTickCount();
 	}
 }
 
@@ -1087,7 +1190,6 @@ void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		Game::GetInstance()->SwitchScene(5);
 		break;
 	case DIK_7:
-		//DebugOut(L"hello");
 		simon->SetSubWeapon(0);
 		break;
 	case DIK_8:
@@ -1098,6 +1200,15 @@ void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_0:
 		simon->SetSubWeapon(3);
+		break;
+	case DIK_Q:
+		simon->SetSubWeapon(4);
+		break;
+	case DIK_W:
+		simon->isGotDoubleShotItem = true;
+		break;
+	case DIK_E:
+		simon->isGotTripleShotItem = true;
 		break;
 	case DIK_SPACE:
 		Simon_Jump();
@@ -1167,8 +1278,17 @@ void PlaySceneKeyHandler::Simon_Hit_Weapon()
 	if (simon->isFalling == true)
 		return;
 
-	if (simon->GetSubWeapon() == -1) // không có vũ khí 
+	if (simon->GetSubWeapon() == -1 || simon->GetEnergy() == 0) // không có vũ khí hoặc enery = 0
 		return;
+
+	if (simon->GetSubWeapon() == 3)
+	{
+		if (simon->GetEnergy() < 5)
+			return;
+		if (((PlayScene*)scene)->IsUsingStopWatch() == true) // đang sử dụng stop watch
+			return;
+		weaponlist->at(0)->SetEnable(false);
+	}
 
 	if (weaponlist->at(0)->IsEnable() == false)
 		weapon = weaponlist->at(0);
@@ -1198,8 +1318,17 @@ void PlaySceneKeyHandler::Simon_Hit_Weapon()
 		weapon->SetState(simon->GetSubWeapon());
 		weapon->SetEnable(true);
 
-		simon->isHitWeapons = true;
-		Simon_Hit();
+		if (weapon->GetState() == WEAPON_STOP_WATCH)
+		{
+			simon->LoseEnergy(5);
+			((PlayScene*)scene)->StartStopWatch();
+		}
+		else
+		{
+			simon->LoseEnergy(1);
+			simon->isHitWeapons = true;
+			Simon_Hit();
+		}
 	}
 }
 

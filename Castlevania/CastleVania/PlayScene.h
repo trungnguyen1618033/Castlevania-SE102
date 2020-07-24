@@ -19,6 +19,7 @@
 #include "Raven.h"
 #include "Skeleton.h"
 #include "Bone.h"
+#include "Grid.h"
 
 
 
@@ -34,6 +35,10 @@ protected:
 
 	Boss* boss;
 
+	Grid* grid;
+	Unit* unit;
+
+	vector<Unit*> listUnits;
 	vector<LPGAMEOBJECT> listObjects;
 	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> listStairs;
@@ -45,9 +50,24 @@ protected:
 
 	Portal* portal;
 
-
 	bool isSetSimonAutoWalk = false;
+
+	bool isUsingStopWatch = false;
+	int stopWatchCounter = 0;
+
+	bool isSimonDead = false;			// dừng update simon khi ở trạng thái dead
+	int simonDeadTimeCounter = 0;
+
+	bool isDoubleShot = false;
+	int doubleShotTimeCounter = 0;
+
+	bool isTripleShot = false;
+	int tripleShotTimeCounter = 0;
+
 	bool isBossFighting = false;
+
+	bool isSimonDead = false;
+
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -55,7 +75,6 @@ protected:
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TILEMAP(string line);
-
 	
 public:
 	PlayScene(int id, LPCWSTR filePath);
@@ -76,16 +95,37 @@ public:
 	void UpdateCameraPosition();
 	vector<LPGAMEOBJECT>* GetListStairs() { return &(this->listStairs); }
 
+	void UpdateTimeCounter();
+
 	void Simon_Update(DWORD dt);
 	void Whip_Update(DWORD dt);
 	void Weapon_Update(DWORD dt, int index);
 
 	// Nhận các đối tượng cần xét
 	void GetColliableObjects(LPGAMEOBJECT curObj, vector<LPGAMEOBJECT>& coObjects);
+	void GetObjectFromGrid();
+	void UpdateGrid();
+
 	void SetEnemiesSpawnPositon();				// Tạo vị trí xuất hiện enemies
 	vector<Weapon*>* GetWeaponList() { return &weaponlist; }
 
+	Boss* GetBoss() { return this->boss; }
 
+
+
+
+	// Item Effect
+	bool IsUsingStopWatch() { return isUsingStopWatch; }
+	bool IsDoubleShot() { return isDoubleShot; }
+	bool IsTripleShot() { return isTripleShot; }
+
+
+	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
+	void DoubleShotEffect();
+	void TripleShotEffect();
+
+	// Game Over
+	void DoGameOver();
 };
 
 

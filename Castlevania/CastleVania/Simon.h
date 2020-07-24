@@ -15,6 +15,7 @@
 #include "Ghost.h"
 #include "HunchBack.h"
 #include "Skeleton.h"
+#include "Bone.h"
 #include "Raven.h"
 #include "Zombie.h"
 #include "Boss.h"
@@ -32,6 +33,7 @@ class Simon : public GameObject
 	int hp;
 	int energy;
 	int subWeapon;
+	int stateShot;
 
 	float autoWalkDistance = 0;		// Khoảng cách 
 	int stateAfterAutoWalk = -1;	// Trạng thái sau khi auto-walk
@@ -53,6 +55,11 @@ public:
 	bool canMoveDownStair = false;	// có thể di chuyển xuống cầu thang
 	bool isAutoWalk = false;		// tự động đi
 	int stairDirection = 0;			// 1: trái dưới - phải trên, -1: trái trên - phải dưới
+
+	bool isGotDoubleShotItem = false; // Double shot item
+	bool isGotTripleShotItem = false; // Triple shot item
+
+	bool isGotMagicCrystalItem = false;
 
 	bool isDead = false;
 

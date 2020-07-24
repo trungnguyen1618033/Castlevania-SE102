@@ -9,12 +9,12 @@
 #include "Simon.h"
 #include "Torch.h"
 #include "TileMap.h"
-#include "Player.h"
+#include "Display.h"
 
 
 
 Game* game;
-Player* player;
+Display* display;
 
 
 
@@ -37,13 +37,14 @@ void Update(DWORD dt)
 	Game::GetInstance()->GetCurrentScene()->Update(dt);
 	if (Game::GetInstance()->GetChangeScene() == true)
 	{
-		player->Delete();
-		player = new Player(game, (PlayScene*)game->GetCurrentScene());
+		display->Delete();
+		display = new Display(game, (PlayScene*)game->GetCurrentScene());
 
-		player->Init();
+		display->Init();
 		Game::GetInstance()->SetChangeScene(false);
 	}
-	player->Update(dt);
+	PlayScene* scene = (PlayScene*)Game::GetInstance()->GetCurrentScene();
+	display->Update(dt, scene->GetBoss());
 
 }
 
@@ -62,7 +63,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		Game::GetInstance()->GetCurrentScene()->Render();
-		player->Render();
+		display->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -168,8 +169,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game->Load(L"Simon-game.txt");
 
-	player = new Player(game, (PlayScene*)game->GetCurrentScene());
-	player->Init();
+	display = new Display(game, (PlayScene*)game->GetCurrentScene());
+	display->Init();
 
 	Run();
 
