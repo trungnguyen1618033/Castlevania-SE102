@@ -12,7 +12,7 @@ PieceWall::PieceWall()
 	DebugOut(L"Init Piece wall\n");
 }
 
-void PieceWall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void PieceWall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
 	GameObject::Update(dt);
 	vy += WALL_GRAVITY * dt;

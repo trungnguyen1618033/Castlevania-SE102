@@ -21,7 +21,7 @@ void Items::Render()
 	animation_set->at(GetState())->Render(1, nx, x, y);
 }
 
-void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
+void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 {
 	if (timeAppear == -1)
 	{

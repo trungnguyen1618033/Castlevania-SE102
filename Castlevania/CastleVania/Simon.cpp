@@ -13,7 +13,7 @@ Simon::Simon() : GameObject()
 }
 
 
-void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
 	GameObject::Update(dt);
 	

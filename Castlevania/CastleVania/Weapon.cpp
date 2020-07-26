@@ -16,7 +16,7 @@ void Weapon::Render()
 		animation_set->at(state)->Render(1, nx, x, y);
 }
 
-void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
+void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 {
 	if (isHolyWater == true &&
 		GetTickCount() - holyWaterCounter > HOLY_WATER_TIME_EFFECT)

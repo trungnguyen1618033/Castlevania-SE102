@@ -11,8 +11,11 @@ Knight::Knight()
 	respawnWaitingTime = 0;
 }
 
-void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+	
 	if (state == KNIGHT_INACTIVE)
 		return;
 

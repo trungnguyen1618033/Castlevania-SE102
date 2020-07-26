@@ -223,6 +223,13 @@
 # Weapon
 4	301	802	902	1401	1402	1402
 
+# id	file_image_path	file_text	width	height	camera_x	camera_y
+[TILEMAP]
+0	scenes\\Map_1.png	scenes\\Map_1.txt	1536	320	0	0
+
+#grid_width	grid_height	cell_width	cell_height
+[GRID]
+1536	480	256	240
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -290,7 +297,3 @@
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
 50	1408	272	0	1440	368	1
-
-# id	file_image_path	file_text	width	height
-[TILEMAP]
-0	scenes\\Map_1.png	scenes\\Map_1.txt	1536	320	0	0

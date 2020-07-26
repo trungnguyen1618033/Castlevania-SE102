@@ -7,7 +7,7 @@ public:
 	Bone();
 	~Bone() {};
 
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	void Render();
 
 	void SetState(int state);

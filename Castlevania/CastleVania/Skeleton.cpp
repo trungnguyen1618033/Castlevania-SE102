@@ -16,8 +16,11 @@ Skeleton::Skeleton()
 	isJumping = false;
 }
 
-void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+
 	DWORD now = GetTickCount();
 
 	if (state == SKELETON_DESTROYED && animation_set->at(state)->IsOver(300) == true)

@@ -21,6 +21,7 @@ PlayScene::PlayScene(int id, LPCWSTR filePath) :Scene(id, filePath)
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_TILEMAP	7
+#define SCENE_SECTION_GRID		8
 
 #define OBJECT_TYPE_SIMON		0
 #define OBJECT_TYPE_TORCH		2
@@ -161,7 +162,6 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		player = (Simon*)obj;
 		obj->SetPosition(x, y);
 		obj->SetAnimationSet(ani_set);
-		//listObjects.push_back(obj);
 		break;
 	case OBJECT_TYPE_TORCH: 
 		obj = new Torch();
@@ -169,14 +169,13 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		obj->SetAnimationSet(ani_set);
 		s = atof(tokens[4].c_str());
 		obj->SetState(s);
-		listObjects.push_back(obj);
-		listStaticObjectsToRender.push_back(obj);
+		unit = new Unit(grid, obj, x, y);
 		break;
 	case OBJECT_TYPE_GROUND: 
 		obj = new Ground();
 		obj->SetPosition(x, y);
 		obj->SetAnimationSet(ani_set);
-		listObjects.push_back(obj);
+		unit = new Unit(grid, obj, x, y);
 		break;
 	case OBJECT_TYPE_STAIR:
 		obj = new Stair();
@@ -184,31 +183,28 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		obj->SetAnimationSet(ani_set);
 		s = atof(tokens[4].c_str());
 		obj->SetState(s);
-		listObjects.push_back(obj);
-		listStairs.push_back(obj);
+		unit = new Unit(grid, obj, x, y);
 		break;
 	case OBJECT_TYPE_PORTAL:
 		r = atof(tokens[4].c_str());
 		b = atof(tokens[5].c_str());
 		scene_id = atoi(tokens[6].c_str());
 		obj = new Portal(x, y, r, b, scene_id);
+		unit = new Unit(grid, obj, x, y);
 		portal = (Portal*)obj;
-		listObjects.push_back(obj);
 		break;
 	case OBJECT_TYPE_BLOCK:
 		obj = new BlockMove();
 		block = (BlockMove*)obj;
 		obj->SetPosition(x, y);
 		obj->SetAnimationSet(ani_set);
-		listObjects.push_back(obj);
-		listStaticObjectsToRender.push_back(obj);
+		unit = new Unit(grid, obj, x, y);
 		break;
 	case OBJECT_TYPE_BREAK:
 		obj = new BreakWall();
 		obj->SetPosition(x, y);
 		obj->SetAnimationSet(ani_set);
-		listObjects.push_back(obj);
-		listStaticObjectsToRender.push_back(obj);
+		unit = new Unit(grid, obj, x, y);
 		break;
 	case OBJECT_TYPE_KNIGHT:
 	{
@@ -220,8 +216,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		r = atof(tokens[4].c_str());
 		knight->SetLeft(x);
 		knight->SetRight(r);
-		listObjects.push_back(knight);
-		listMovingObjectsToRender.push_back(knight);
+		unit = new Unit(grid, knight, x, y);
 		break;
 	}
 	case OBJECT_TYPE_BAT:
@@ -231,8 +226,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		bat->SetPosition(x, y);
 		bat->SetAnimationSet(ani_set);
 		bat->SetState(BAT_INACTIVE);
-		listObjects.push_back(bat);
-		listMovingObjectsToRender.push_back(bat);
+		unit = new Unit(grid, bat, x, y);
 		break;
 	}
 	case OBJECT_TYPE_GHOST:
@@ -242,8 +236,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		ghost->SetAnimationSet(ani_set);
 		ghost->SetState(true);
 		ghost->SetState(GHOST_INACTIVE);
-		listObjects.push_back(ghost);
-		listMovingObjectsToRender.push_back(ghost);
+		unit = new Unit(grid, ghost, x, y);
 		break;
 	}
 	case OBJECT_TYPE_HUNCHBACK:
@@ -253,8 +246,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		hunchback->SetPosition(x, y);
 		hunchback->SetAnimationSet(ani_set);
 		hunchback->SetState(HUNCHBACK_INACTIVE);
-		listObjects.push_back(hunchback);
-		listMovingObjectsToRender.push_back(hunchback);
+		unit = new Unit(grid, hunchback, x, y);
 		break;
 	}
 	case OBJECT_TYPE_SKELETON:
@@ -263,8 +255,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		skeleton->SetEntryPosition(x, y);
 		skeleton->SetAnimationSet(ani_set);
 		skeleton->SetState(true);
-		listObjects.push_back(skeleton);
-		listMovingObjectsToRender.push_back(skeleton);
+		unit = new Unit(grid, skeleton, x, y);
 		break;
 	}
 	case OBJECT_TYPE_RAVEN:
@@ -273,8 +264,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		raven->SetEntryPosition(x, y);
 		raven->SetAnimationSet(ani_set);
 		raven->SetState(true);
-		listObjects.push_back(raven);
-		listMovingObjectsToRender.push_back(raven);
+		unit = new Unit(grid, raven, x, y);
 		break;
 	}
 	case OBJECT_TYPE_ZOMBIE:
@@ -283,8 +273,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		zombie->SetEntryPosition(x, y);
 		zombie->SetAnimationSet(ani_set);
 		zombie->SetState(ZOMBIE_INACTIVE);
-		listObjects.push_back(zombie);
-		listMovingObjectsToRender.push_back(zombie);
+		unit = new Unit(grid, zombie, x, y);
 		break;
 	}
 	case OBJECT_TYPE_BOSS:
@@ -293,14 +282,26 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		boss->SetAnimationSet(ani_set);
 		boss->SetState(INACTIVE);
 		boss->SetEnable(true);
-		listObjects.push_back(boss);
-		listMovingObjectsToRender.push_back(boss);
+		unit = new Unit(grid, boss, x, y);
 		break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
 
+	if (id == 2)
+	{
+		player->SetPosition(728, 376);
+		player->SetState(ASCEND);
+		player->stairDirection = 1;
+	}
+	if (id == 4)
+	{
+		player->SetPosition(172, 374);
+		player->SetOrientation(-1);
+		player->SetState(ASCEND);
+		player->stairDirection = 1;
+	}
 
 }
 
@@ -319,25 +320,25 @@ void PlayScene::_ParseSection_TILEMAP(string line)
 	int y = atoi(tokens[6].c_str());
 
 	tilemaps->Add(mapID, path_img.c_str(), path_text.c_str(), W, H);
-
-	/*Game* game = Game::GetInstance();*/
 	
-	DebugOut(L"ok_______\n");
+	//DebugOut(L"ok_______\n");
 	Game::GetInstance()->SetCamPos(x, y);
 	
-	if (id == 2)
-	{
-		player->SetPosition(728, 408);
-		player->SetState(ASCEND);
-		player->stairDirection = 1;
-	}
-	if (id == 4)
-	{
-		player->SetPosition(172, 406);
-		player->SetOrientation(-1);
-		player->SetState(ASCEND);
-		player->stairDirection = 1;
-	}
+}
+
+void PlayScene::_ParseSection_GRID(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 4) return; // skip invalid lines
+
+	int W = atoi(tokens[0].c_str());
+	int H = atoi(tokens[1].c_str());
+	int x = atoi(tokens[2].c_str());
+	int y = atoi(tokens[3].c_str());
+
+	grid = new Grid(W, H, x, y);
+
 }
 
 void PlayScene::Load()
@@ -356,8 +357,12 @@ void PlayScene::Load()
 		string line(str);
 
 		if (line[0] == '#') continue;	// skip comment lines	
-		if (line == "[TILEMAP]") { section = SCENE_SECTION_TILEMAP; continue; }
-		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
+		if (line == "[TILEMAP]") { 
+			section = SCENE_SECTION_TILEMAP; continue; 
+		}
+		if (line == "[TEXTURES]") { 
+			section = SCENE_SECTION_TEXTURES; continue; 
+		}
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
 		}
@@ -370,7 +375,12 @@ void PlayScene::Load()
 		if (line == "[OBJECTS]") {
 			section = SCENE_SECTION_OBJECTS; continue;
 		}
-		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+		if (line == "[GRID]") {
+			section = SCENE_SECTION_GRID; continue;
+		}
+		if (line[0] == '[') {
+			section = SCENE_SECTION_UNKNOWN; continue; 
+		}
 
 		//
 		// data section
@@ -383,6 +393,7 @@ void PlayScene::Load()
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 		case SCENE_SECTION_TILEMAP: _ParseSection_TILEMAP(line); break;
+		case SCENE_SECTION_GRID: _ParseSection_GRID(line); break;
 		}
 	}
 
@@ -405,6 +416,9 @@ void PlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
+
+	// Lấy danh sách object từ grid 
+	GetObjectFromGrid();
 
 	// Cập nhật bộ đếm thời gian
 	UpdateTimeCounter();
@@ -432,7 +446,7 @@ void PlayScene::Update(DWORD dt)
 		vector<LPGAMEOBJECT> coObjects;
 
 		GetColliableObjects(object, coObjects);
-		object->Update(dt, &coObjects);
+		object->Update(dt, &coObjects, isUsingStopWatch);
 
 		if (dynamic_cast<Skeleton*>(object))
 		{
@@ -488,6 +502,9 @@ void PlayScene::Update(DWORD dt)
 
 	// update camera
 	UpdateCameraPosition();
+
+	// update grid
+	UpdateGrid();
 }
 
 void PlayScene::Render()
@@ -570,6 +587,7 @@ void PlayScene::Unload()
 	for (int i = 0; i < listObjects.size(); i++)
 		delete listObjects[i];
 
+	listUnits.clear();
 	listObjects.clear();
 	player = NULL;
 	listStaticObjectsToRender.clear();
@@ -578,6 +596,8 @@ void PlayScene::Unload()
 	listItems.clear();
 	portal = NULL;
 	whip = NULL;
+
+
 	
 }
 
@@ -593,14 +613,16 @@ void PlayScene::SetDropItems()
 			continue;
 		if (dynamic_cast<Torch*>(object) && object->GetState() == EFFECTEXPLODE )
 		{
+			
 			if (object->animation_set->at(EFFECTEXPLODE)->IsOver(300) == true)
 			{
 				object->SetIsDroppedItem(true);
 				items = new Items();
 				items->SetEnable(true);
+				object->GetPosition(x, y);
 				items->SetPosition(object->x, object->y);
 				listItems.push_back(items);
-				listObjects.push_back(items);
+				unit = new Unit(grid, items, x, y);
 			}
 		}
 	}

@@ -10,7 +10,7 @@ Whip::Whip()
 	SetAnimationSet(ani_set);
 }
 
-void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
 
 	for (UINT i = 0; i < coObjects->size(); i++)

@@ -6,7 +6,7 @@
 
 	#define BACKGROUND_COLOR		D3DCOLOR_XRGB(0,0,0)
 	#define SCREEN_WIDTH			512
-	#define SCREEN_HEIGHT			512
+	#define SCREEN_HEIGHT			480
 
 	#define MAX_FRAME_RATE			120
 

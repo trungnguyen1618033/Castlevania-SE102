@@ -9,7 +9,7 @@ class BreakWall : public GameObject
 
 public:
 	BreakWall();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	void Render();
 	void SetState(int state);
 

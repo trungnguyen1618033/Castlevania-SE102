@@ -10,7 +10,7 @@ public:
 	Bat();
 	~Bat() { ; }
 
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	virtual void Render();
 	virtual void SetState(int state);
 

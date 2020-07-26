@@ -383,7 +383,7 @@ void Game::Load(LPCWSTR gameFile)
 
 void Game::SwitchScene(int scene_id)
 {
-	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
+	
 	Game* game = Game::GetInstance();
 	current_scene = scene_id;
 
@@ -404,6 +404,7 @@ void Game::SwitchScene(int scene_id)
 		game->stateWhip = whip->GetState();
 	}
 
+	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
 	s->Unload();
 
 	Textures::GetInstance()->Clear();

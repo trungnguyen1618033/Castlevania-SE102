@@ -11,8 +11,11 @@ Ghost::Ghost()
 
 }
 
-void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+
 	if (state == GHOST_INACTIVE)
 		return;
 

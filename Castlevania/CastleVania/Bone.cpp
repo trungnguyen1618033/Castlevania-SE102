@@ -6,8 +6,11 @@ Bone::Bone()
 	SetState(0);
 }
 
-void Bone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Bone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+
 	vy += 0.001f * dt;
 	GameObject::Update(dt);
 	x += dx;

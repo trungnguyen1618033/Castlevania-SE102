@@ -118,7 +118,7 @@ void GameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPCO
 
 
 
-void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
+void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 {
 	this->dt = dt;
 	dx = vx * dt;

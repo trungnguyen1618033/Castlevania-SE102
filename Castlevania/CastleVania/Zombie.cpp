@@ -14,8 +14,10 @@ Zombie::~Zombie()
 {
 }
 
-void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
 
 	if (state == ZOMBIE_INACTIVE)
 		return;

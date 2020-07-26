@@ -28,7 +28,7 @@ class PlayScene : public Scene
 protected:
 	Whip* whip;
 	Weapon* weapon;
-	TileMaps* tilemaps = TileMaps::GetInstance();
+	
 	Simon* player;					// A play scene has to have player, right? 
 
 	Items* items;
@@ -37,6 +37,8 @@ protected:
 
 	Grid* grid;
 	Unit* unit;
+
+	TileMaps* tilemaps = TileMaps::GetInstance();
 
 	vector<Unit*> listUnits;
 	vector<LPGAMEOBJECT> listObjects;
@@ -66,8 +68,6 @@ protected:
 
 	bool isBossFighting = false;
 
-	bool isSimonDead = false;
-
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -75,6 +75,7 @@ protected:
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TILEMAP(string line);
+	void _ParseSection_GRID(string line);
 	
 public:
 	PlayScene(int id, LPCWSTR filePath);

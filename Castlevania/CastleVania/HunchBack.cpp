@@ -11,8 +11,11 @@ HunchBack::HunchBack()
 	respawnWaitingTime = 5000;
 }
 
-void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+
 	DWORD now = GetTickCount();
 
 	if (state == HUNCHBACK_DESTROYED && animation_set->at(state)->IsOver(300) == true)

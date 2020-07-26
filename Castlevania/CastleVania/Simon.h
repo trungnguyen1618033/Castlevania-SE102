@@ -67,7 +67,7 @@ public:
 	LPGAMEOBJECT stairCollided = nullptr;
 
 	
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	void Render();
 	void SetState(int state);
 	void StartUntouchable() { isUntouchable = true; untouchable_start = GetTickCount(); }

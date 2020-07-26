@@ -10,7 +10,7 @@ BreakWall::BreakWall()
 	SetAnimationSet(ani_set);
 }
 
-void BreakWall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void BreakWall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
 	if (state == BREAK && isBreakToPieces == false)
 	{

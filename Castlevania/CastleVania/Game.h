@@ -42,12 +42,12 @@ class Game
 	void _ParseSection_SCENES(string line);
 
 public:
-	int score;
-	int life;
-	int hp;
-	int energy;
-	int subWeapon;
-	int stateWhip;
+	int score = 0;
+	int life = 3;
+	int hp = 10;
+	int energy = 15;
+	int subWeapon = -1;
+	int stateWhip = -1;
 
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }

@@ -8,9 +8,6 @@ Stair::Stair()
 {
 }
 
-void Stair::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-}
 
 void Stair::Render()
 {

@@ -15,7 +15,7 @@ void Torch::Render()
 	RenderBoundingBox();
 }
 
-void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Torch::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
 	if (state == EFFECTEXPLODE && animation_set->at(state)->IsOver(300) == true)
 	{

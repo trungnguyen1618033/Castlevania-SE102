@@ -12,7 +12,7 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject)
+void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 {
 	GameObject::Update(dt);
 }

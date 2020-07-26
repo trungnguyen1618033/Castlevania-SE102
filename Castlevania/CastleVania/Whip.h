@@ -26,7 +26,7 @@ public:
 	Whip();
 	~Whip() {};
 
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	virtual void Render() {}
 
 	void Render(int currentID);

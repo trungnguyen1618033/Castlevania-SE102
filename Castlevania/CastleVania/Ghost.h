@@ -7,7 +7,7 @@ class Ghost : public Enemy
 
 public:
 	Ghost();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	virtual void Render();
 	virtual void SetState(int state);
 

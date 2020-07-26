@@ -15,7 +15,7 @@ void BlockMove::Render()
 	animation_set->at(GetState())->Render(1, nx, x, y);
 }
 
-void BlockMove::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void BlockMove::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
 	GameObject::Update(dt);
 

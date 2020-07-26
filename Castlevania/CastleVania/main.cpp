@@ -34,7 +34,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Update(DWORD dt)
 {
-	Game::GetInstance()->GetCurrentScene()->Update(dt);
 	if (Game::GetInstance()->GetChangeScene() == true)
 	{
 		display->Delete();
@@ -42,7 +41,10 @@ void Update(DWORD dt)
 
 		display->Init();
 		Game::GetInstance()->SetChangeScene(false);
+		return;
 	}
+	Game::GetInstance()->GetCurrentScene()->Update(dt);
+	
 	PlayScene* scene = (PlayScene*)Game::GetInstance()->GetCurrentScene();
 	display->Update(dt, scene->GetBoss());
 

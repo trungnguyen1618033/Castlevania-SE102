@@ -18,8 +18,11 @@ Boss::Boss()
 	attack = 3;
 }
 
-void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+
 	if (state == BOSS_DESTROYED)
 	{
 		if (animation_set->at(state)->IsOver(150) == true)

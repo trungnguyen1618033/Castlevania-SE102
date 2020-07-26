@@ -10,8 +10,11 @@ Raven::Raven()
 	respawnWaitingTime = 0;
 }
 
-void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+
 	if (state == RAVEN_INACTIVE)
 		return;
 	

@@ -10,8 +10,11 @@ Bat::Bat()
 	attack = 2;
 }
 
-void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (stopMoving == true)
+		return;
+
 	if (state == BAT_INACTIVE)
 		return;
 
