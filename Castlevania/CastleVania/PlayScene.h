@@ -31,8 +31,6 @@ protected:
 	
 	Simon* player;					// A play scene has to have player, right? 
 
-	Items* items;
-
 	Boss* boss;
 
 	Grid* grid;
@@ -88,15 +86,21 @@ public:
 	Simon* GetPlayer() { return player; }
 	Whip* GetWhip() { return whip; }
 	Weapon* GetWeapon() { return this->weapon; }
-	
+	Boss* GetBoss() { return this->boss; }
 
 	void SetDropItems();
+	int GetRandomItem();
+
 	void SetInactivation();
 	bool IsInViewport(LPGAMEOBJECT object);
 	void UpdateCameraPosition();
 	vector<LPGAMEOBJECT>* GetListStairs() { return &(this->listStairs); }
 
 	void UpdateTimeCounter();
+
+	bool isGameReset = false;
+	bool isGameOver = false;
+	bool isGamePause = false;
 
 	void Simon_Update(DWORD dt);
 	void Whip_Update(DWORD dt);
@@ -110,11 +114,7 @@ public:
 	void SetEnemiesSpawnPositon();				// Tạo vị trí xuất hiện enemies
 	vector<Weapon*>* GetWeaponList() { return &weaponlist; }
 
-	Boss* GetBoss() { return this->boss; }
-
-
-
-
+	
 	// Item Effect
 	bool IsUsingStopWatch() { return isUsingStopWatch; }
 	bool IsDoubleShot() { return isDoubleShot; }
@@ -125,8 +125,8 @@ public:
 	void DoubleShotEffect();
 	void TripleShotEffect();
 
-	// Game Over
-	void DoGameOver();
+	void ResetGame();							// Reset lại trạng thái của game (map, simon...) sau khi simon chết
+
 };
 
 
@@ -148,6 +148,9 @@ public:
 	void Simon_Stair_Down();
 	void Simon_Stair_Up();
 	bool Simon_Stair_Stand();
+
+	bool AnimationDelay();
+	bool CanProcessKeyboard();
 
 	bool StairCollisionsDetection();
 };

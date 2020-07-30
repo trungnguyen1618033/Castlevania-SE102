@@ -11,6 +11,9 @@
 class Skeleton : public Enemy
 {
 	bool isJumping;
+	int left;
+	int right;
+
 public:
 	Skeleton();
 

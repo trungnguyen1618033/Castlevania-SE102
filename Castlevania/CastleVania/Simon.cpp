@@ -49,7 +49,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		x += dx;
 		y += dy;
-		if (vy > 0.2f)//SIMON_SPEED_Y_LOWER_ZONE    0.2f
+		if (vy > 0.2f)
 			isFalling = true;
 	}
 	else
@@ -86,6 +86,11 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 					}
 					else
 						y += dy;
+					if (hp == 0)
+					{
+						SetState(DEAD);
+						return;
+					}
 				}
 				// Khi đang lên/xuống cầu thang, va chạm theo trục x sẽ không được xét tới
 				if (state == ASCEND || state == DESCEND)
@@ -111,20 +116,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 			else if (dynamic_cast<Knight*>(e->obj) || dynamic_cast<Bat*>(e->obj) || dynamic_cast<Ghost*>(e->obj) || dynamic_cast<HunchBack*>(e->obj) ||
 				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj))
 			{
-				if (state != UPGRADE)
+				if (state != UPGRADE && isUntouchable == false)
 				{
-				
 					if (dynamic_cast<Knight*>(e->obj))
 					{
 						Knight* knight = dynamic_cast<Knight*>(e->obj);
-						DebugOut(L"collision knight\n");
 						LoseHP(knight->GetAttack());
 					}
 					else if (dynamic_cast<Bat*>(e->obj))
 					{
 						Bat* bat = dynamic_cast<Bat*>(e->obj);
 						bat->SetState(BAT_DESTROYED);
-						DebugOut(L"collision bat\n");
 						LoseHP(bat->GetAttack());
 					}
 					else if (dynamic_cast<Ghost*>(e->obj))
@@ -182,20 +184,18 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 void Simon::Render()
 {
 
+	int tempState = state;
+	int alpha = 255;
+
 	// Khi Simon rơi từ trên cao xuống thì luôn co chân
+	// Sử dụng biến tạm để không thay đổi trạng thái gốc của Simon
 	if (state !=DEAD  && IsHit() == false && isFalling == true)
-		state = DUCK;
+		tempState = DUCK;
 
-	if (isUntouchable) 
-	{
-		int r = rand() % 2;
-		if (r == 0) 
-			animation_set->at(state)->Render(1, nx, x, y);
-		else 
-			animation_set->at(state)->Render(1, nx, x, y, 100);;
-	}
+	if (isUntouchable == true)  // Để render Simon nhấp nháy trong trạng thái isUntouchable
+		alpha = rand() % 255;
 
-	animation_set->at(state)->Render(1, nx, x, y);
+	animation_set->at(state)->Render(1, nx, x, y, alpha);
 }
 
 void Simon::SetState(int state)
@@ -249,10 +249,10 @@ void Simon::SetState(int state)
 		break;
 	case HURT:
 		if (nx > 0) 
-			vx = -SIMON_DEFLECT_SPEED_X;
+			vx = -SIMON_HURT_SPEED_X;
 		else 
-			vx = SIMON_DEFLECT_SPEED_X;
-		vy = -SIMON_DEFLECT_SPEED_Y;
+			vx = SIMON_HURT_SPEED_X;
+		vy = -SIMON_HURT_SPEED_Y;
 		animation_set->at(state)->Reset();
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		isStandOnStair = false;
@@ -267,8 +267,6 @@ void Simon::SetState(int state)
 	case STANDING:
 	case DUCKING:
 	case UPGRADE:
-		vx = 0;
-		vy = 0;
 		animation_set->at(state)->Reset();
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		isStandOnStair = false;
@@ -508,7 +506,13 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 		{
 			D3DXVECTOR2 enemyEntryPostion = enemy->GetEntryPosition();
 
-			if (dynamic_cast<Ghost*>(enemy))
+			if (dynamic_cast<Bat*>(enemy))
+			{
+				Bat* bat = dynamic_cast<Bat*>(enemy);
+				if (bat->IsEnable() == true)
+					bat->SetState(BAT_ACTIVE);
+			}
+			else if (dynamic_cast<Ghost*>(enemy))
 			{
 				Ghost* ghost = dynamic_cast<Ghost*>(enemy);
 				ghost->SetState(GHOST_ACTIVE);
@@ -518,12 +522,6 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 				HunchBack* hunchback = dynamic_cast<HunchBack*>(enemy);
 				if (hunchback->GetState() == HUNCHBACK_IDLE)
 					hunchback->SetState(HUNCHBACK_ACTIVE);
-			}
-			else if (dynamic_cast<Bat*>(enemy))
-			{
-				Bat* bat = dynamic_cast<Bat*>(enemy);
-				if (bat->IsEnable() == true)
-					bat->SetState(BAT_ACTIVE);
 			}
 			else if (dynamic_cast<Raven*>(enemy))
 			{

@@ -45,7 +45,7 @@ void Enemy::RenderActiveBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	Game::GetInstance()->Draw(1, 0, l, t, bbox, 0, 0, rect.right, rect.bottom, 150);
+	Game::GetInstance()->Draw(1, 0, l, t, bbox, 0, 0, rect.right, rect.bottom, 50);
 }
 
 void Enemy::StartRespawnTimeCounter()

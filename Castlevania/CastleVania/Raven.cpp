@@ -1,4 +1,4 @@
-#include "Raven.h"
+﻿#include "Raven.h"
 
 #define RAVEN_FLYING_SPEED_X 0.12f
 #define RAVEN_FLYING_SPEED_Y 0.1f
@@ -17,18 +17,44 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	if (state == RAVEN_INACTIVE)
 		return;
-	
+
+	if (state == RAVEN_IDLE)
+		return;
+
 	if (state == RAVEN_DESTROYED && animation_set->at(state)->IsOver(150) == true)
 	{
 		SetState(RAVEN_INACTIVE);
 		return;
 	}
+	if (isStopWaiting == false && (GetTickCount() - endTimeWaiting > 1500))
+	{
+		StartStopTimeCounter();
+	}
+
+	if (isStopWaiting == true)
+	{
+		if (GetTickCount() - startTimeWaiting > 1000)
+		{
+			endTimeWaiting = GetTickCount();
+			isStopWaiting = false;
+			startTimeWaiting = 0;
+		}
+		else
+		{
+			vx = vy = 0;
+			return;
+		}
+	}
+
+	
+
+	GetVelocity();
 
 	GameObject::Update(dt);
 
 	x += dx;
 	y += dy;
-
+	
 }
 
 void Raven::Render()
@@ -50,6 +76,7 @@ void Raven::SetState(int state)
 		else 
 			vx = -RAVEN_FLYING_SPEED_X;
 		vy = 0;
+		StartStopTimeCounter();
 		isDroppedItem = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
@@ -100,4 +127,39 @@ void Raven::LoseHP(int x)
 
 	if (hp == 0)
 		SetState(RAVEN_DESTROYED);
+}
+
+void Raven::GetVelocity()
+{
+	float dx = abs(x - simonPostion.x);
+	float dy = abs(y - simonPostion.y);
+
+	// lấy phương hướng
+	int nx, ny;
+
+	if (x < simonPostion.x)
+		nx = 1;
+	else
+		nx = -1;
+
+	if (y < simonPostion.y)
+		ny = 1;
+	else
+		ny = -1;
+	
+	// tính vận tốc
+	if (dx < 10 && dy < 10)
+	{
+		vx = nx * dx / 250;
+		vy = ny * dy / 250;
+	}
+	else
+	{
+		vx = nx * dx / 1000;
+		vy = ny * dy / 1000;
+	}
+	
+	
+
+	
 }

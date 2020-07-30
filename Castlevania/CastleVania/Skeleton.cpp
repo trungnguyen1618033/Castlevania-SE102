@@ -14,6 +14,8 @@ Skeleton::Skeleton()
 	attack = 2 + rand() % 3;
 	respawnWaitingTime = 5000;
 	isJumping = false;
+	left = 0;
+	right = 96;
 }
 
 void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
@@ -38,6 +40,13 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 	if (state == SKELETON_INACTIVE)
 		return;
 
+	if (x < left) {
+		vx = 0.05f;
+	}
+	else if (x > right) {
+		vx = -0.05f;
+	}
+
 	Enemy::Update(dt);
 	vy += SKELETON_GRAVITY * dt;
 
@@ -56,11 +65,6 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 		x += dx;
 		y += dy;
 
-		if (state == SKELETON_ACTIVE && isJumping == false) // không va chạm với ground và chưa nhảy -> nhảy
-		{
-			isJumping = true;
-			SetState(SKELETON_JUMP);
-		}
 	}
 	else
 	{
@@ -75,11 +79,6 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 		{
 			vy = 0;
 
-			if (state == SKELETON_JUMP)
-			{
-				(this->nx) *= -1;
-				SetState(SKELETON_ACTIVE);
-			}
 		}
 	}
 
@@ -101,8 +100,10 @@ void Skeleton::SetState(int state)
 	switch (state)
 	{
 	case SKELETON_ACTIVE:
-		if (nx > 0) vx = SKELETON_WALKING_SPEED_X;
-		else vx = -SKELETON_WALKING_SPEED_X;
+		if (nx > 0) 
+			vx = SKELETON_WALKING_SPEED_X;
+		else 
+			vx = -SKELETON_WALKING_SPEED_X;
 		break;
 	case SKELETON_DESTROYED:
 		vx = vy = 0;
@@ -121,6 +122,7 @@ void Skeleton::SetState(int state)
 		isDroppedItem = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
+		isJumping = true;
 		break;
 	case SKELETON_HIT:
 		vx = vy = 0;

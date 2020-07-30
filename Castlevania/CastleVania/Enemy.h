@@ -12,6 +12,8 @@ protected:
 	int respawnWaitingTime;
 
 	D3DXVECTOR2 entryPosition;
+
+	D3DXVECTOR2 simonPostion;
 public:
 	bool isSettedPosition;
 
@@ -34,6 +36,7 @@ public:
 
 	void SetEntryPosition(float x, float y) { entryPosition.x = x; entryPosition.y = y; }
 	D3DXVECTOR2 GetEntryPosition() { return entryPosition; }
+	void SetSimonPosition(float sx, float sy) { simonPostion.x = sx; simonPostion.y = sy; }
 
 	int GetHP() { return hp; }
 	int GetScore() { return score; }

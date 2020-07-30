@@ -3,23 +3,24 @@
 
 Weapon::Weapon() : GameObject()
 {
-	state = -1; // no subweapon
+	state = -1;
 	AnimationSets* animation_sets = AnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(4);
 	SetAnimationSet(ani_set);
+	spark = Animations::GetInstance()->Get(8001);
 }
 
 
 void Weapon::Render()
 {
+	RenderSpark();
 	if (this->isEnable == true && state != WEAPON_STOP_WATCH)
 		animation_set->at(state)->Render(1, nx, x, y);
 }
 
 void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 {
-	if (isHolyWater == true &&
-		GetTickCount() - holyWaterCounter > HOLY_WATER_TIME_EFFECT)
+	if (isHolyWater == true && GetTickCount() - holyWaterCounter > HOLY_WATER_TIME_EFFECT)
 	{
 		isHolyWater = false;
 		holyWaterCounter = 0;
@@ -73,6 +74,10 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				Torch* torch = dynamic_cast<Torch*>(e->obj);
 				torch->SetState(EFFECTEXPLODE);
 				targetTypeHit = TORCH;
+				float l, t, r, b;
+				e->obj->GetBoundingBox(l, t, r, b);
+				sparkEffect.push_back({ l, t });
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Ground*>(e->obj))
@@ -91,7 +96,12 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = KNIGHT;
 
 				if (knight->GetState() == KNIGHT_DESTROYED)
+				{
 					scoreReceived += knight->GetScore();
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
 
 				UpdateCollisionState();
 			}
@@ -102,7 +112,12 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = BAT;
 
 				if (bat->GetState() == BAT_DESTROYED)
+				{
 					scoreReceived += bat->GetScore();
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
 
 				UpdateCollisionState();
 			}
@@ -113,7 +128,12 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = GHOST;
 
 				if (ghost->GetState() == GHOST_DESTROYED)
+				{
 					scoreReceived += ghost->GetScore();
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
 
 				UpdateCollisionState();
 			}
@@ -124,7 +144,12 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = HUNCHBACK;
 
 				if (hunchback->GetState() == HUNCHBACK_DESTROYED)
+				{
 					scoreReceived += hunchback->GetScore();
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
 
 				UpdateCollisionState();
 			}
@@ -135,7 +160,12 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = RAVEN;
 
 				if (raven->GetState() == HUNCHBACK_DESTROYED)
+				{
 					scoreReceived += raven->GetScore();
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
 
 				UpdateCollisionState();
 			}
@@ -146,8 +176,23 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = SKELETON;
 
 				if (skeleton->GetState() == SKELETON_DESTROYED)
+				{
 					scoreReceived += skeleton->GetScore();
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
 
+				UpdateCollisionState();
+			}
+			else if (dynamic_cast<Bone*>(e->obj))
+			{
+				Bone* bone = dynamic_cast<Bone*>(e->obj);
+				bone->SetEnable(false);
+				targetTypeHit = BONE;
+				float l, t, r, b;
+				e->obj->GetBoundingBox(l, t, r, b);
+				sparkEffect.push_back({ l, t });
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Zombie*>(e->obj))
@@ -158,14 +203,13 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = ZOMBIE;
 
 				if (zombie->GetState() == ZOMBIE_DESTROYED)
+				{
 					scoreReceived += zombie->GetScore();
-				UpdateCollisionState();
-			}
-			else if (dynamic_cast<Bone*>(e->obj))
-			{
-				Bone* bone = dynamic_cast<Bone*>(e->obj);
-				bone->SetEnable(false);
-				targetTypeHit = BONE;
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
+
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Boss*>(e->obj))
@@ -175,13 +219,18 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				targetTypeHit = BOSS;
 
 				if (boss->GetState() == BOSS_DESTROYED)
+				{
 					scoreReceived += boss->GetScore();
+					float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);
+					sparkEffect.push_back({ l, t });
+				}
 
 				UpdateCollisionState();
 			}
 			else if (dynamic_cast<Simon*>(e->obj))
 			{
-				if (state == BOOMERANG)
+				if (state == WEAPON_BOOMERANG)
 					SetEnable(false);
 			}
 		}
@@ -266,3 +315,21 @@ void Weapon::UpdateCollisionState()
 		y += dy;
 	}
 }
+
+void Weapon::RenderSpark()
+{
+	if (sparkEffect.size() > 0)
+	{
+		if (startTimeRenderSpark == 0)
+			startTimeRenderSpark = GetTickCount();
+		else if (GetTickCount() - startTimeRenderSpark > 100)
+		{
+			startTimeRenderSpark = 0;
+			sparkEffect.clear();
+		}
+
+		for (auto effect : sparkEffect)
+			spark->Render(1, -1, effect[0], effect[1]);
+	}
+}
+

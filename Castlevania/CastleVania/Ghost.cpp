@@ -1,4 +1,4 @@
-#include "Ghost.h"
+﻿#include "Ghost.h"
 
 
 
@@ -8,6 +8,7 @@ Ghost::Ghost()
 	score = 300;
 	attack = 2;
 	respawnWaitingTime = 10000;
+	velocityVariation = 0.001f;
 
 }
 
@@ -27,6 +28,12 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	Enemy::Update(dt);
 
+	vy += velocityVariation;
+
+	if (vy > 0.025f || vy < -0.025f) {
+		velocityVariation = -velocityVariation;
+	}
+
 	x += dx;
 	y += dy;
 }
@@ -45,9 +52,10 @@ void Ghost::SetState(int state)
 	switch (state)
 	{
 	case GHOST_ACTIVE:
-		if (nx > 0) vx = GHOST_FLYING_SPEED_X;
-		else vx = -GHOST_FLYING_SPEED_X;
-		vy = 0;
+		if (nx > 0) 
+			vx = GHOST_FLYING_SPEED_X;
+		else 
+			vx = -GHOST_FLYING_SPEED_X;
 		isDroppedItem = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
@@ -91,5 +99,11 @@ void Ghost::LoseHP(int x)
 	Enemy::LoseHP(x);
 	if (hp == 0)
 		SetState(GHOST_DESTROYED);
+}
+
+void Ghost::GetOrientation()
+{
+	// lấy phương hướng
+	
 }
 

@@ -46,7 +46,7 @@ void Update(DWORD dt)
 	Game::GetInstance()->GetCurrentScene()->Update(dt);
 	
 	PlayScene* scene = (PlayScene*)Game::GetInstance()->GetCurrentScene();
-	display->Update(dt, scene->GetBoss());
+	display->Update(dt, scene->IsUsingStopWatch());
 
 }
 

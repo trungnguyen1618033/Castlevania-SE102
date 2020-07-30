@@ -24,10 +24,6 @@ using namespace std;
 
 class Simon : public GameObject
 {
-	bool isUntouchable = false;
-	DWORD untouchable_start = 0;
-
-
 	int score;
 	int life;
 	int hp;
@@ -38,6 +34,10 @@ class Simon : public GameObject
 	float autoWalkDistance = 0;		// Khoảng cách 
 	int stateAfterAutoWalk = -1;	// Trạng thái sau khi auto-walk
 	int nxAfterAutoWalk = 0;		// Hướng Simon sau khi auto-walk
+
+	bool isUntouchable = false;
+	DWORD untouchable_start = 0;
+
 
 public:
 	Simon();
@@ -74,6 +74,7 @@ public:
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
+	// Lấy thuộc tính
 	bool IsStand() { return this->isStand; }
 	int GetLife() { return this->life; }
 	int GetScore() { return this->score; }
@@ -81,6 +82,8 @@ public:
 	int GetEnergy() { return this->energy; }
 	int GetSubWeapon() { return this->subWeapon; }
 
+
+	// Cập nhập thuộc tính
 	void AddScore(int x) { score += x; }
 	void LoseEnergy(int x) { energy -= x; }
 	void LoseHP(int x);

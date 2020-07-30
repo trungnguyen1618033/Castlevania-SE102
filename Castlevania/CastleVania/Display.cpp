@@ -14,6 +14,9 @@ Display::Display(Game* game, PlayScene* scene)
 	this->simon = scene->GetPlayer();
 	this->boss = scene->GetBoss();
 
+	if (boss == NULL)
+		bossHP = 16;
+
 	time = 0;
 }
 
@@ -87,6 +90,9 @@ void Display::Update(DWORD dt, bool stopwatch)
 	simonHP = simon->GetHP();
 	subWeapon = simon->GetSubWeapon();
 
+	if(boss != NULL)
+		bossHP = boss->GetHP();
+
 	switch (scene->GetId())
 	{
 	case 0:
@@ -114,7 +120,7 @@ void Display::Update(DWORD dt, bool stopwatch)
 	else 
 		item = -1;
 
-	if (stopwatch == false) // khi sử dụng stop watch thì không đếm thời gian
+	if (stopwatch == false && scene->isGamePause == false) // khi sử dụng stop watch thì không đếm thời gian
 		time += dt;
 	
 	int remainTime = DEFAULT_TIME_PLAY - time / 1000;
@@ -153,6 +159,15 @@ void Display::Update(DWORD dt, bool stopwatch)
 
 void Display::Render()
 {
+	if (game->GetChangeScene() == true)
+		return;
+
+	if (scene->isGamePause == true)
+	{
+		pause = Textures::GetInstance()->Get(90);
+		game->Draw(0, 0, 240, 210, pause, 0, 0, 34, 52);
+	}
+
 	RECT rect;
 	SetRect(&rect, 0, 15, SCREEN_WIDTH, 80);
 
@@ -166,11 +181,14 @@ void Display::Render()
 
 	if (subWeapon != -1) // simon get subweapon
 	{
+		
 		subWeaponList[subWeapon]->Draw(0, -1, 305, 38);
 	}
 
 	if (item != -1)
+	{
 		itemList[item]->Draw(0, -1, 450, 38);
+	}
 
 	for (int i = 0; i < simonHP; i++)
 	{

@@ -7,7 +7,7 @@ class Boss : public Enemy
 	bool isFlyToSimon = false;
 
 	int idTarget = 0;
-	D3DXVECTOR2 simonPostion;
+	
 	D3DXVECTOR2 target;
 
 	int startTimeWaiting = 0;
@@ -32,8 +32,6 @@ public:
 	void GetVelocity();
 
 	void StartStopTimeCounter() { isStopWaiting = true; startTimeWaiting = GetTickCount(); }
-
-	void SetSimonPosition(float sx, float sy) { simonPostion.x = sx; simonPostion.y = sy; }
 
 	int GetIdTarget() { return idTarget; }
 

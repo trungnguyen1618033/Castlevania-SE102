@@ -14,6 +14,10 @@ class Weapon : public GameObject
 	bool isHolyWater = false;
 	int holyWaterCounter = 0;
 
+	vector<vector<float>> sparkEffect; // vector lưu toạ độ để render spark khi roi đánh trúng mục tiêu
+	Animation* spark;
+	int startTimeRenderSpark = 0;
+
 public:
 	Weapon();
 	~Weapon() {};
@@ -28,7 +32,13 @@ public:
 
 	void UpdateCollisionState();
 
+	int GetScoreReceived() { return scoreReceived; }
 	int GetTargetTypeHit() { return targetTypeHit; }
+
+	void SetScoreReceived(int x) { scoreReceived = x; }
 	void SetTargetTypeHit(int x) { targetTypeHit = x; }
+
+	void RenderSpark();
+
 };
 

@@ -4,10 +4,11 @@
 
 Whip::Whip()
 {
-	SetState(WHIP);
+	SetState(WHIP_2);
 	AnimationSets* animation_sets = AnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(1);
 	SetAnimationSet(ani_set);
+	spark = Animations::GetInstance()->Get(8001);
 }
 
 void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
@@ -29,6 +30,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 			{
 				e->SetState(EFFECTEXPLODE);
 				targetTypeHit = CANDLE;
+				sparkEffect.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<BreakWall*>(obj))
@@ -58,7 +60,11 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = KNIGHT;
 
 				if (e->GetState() == KNIGHT_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
+
 			}
 		}
 		else if (dynamic_cast<Bat*>(obj))
@@ -75,7 +81,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = BAT;
 
 				if (e->GetState() == BAT_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<Ghost*>(obj))
@@ -92,7 +101,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = GHOST;
 
 				if (e->GetState() == GHOST_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<HunchBack*>(obj))
@@ -109,7 +121,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = HUNCHBACK;
 
 				if (e->GetState() == HUNCHBACK_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<Raven*>(obj))
@@ -126,7 +141,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = RAVEN;
 
 				if (e->GetState() == RAVEN_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<Skeleton*>(obj))
@@ -143,7 +161,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = SKELETON;
 
 				if (e->GetState() == SKELETON_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<Bone*>(obj))
@@ -158,6 +179,7 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 			{
 				e->SetEnable(false);
 				targetTypeHit = BONE;
+				sparkEffect.push_back({ left, top });
 			}
 		}
 		else if (dynamic_cast<Zombie*>(obj))
@@ -174,7 +196,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = ZOMBIE;
 
 				if (e->GetState() == ZOMBIE_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
 			}
 		}
 		else if (dynamic_cast<Boss*>(obj))
@@ -191,7 +216,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				targetTypeHit = BOSS;
 
 				if (e->GetState() == BOSS_DESTROYED)
+				{
 					scoreReceived += e->GetScore();
+					sparkEffect.push_back({ left, top });
+				}
 			}
 		}
 	}
@@ -199,8 +227,10 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 void Whip::Render(int currentID)
 {
+	RenderSpark();
 	if (currentID >= 0)
 		animation_set->at(state)->RenderByID(currentID, nx, x, y);
+	RenderBoundingBox();
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)
@@ -251,6 +281,23 @@ void Whip::Upgrade()
 {
 	if (state == WHIP) SetState(WHIP_1);
 	else if (state == WHIP_1) SetState(WHIP_2);
+}
+
+void Whip::RenderSpark()
+{
+	if (sparkEffect.size() > 0)
+	{
+		if (startTimeRenderSpark == 0)
+			startTimeRenderSpark = GetTickCount();
+		else if (GetTickCount() - startTimeRenderSpark > 100)
+		{
+			startTimeRenderSpark = 0;
+			sparkEffect.clear();
+		}
+
+		for (auto effect : sparkEffect)
+			spark->Render(1, -1, effect[0], effect[1]);
+	}
 }
 
 

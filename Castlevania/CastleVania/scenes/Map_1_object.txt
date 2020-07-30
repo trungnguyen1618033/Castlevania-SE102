@@ -10,6 +10,8 @@
 13	textures\Candle.png	255	255	255
 14	textures\Weapons\HolyWater.png	255	255	255
 
+80	textures\Spark.png	255	255	255
+90	textures\Pause.png	255	255	255
 99	textures\Effect.png	255	255	255
 -100	textures\bbox.png	255	255	255
 # id	left	top	right	bottom	texture_id
@@ -122,6 +124,9 @@
 1402	32	0	64	26	14
 1403	64	0	96	26	14
 
+#SPARK
+8001	0	0	16	20	80
+
 #Effect Explore
 9901	0	0	32	60	99
 9902	32	0	64	60	99
@@ -204,6 +209,9 @@
 1401	1401	100
 1402	1402	100	1403	100
 
+#SPARK
+8001	8001	100
+
 # ==== EFFECT =========
 9901	9901	100	9902	100	9903	100
 9902	9904	100	9905	100	9906	100
@@ -235,7 +243,7 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon, 2 = Torch
 # SIMON
-0	0	200	0
+0	64	302	0
 # TORCH
 2	160	304	2	0
 2	448	304	2	0
@@ -245,6 +253,10 @@
 
 3	0	0	3
 # GROUND
+7	-32	240	7
+7	-32	272	7
+7	-32	304	7
+7	-32	336	7
 7	0	368	7
 7	32	368	7
 7	64	368	7

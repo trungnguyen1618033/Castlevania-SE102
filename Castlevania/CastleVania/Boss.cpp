@@ -1,15 +1,7 @@
 ﻿#include "Boss.h"
 
-
-
 Boss::Boss()
 {
-
-	isFlyToTarget = false;
-	isFlyToSimon = false;
-
-	idTarget = 0;
-
 	startTimeWaiting = 0;
 	isStopWaiting = false;
 
@@ -25,7 +17,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	if (state == BOSS_DESTROYED)
 	{
-		if (animation_set->at(state)->IsOver(150) == true)
+		if (animation_set->at(state)->IsOver(1000) == true)
 			dropItem = true;
 
 		return;
@@ -50,7 +42,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		isFlyToTarget = true;
 
-		// deternmind target
+		// xác định mục tiêu
 		if (idTarget == 1)
 		{
 			isFlyToSimon = true;
@@ -178,11 +170,15 @@ void Boss::GetVelocity()
 	// lấy phương hướng
 	int nx, ny;
 
-	if (x < target.x) nx = 1;
-	else nx = -1;
+	if (x < target.x) 
+		nx = 1;
+	else 
+		nx = -1;
 
-	if (y < target.y) ny = 1;
-	else ny = -1;
+	if (y < target.y) 
+		ny = 1;
+	else 
+		ny = -1;
 
 	// tính vận tốc
 	if (isFlyToSimon == true)

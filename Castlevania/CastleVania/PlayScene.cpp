@@ -144,11 +144,11 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 	AnimationSets* animation_sets = AnimationSets::GetInstance();
 
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-	GameObject* obj = NULL;
+
 	float r;
 	float b;
 	int scene_id;
-	int s;
+	int s, idItem;
 
 	switch (object_type)
 	{
@@ -158,62 +158,73 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] SIMON object was created before! ");
 			return;
 		}
-		obj = new Simon();
-		player = (Simon*)obj;
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
+		player = new Simon();
+		player->SetPosition(x, y);
+		player->SetAnimationSet(ani_set);
 		break;
-	case OBJECT_TYPE_TORCH: 
-		obj = new Torch();
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
+	case OBJECT_TYPE_TORCH:
+	{
+		Torch* torch = new Torch();
+		torch->SetPosition(x, y);
+		torch->SetAnimationSet(ani_set);
 		s = atof(tokens[4].c_str());
-		obj->SetState(s);
-		unit = new Unit(grid, obj, x, y);
+		torch->SetState(s);
+		unit = new Unit(grid, torch, x, y);
 		break;
-	case OBJECT_TYPE_GROUND: 
-		obj = new Ground();
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
-		unit = new Unit(grid, obj, x, y);
+	}
+	case OBJECT_TYPE_GROUND:
+	{
+		Ground* ground = new Ground();
+		ground->SetPosition(x, y);
+		ground->SetAnimationSet(ani_set);
+		unit = new Unit(grid, ground, x, y);
 		break;
+	}
 	case OBJECT_TYPE_STAIR:
-		obj = new Stair();
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
+	{
+		Stair* stair = new Stair();
+		stair->SetPosition(x, y);
+		stair->SetAnimationSet(ani_set);
 		s = atof(tokens[4].c_str());
-		obj->SetState(s);
-		unit = new Unit(grid, obj, x, y);
+		stair->SetState(s);
+		unit = new Unit(grid, stair, x, y);
 		break;
+	}
 	case OBJECT_TYPE_PORTAL:
+	{
 		r = atof(tokens[4].c_str());
 		b = atof(tokens[5].c_str());
 		scene_id = atoi(tokens[6].c_str());
-		obj = new Portal(x, y, r, b, scene_id);
-		unit = new Unit(grid, obj, x, y);
-		portal = (Portal*)obj;
+		portal = new Portal(x, y, r, b, scene_id);
+		unit = new Unit(grid, portal, x, y);
 		break;
+	}
 	case OBJECT_TYPE_BLOCK:
-		obj = new BlockMove();
-		block = (BlockMove*)obj;
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
-		unit = new Unit(grid, obj, x, y);
+	{
+		BlockMove* block = new BlockMove();
+		block->SetPosition(x, y);
+		block->SetAnimationSet(ani_set);
+		unit = new Unit(grid, block, x, y);
 		break;
+	}
 	case OBJECT_TYPE_BREAK:
-		obj = new BreakWall();
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
-		unit = new Unit(grid, obj, x, y);
+	{
+		idItem = atof(tokens[4].c_str());
+		BreakWall* wall = new BreakWall();
+		wall->SetPosition(x, y);
+		wall->SetAnimationSet(ani_set);
+		wall->SetIDItem(idItem);
+		unit = new Unit(grid, wall, x, y);
 		break;
+	}
 	case OBJECT_TYPE_KNIGHT:
 	{
+		r = atof(tokens[4].c_str());
 		Knight* knight = new Knight();
 		knight->SetEntryPosition(x, y);
 		knight->SetPosition(x, y);
 		knight->SetAnimationSet(ani_set);
 		knight->SetState(KNIGHT_INACTIVE);
-		r = atof(tokens[4].c_str());
 		knight->SetLeft(x);
 		knight->SetRight(r);
 		unit = new Unit(grid, knight, x, y);
@@ -254,7 +265,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		Skeleton* skeleton = new Skeleton();
 		skeleton->SetEntryPosition(x, y);
 		skeleton->SetAnimationSet(ani_set);
-		skeleton->SetState(true);
+		skeleton->SetState(SKELETON_INACTIVE);
 		unit = new Unit(grid, skeleton, x, y);
 		break;
 	}
@@ -263,7 +274,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		Raven* raven = new Raven();
 		raven->SetEntryPosition(x, y);
 		raven->SetAnimationSet(ani_set);
-		raven->SetState(true);
+		raven->SetState(RAVEN_INACTIVE);
 		unit = new Unit(grid, raven, x, y);
 		break;
 	}
@@ -289,19 +300,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		return;
 	}
 
-	if (id == 2)
-	{
-		player->SetPosition(728, 376);
-		player->SetState(ASCEND);
-		player->stairDirection = 1;
-	}
-	if (id == 4)
-	{
-		player->SetPosition(172, 374);
-		player->SetOrientation(-1);
-		player->SetState(ASCEND);
-		player->stairDirection = 1;
-	}
+	
 
 }
 
@@ -399,8 +398,25 @@ void PlayScene::Load()
 
 	f.close();
 
-
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+
+	if(id == 2)
+	{
+		player->SetPosition(732, 376);
+		player->SetState(ASCEND);
+		player->stairDirection = 1;
+	}
+	if(id == 4)
+	{
+		player->SetPosition(170, 374);
+		player->SetOrientation(-1);
+		player->SetState(ASCEND);
+		player->stairDirection = 1;
+	}
+	if (id == 3)
+	{
+		player->SetOrientation(-1);
+	}
 
 	whip = new Whip();
 	for (int i = 1; i <= 3; i++)
@@ -414,8 +430,9 @@ void PlayScene::Load()
 
 void PlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
+	// Pause Game
+	if (isGamePause == true)
+		return;
 
 	// Lấy danh sách object từ grid 
 	GetObjectFromGrid();
@@ -480,6 +497,20 @@ void PlayScene::Update(DWORD dt)
 			
 				skeleton->SetOrientation(nx);
 			}
+		}
+		else if (dynamic_cast<Ghost*>(object))
+		{
+			Ghost* ghost = dynamic_cast<Ghost*>(object);
+			float sx, sy;
+			player->GetPosition(sx, sy);
+			ghost->SetSimonPosition(sx, sy);
+		}
+		else if (dynamic_cast<Raven*>(object))
+		{
+			Raven* raven = dynamic_cast<Raven*>(object);
+			float sx, sy;
+			player->GetPosition(sx, sy);
+			raven->SetSimonPosition(sx, sy);
 		}
 		else if (dynamic_cast<Boss*>(object))
 		{
@@ -548,13 +579,7 @@ void PlayScene::Render()
 	}
 
 	player->Render();
-	player->RenderBoundingBox();
-
-	/*if (weapon->IsEnable() == true)
-	{
-		weapon->Render();
-		weapon->RenderBoundingBox();
-	}*/
+	//player->RenderBoundingBox();
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -596,7 +621,7 @@ void PlayScene::Unload()
 	listItems.clear();
 	portal = NULL;
 	whip = NULL;
-
+	weaponlist.clear();
 
 	
 }
@@ -611,21 +636,60 @@ void PlayScene::SetDropItems()
 
 		if (object->IsDroppedItem() == true)
 			continue;
-		if (dynamic_cast<Torch*>(object) && object->GetState() == EFFECTEXPLODE )
+		if (dynamic_cast<Torch*>(object) && object->GetState() == EFFECTEXPLODE)
 		{
-			
-			if (object->animation_set->at(EFFECTEXPLODE)->IsOver(300) == true)
+			idItem = GetRandomItem();
+			object->GetPosition(x, y);
+			object->SetIsDroppedItem(true);
+		}
+		else if (dynamic_cast<BreakWall*>(object)
+			&& object->GetState() == BREAK && object->IsDroppedItem() == false)
+		{
+			object->SetIsDroppedItem(true);
+			idItem = object->idItem;
+			x = Game::GetInstance()->GetCameraPositon().x + SCREEN_WIDTH / 2;
+			y = Game::GetInstance()->GetCameraPositon().y + SCREEN_HEIGHT / 2;
+		}
+		else if ((dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_DESTROYED) ||
+			(dynamic_cast<Bat*>(object) && object->GetState() == BAT_DESTROYED) ||
+			(dynamic_cast<Raven*>(object) && object->GetState() == RAVEN_DESTROYED))
+		{
+			DebugOut(L"here: %d\n", idItem);
+			idItem = GetRandomItem();
+			object->GetPosition(x, y);
+			object->SetIsDroppedItem(true);
+		}
+		else if (dynamic_cast<Boss*>(object) && object->GetState() == BOSS_DESTROYED)
+		{
+			if (boss->IsDroppedItem() == false)
 			{
-				object->SetIsDroppedItem(true);
-				items = new Items();
-				items->SetEnable(true);
-				object->GetPosition(x, y);
-				items->SetPosition(object->x, object->y);
-				listItems.push_back(items);
-				unit = new Unit(grid, items, x, y);
+				boss->SetEnable(false);
+				boss->SetIsDroppedItem(true);
+
+				idItem = MAGIC_CRYSTAL;
+				x = Game::GetInstance()->GetCameraPositon().x + SCREEN_WIDTH / 2;
+				y = Game::GetInstance()->GetCameraPositon().y + SCREEN_HEIGHT / 2;
 			}
 		}
+		if (idItem != -1)
+		{
+			// Tạo một item theo id
+			auto items = new Items();
+			items->SetEnable(true);
+			items->SetPosition(x, y);
+			items->SetState(idItem);
+
+			listItems.push_back(items);
+			unit = new Unit(grid, items, x, y);
+		}
 	}
+}
+
+int PlayScene::GetRandomItem()
+{
+	srand(time(NULL));
+	int idItem = rand() % 15;
+	return idItem;
 }
 
 void PlayScene::SetInactivation()
@@ -641,6 +705,16 @@ void PlayScene::SetInactivation()
 			{
 				auto zombie = dynamic_cast<Zombie*>(object);
 				zombie->SetState(ZOMBIE_INACTIVE);
+			}
+			if (dynamic_cast<Ghost*>(object) && object->GetState() == GHOST_ACTIVE)
+			{
+				auto ghost = dynamic_cast<Ghost*>(object);
+				ghost->SetState(GHOST_INACTIVE);
+			}
+			if (dynamic_cast<HunchBack*>(object) && object->GetState() == HUNCHBACK_ACTIVE)
+			{
+				auto hunchback = dynamic_cast<HunchBack*>(object);
+				hunchback->SetState(HUNCHBACK_INACTIVE);
 			}
 			else if (dynamic_cast<Items*>(object) && object->IsEnable() == true)
 				object->SetEnable(false);
@@ -719,7 +793,10 @@ void PlayScene::UpdateTimeCounter()
 	{
 		isSimonDead = false;
 		simonDeadTimeCounter = 0;
-		/*ResetGame();*/
+		if (player->GetLife() == 0)
+			isGameOver = true;
+		else
+			ResetGame();
 	}
 
 	// Double shot
@@ -739,6 +816,17 @@ void PlayScene::UpdateTimeCounter()
 
 void PlayScene::Simon_Update(DWORD dt)
 {
+	if (player->GetState() == DEAD)
+	{
+		if (isSimonDead == false)
+		{
+			isSimonDead = true;
+			simonDeadTimeCounter = GetTickCount();
+		}
+
+		return;
+	}
+
 	vector<LPGAMEOBJECT> coObjects;
 
 	GetColliableObjects(player, coObjects);
@@ -750,6 +838,12 @@ void PlayScene::Simon_Update(DWORD dt)
 
 void PlayScene::Whip_Update(DWORD dt)
 {
+	if (whip->GetScoreReceived() != 0)
+	{
+		player->AddScore(whip->GetScoreReceived());
+		whip->SetScoreReceived(0);
+	}
+
 	if (player->isGotChainItem == true) // update trạng thái của whip
 	{
 		player->isGotChainItem = false;
@@ -783,6 +877,14 @@ void PlayScene::Whip_Update(DWORD dt)
 
 void PlayScene::Weapon_Update(DWORD dt, int index)
 {
+	if (player->GetSubWeapon() == WEAPON_STOP_WATCH)
+		return;
+
+	if (weaponlist[index]->GetScoreReceived() != 0)
+	{
+		player->AddScore(weaponlist[index]->GetScoreReceived());
+		weaponlist[index]->SetScoreReceived(0);
+	}
 
 	if (weaponlist[index]->IsEnable() == false)
 	{
@@ -951,7 +1053,7 @@ void PlayScene::SetEnemiesSpawnPositon()
 				zombie->SetOrientation(nx);
 
 				// Cần random một khoảng nhỏ để tránh việc các zombie spawn cùng lúc, tại cùng một vị trí
-				int randomDistance = rand() % 30 + 10;
+				int randomDistance = rand() % 30;
 
 				float x, y;
 				y = zombie->GetEntryPosition().y;
@@ -1061,6 +1163,27 @@ void PlayScene::TripleShotEffect()
 	}
 }
 
+void PlayScene::ResetGame()
+{
+	isGameReset = true;
+	isSimonDead = false;
+	isGameOver = false;
+
+	int life = player->GetLife();
+
+	player = new Simon();
+	if (life > 0)
+		player->SetLife(life);
+
+	whip->SetState(0);
+
+	boss = new Boss();
+	boss->SetState(BOSS_INACTIVE);
+
+	Game::GetInstance()->SwitchScene(id);
+
+}
+
 
 
 
@@ -1069,50 +1192,12 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	Game* game = Game::GetInstance();
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 
-	if (simon->isAutoWalk == true)
-		return ;
+	if (CanProcessKeyboard() == false)
+		return;
 
-	if (isNeedToWaitingAnimation == true)
-	{
-		if ((simon->GetState() == JUMP || simon->GetState() == IDLE) && simon->isTouchGround == false)
-			return;
-		if (simon->GetState() == DEAD)
-			return;
-		if (simon->GetState() == ASCEND && simon->animation_set->at(ASCEND)->IsOver(200) == false)
-			return;
-
-		if (simon->GetState() == DESCEND && simon->animation_set->at(DESCEND)->IsOver(200) == false)
-			return;
-
-		if (simon->GetState() == STANDING && simon->animation_set->at(STANDING)->IsOver(300) == false)
-			return;
-
-		if (simon->GetState() == DUCKING && simon->animation_set->at(DUCKING)->IsOver(300) == false)
-			return;
-
-		if (simon->GetState() == ASCENDING && simon->animation_set->at(ASCENDING)->IsOver(300) == false)
-			return;
-
-		if (simon->GetState() == DESCENDING && simon->animation_set->at(DESCENDING)->IsOver(300) == false)
-			return;
-
-		if (simon->GetState() == HURT && simon->animation_set->at(HURT)->IsOver(600) == false)
-			return;
-
-		if (simon->GetState() == UPGRADE && simon->animation_set->at(UPGRADE)->IsOver(450) == false)
-			return;
-	}
-	else
-	{
-		// Đặt lại biến chờ render animation
-		isNeedToWaitingAnimation = true;
-
-		//Để tránh việc ở frame tiếp theo rơi vào trạng thái chờ render animation 
-		//(vì animation == 200ms, một frame ~ 30ms nên sẽ phải bị chờ dù cho có biến = false),
-		// do đó cần reset lại animation start time về 0
-		simon->animation_set->at(ASCEND)->SetAniStartTime(0);
-		simon->animation_set->at(DESCEND)->SetAniStartTime(0);
-	}
+	// nếu simon đang nhảy và chưa chạm đất
+	if ((simon->GetState() == JUMP || simon->GetState() == IDLE) && simon->isTouchGround == false)
+		return;
 
 	// Xét trạng thái phím
 	if (game->IsKeyDown(DIK_RIGHT))
@@ -1127,7 +1212,6 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 			{
 				Simon_Stair_Down();
 			}
-
 			return;
 		}
 		simon->SetOrientation(1);
@@ -1145,7 +1229,6 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 			{
 				Simon_Stair_Up();
 			}
-
 			return;
 		}
 		simon->SetOrientation(-1);
@@ -1183,13 +1266,22 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 			if (Simon_Stair_Stand() == true)
 				return;
 		}
-
 		simon->SetState(IDLE);
 	}
 }
 
 void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
+
+	if (CanProcessKeyboard() == false)
+		return;
+
+	if (KeyCode == DIK_P)						// Pause game
+	{
+		((PlayScene*)scene)->isGamePause = !(((PlayScene*)scene)->isGamePause);
+		return;
+	}
+
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 	switch (KeyCode)
 	{
@@ -1291,11 +1383,13 @@ void PlaySceneKeyHandler::Simon_Hit()
 
 void PlaySceneKeyHandler::Simon_Hit_Weapon()
 {
-	Simon* simon = ((PlayScene*)scene)->GetPlayer();
+	PlayScene* playscene = (PlayScene*)scene;
 
-	vector<Weapon*>* weaponlist = ((PlayScene*)scene)->GetWeaponList();
-	//Weapon* weapon;
-	Weapon* weapon = ((PlayScene*)scene)->GetWeapon();
+	Simon* simon = playscene->GetPlayer();
+
+	vector<Weapon*>* weaponlist = playscene->GetWeaponList();
+
+	Weapon* weapon;
 
 	if (simon->isFalling == true)
 		return;
@@ -1314,9 +1408,9 @@ void PlaySceneKeyHandler::Simon_Hit_Weapon()
 
 	if (weaponlist->at(0)->IsEnable() == false)
 		weapon = weaponlist->at(0);
-	else if (weaponlist->at(1)->IsEnable() == false)
+	else if (weaponlist->at(1)->IsEnable() == false && (playscene->IsDoubleShot() || playscene->IsTripleShot()))
 		weapon = weaponlist->at(1);
-	else if (weaponlist->at(2)->IsEnable() == false)
+	else if (weaponlist->at(2)->IsEnable() == false && playscene->IsTripleShot())
 		weapon = weaponlist->at(2);
 	else 
 		return;
@@ -1475,6 +1569,72 @@ bool PlaySceneKeyHandler::Simon_Stair_Stand()
 		return true;
 	}
 	return false;
+}
+
+bool PlaySceneKeyHandler::AnimationDelay()
+{
+	Game* game = Game::GetInstance();
+	Simon* simon = ((PlayScene*)scene)->GetPlayer();
+
+	if (isNeedToWaitingAnimation == true)
+	{
+		if (simon->GetState() == ASCEND && simon->animation_set->at(ASCEND)->IsOver(200) == false)
+			return true;
+
+		if (simon->GetState() == DESCEND && simon->animation_set->at(DESCEND)->IsOver(200) == false)
+			return true;
+
+		if (simon->GetState() == STANDING && simon->animation_set->at(STANDING)->IsOver(300) == false)
+			return true;
+
+		if (simon->GetState() == DUCKING && simon->animation_set->at(DUCKING)->IsOver(300) == false)
+			return true;
+
+		if (simon->GetState() == ASCENDING && simon->animation_set->at(ASCENDING)->IsOver(300) == false)
+			return true;
+
+		if (simon->GetState() == DESCENDING && simon->animation_set->at(DESCENDING)->IsOver(300) == false)
+			return true;
+
+		if (simon->GetState() == HURT && simon->animation_set->at(HURT)->IsOver(600) == false)
+			return true;
+
+		if (simon->GetState() == UPGRADE && simon->animation_set->at(UPGRADE)->IsOver(450) == false)
+			return true;
+	}
+	else
+	{
+		// Đặt lại biến chờ render animation
+		isNeedToWaitingAnimation = true;
+
+		//Để tránh việc ở frame tiếp theo rơi vào trạng thái chờ render animation 
+		//(vì animation == 200ms, một frame ~ 30ms nên sẽ phải bị chờ dù cho có biến = false),
+		// do đó cần reset lại animation start time về 0
+		simon->animation_set->at(ASCEND)->SetAniStartTime(0);
+		simon->animation_set->at(DESCEND)->SetAniStartTime(0);
+	}
+
+	return false;
+}
+
+bool PlaySceneKeyHandler::CanProcessKeyboard()
+{
+	Game* game = Game::GetInstance();
+	Simon* simon = ((PlayScene*)scene)->GetPlayer();
+
+	if (((PlayScene*)scene)->isGamePause == true)
+		return false;
+
+	if (simon->GetState() == DEAD)
+		return false;
+
+	if (simon->isAutoWalk == true)
+		return false;
+
+	if (AnimationDelay() == true)
+		return false;
+
+	return true;
 }
 
 bool PlaySceneKeyHandler::StairCollisionsDetection()

@@ -1,4 +1,4 @@
-﻿#include "Game.h"
+﻿	#include "Game.h"
 #include <iostream>
 #include <fstream>
 #include "debug.h"
@@ -394,14 +394,27 @@ void Game::SwitchScene(int scene_id)
 	{
 		PlayScene* scene = (PlayScene*)scenes[current_scene - 1];
 		Simon* simon = scene->GetPlayer();
-		game->score = simon->GetScore();
-		game->life = simon->GetLife();
-		game->hp = simon->GetHP();
-		game->energy = simon->GetEnergy();
-		game->subWeapon = simon->GetSubWeapon();
+		if (simon == NULL)
+		{
+			game->score = 0;
+			game->life = 3;
+			game->hp = 16;
+			game->energy = 99;
+			game->subWeapon = -1;
 
-		Whip* whip = scene->GetWhip();
-		game->stateWhip = whip->GetState();
+			game->stateWhip = 0;
+		}
+		else
+		{
+			game->score = simon->GetScore();
+			game->life = simon->GetLife();
+			game->hp = simon->GetHP();
+			game->energy = simon->GetEnergy();
+			game->subWeapon = simon->GetSubWeapon();
+
+			Whip* whip = scene->GetWhip();
+			game->stateWhip = whip->GetState();
+		}
 	}
 
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources

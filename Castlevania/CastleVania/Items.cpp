@@ -13,12 +13,11 @@ Items::Items() :GameObject()
 	AnimationSets* animation_sets = AnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(3);
 	SetAnimationSet(ani_set);
-	GetRandomItem();
 }
 
 void Items::Render()
 {
-	animation_set->at(GetState())->Render(1, nx, x, y);
+	animation_set->at(state)->Render(1, nx, x, y);
 }
 
 void Items::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)

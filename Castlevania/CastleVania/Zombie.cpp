@@ -1,4 +1,4 @@
-#include "Zombie.h"
+﻿#include "Zombie.h"
 
 
 
@@ -54,13 +54,14 @@ void Zombie::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 		if (nx != 0 && ny == 0)
 		{
-			this->nx *= 1;
-			this->vx *= 1;
+			this->nx *= -1;
+			this->vx *= -1;
 		}
 		else if (ny == -1.0f)
 		{
 			vy = 0;
 		}
+		
 	}
 
 	// clean up collision events
@@ -71,13 +72,13 @@ void Zombie::Render()
 {
 	if(state != ZOMBIE_INACTIVE)
 		animation_set->at(state)->Render(1, nx, x, y);
-	RenderActiveBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Zombie::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
+	left = x + 11; // (10/32)
+	top = y + 2; // (60,64)
 	right = left + ZOMBIE_BBOX_WIDTH;
 	bottom = top + ZOMBIE_BBOX_HEIGHT;
 }
@@ -89,8 +90,10 @@ void Zombie::SetState(int state)
 	switch (state)
 	{
 	case ZOMBIE_ACTIVE:
-		if (nx > 0) vx = ZOMBIE_WALKING_SPEED;
-		else vx = -ZOMBIE_WALKING_SPEED;
+		if (nx > 0) 
+			vx = ZOMBIE_WALKING_SPEED;
+		else 
+			vx = -ZOMBIE_WALKING_SPEED;
 		vy = 0;
 		isDroppedItem = false;
 		respawnTime_Start = 0;
@@ -123,6 +126,7 @@ void Zombie::GetActiveBoundingBox(float& left, float& top, float& right, float& 
 void Zombie::LoseHP(int x)
 {
 	Enemy::LoseHP(x);
+
 	if (hp == 0)
 		SetState(ZOMBIE_DESTROYED);
 }

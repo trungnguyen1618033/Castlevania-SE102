@@ -8,7 +8,7 @@ HunchBack::HunchBack()
 	hp = 1;
 	score = 500;
 	attack = 2;
-	respawnWaitingTime = 5000;
+	respawnWaitingTime = 10000;
 }
 
 void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)

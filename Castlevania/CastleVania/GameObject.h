@@ -61,6 +61,7 @@ public:
 
 	bool isEnable;
 
+	int idItem;		// id của item mà object đó chứa (-1: no item)
 
 	bool isDroppedItem = false;
 
@@ -69,6 +70,7 @@ public:
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx; this->vy = vy; }
 	void SetState(int state) { this->state = state; }
+	void SetIDItem(int id) { this->idItem = id; }
 
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }

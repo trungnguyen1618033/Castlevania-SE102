@@ -32,7 +32,7 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	if (vy >= BAT_FLYING_SPEED_Y)
 		vy = 0;
-	if (y > 186)
+	if (y > 144)
 		vy = 0;
 
 
