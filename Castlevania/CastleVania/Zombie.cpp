@@ -1,13 +1,11 @@
 ﻿#include "Zombie.h"
 
-
-
 Zombie::Zombie()
 {
 	hp = 1;
 	score = 100;
 	attack = 2;
-	respawnWaitingTime = 5000;
+	respawnWaitingTime = 4000;
 }
 
 Zombie::~Zombie()

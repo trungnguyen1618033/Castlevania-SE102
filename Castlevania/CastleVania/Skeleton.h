@@ -1,6 +1,8 @@
 #pragma once
 #include "Enemy.h"
 #include "Ground.h"
+#include "Grid.h"
+#include "Bone.h"
 #define SKELETON_ACTIVE			0
 #define SKELETON_DESTROYED		1
 #define SKELETON_INACTIVE		4
@@ -11,8 +13,9 @@
 class Skeleton : public Enemy
 {
 	bool isJumping;
-	int left;
-	int right;
+
+	DWORD lastTimeThrown = 0;
+	int velocityVariation = 1;
 
 public:
 	Skeleton();
@@ -25,5 +28,8 @@ public:
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	virtual void LoseHP(int x);
+
+	bool CanHit();
+	void Hit(Grid* grid);
 };
 

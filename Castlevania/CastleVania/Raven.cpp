@@ -1,13 +1,11 @@
 ﻿#include "Raven.h"
 
-#define RAVEN_FLYING_SPEED_X 0.12f
-#define RAVEN_FLYING_SPEED_Y 0.1f
 Raven::Raven()
 {
 	hp = 1;
 	score = 200;
 	attack = 2;
-	respawnWaitingTime = 0;
+	respawnWaitingTime = 5000;
 }
 
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
@@ -28,6 +26,7 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	}
 	if (isStopWaiting == false && (GetTickCount() - endTimeWaiting > 1500))
 	{
+
 		StartStopTimeCounter();
 	}
 
@@ -35,18 +34,18 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		if (GetTickCount() - startTimeWaiting > 1000)
 		{
+			//DebugOut(L"Fly");
 			endTimeWaiting = GetTickCount();
 			isStopWaiting = false;
 			startTimeWaiting = 0;
 		}
 		else
 		{
+			//DebugOut(L"Waiting");
 			vx = vy = 0;
 			return;
 		}
 	}
-
-	
 
 	GetVelocity();
 
@@ -105,20 +104,21 @@ void Raven::SetState(int state)
 	}
 }
 
+
 void Raven::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x + 11;
-	top = y + 11;
-	right = left + 10;
-	bottom = top + 10;
+	top = y;
+	right = left + RAVEN_BBOX_WIDTH;
+	bottom = top + RAVEN_BBOX_HEIGHT;
 }
 
 void Raven::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = entryPosition.x - 192;
-	top = entryPosition.y - 96 ;
-	right = entryPosition.x - 160;
-	bottom = entryPosition.y  + 160;
+	left = entryPosition.x - RAVEN_ACTIVE_BBOX_WIDTH - 32;
+	right = entryPosition.x + RAVEN_ACTIVE_BBOX_WIDTH;
+	top = entryPosition.y;
+	bottom = entryPosition.y + RAVEN_ACTIVE_BBOX_HEIGHT;
 }
 
 void Raven::LoseHP(int x)
@@ -146,8 +146,10 @@ void Raven::GetVelocity()
 		ny = 1;
 	else
 		ny = -1;
+
+	SetOrientation(nx);
 	
-	// tính vận tốc
+
 	if (dx < 10 && dy < 10)
 	{
 		vx = nx * dx / 250;
@@ -155,8 +157,8 @@ void Raven::GetVelocity()
 	}
 	else
 	{
-		vx = nx * dx / 1000;
-		vy = ny * dy / 1000;
+		vx = nx * dx / 1200;
+		vy = ny * dy / 1200;
 	}
 	
 	

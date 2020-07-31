@@ -11,6 +11,7 @@
 14	textures\Weapons\HolyWater.png	255	255	255
 20	textures\Enemys\Skeleton.png	255	255	255
 21	textures\Enemys\Raven.png	255	255	255
+30	textures\Enemys\Bone.png	255	255	255
 
 80	textures\Spark.png	255	255	255
 90	textures\Pause.png	255	255	255
@@ -140,6 +141,11 @@
 2103	64	0	96	32	21
 2104	96	0	128	32	21
 
+#BONE
+3001	0	0	32	32	30
+3002	32	0	64	32	30
+3003	64	0	96	32	30
+
 #SPARK
 8001	0	0	16	20	80
 
@@ -231,6 +237,9 @@
 2101	2103	100	2102	100	2101	100
 2102	2104	200
 
+#BONE
+3001	3001	100	3002	100	3003	100
+
 #SPARK
 8001	8001	100
 
@@ -252,9 +261,11 @@
 # Weapon
 4	301	802	902	1401	1402	1402
 # SKELETON
-20	2001	2002	2001
+20	2001	2002	2001	2001
 # RAVEN
 21	2101	9901	2102
+
+30	3001
 
 # id	file_image_path	file_text	width	height
 [TILEMAP]
@@ -268,8 +279,8 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon, 2 = Torch
 # SIMON
-0	100.0	48	0
-
+0	162	370	0
+#0	170	374	0
 # CANDLE
 2	304	76	2	1
 2	432	304	2	1
@@ -357,8 +368,14 @@
 
 
 20	640	336	20
+20	1280	336	20
 
 21	448	208	21
+#21	832	240	21
+21	960	176	21
+21	1024	240	21
+
+
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

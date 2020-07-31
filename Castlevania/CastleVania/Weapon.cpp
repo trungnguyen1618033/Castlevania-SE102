@@ -80,7 +80,7 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 
 				UpdateCollisionState();
 			}
-			else if (dynamic_cast<Ground*>(e->obj))
+			else if (dynamic_cast<Ground*>(e->obj) || dynamic_cast<BreakWall*>(e->obj))
 			{
 				if (state == WEAPON_HOLY_WATER && e->ny == -1)
 					SetState(HOLY_WATER_BROKEN);
@@ -88,7 +88,6 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				x += dx;
 				y += dy;
 			}
-			
 			else if (dynamic_cast<Knight*>(e->obj))
 			{
 				Knight* knight = dynamic_cast<Knight*>(e->obj);

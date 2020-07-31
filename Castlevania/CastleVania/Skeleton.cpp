@@ -1,21 +1,11 @@
 ﻿#include "Skeleton.h"
 
-#define SKELETON_JUMP_SPEED_Y		0.7f
-#define SKELETON_GRAVITY				0.0015f
-#define SKELETON_WALKING_SPEED_X		0.1f
-
-#define SKELETON_BBOX_WIDTH			10
-#define SKELETON_BBOX_HEIGHT			60
-
 Skeleton::Skeleton()
 {
-	hp = 1;
+	hp = 2;
 	score = 300;
-	attack = 2 + rand() % 3;
 	respawnWaitingTime = 5000;
 	isJumping = false;
-	left = 0;
-	right = 96;
 }
 
 void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
@@ -37,14 +27,17 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 		return;
 	}
 
+
 	if (state == SKELETON_INACTIVE)
 		return;
 
-	if (x < left) {
-		vx = 0.05f;
-	}
-	else if (x > right) {
-		vx = -0.05f;
+	if (this->state == SKELETON_ACTIVE)
+	{
+		vx += velocityVariation * 0.01f;
+		if (vx > 0.14f) 
+			velocityVariation = -1;
+		else if (vx < -0.14f)  
+			velocityVariation = 1;;
 	}
 
 	Enemy::Update(dt);
@@ -57,8 +50,6 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
-
-	//DebugOut(L"%d ", coEvents.size());
 
 	if (coEvents.size() == 0)
 	{
@@ -75,10 +66,25 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 		x += dx;
 		y += min_ty * dy + ny * 0.1f;
 
-		if (ny == -1.0f)
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			vy = 0;
+			LPCOLLISIONEVENT e = coEventsResult[i];
 
+			if (dynamic_cast<Ground*>(e->obj))
+			{
+				if (e->ny != 0)
+				{
+					if (e->ny == -1)
+					{
+						vy = 0;
+
+						if (state == SKELETON_JUMP) // jump xong chạm đất -> walk
+							SetState(SKELETON_ACTIVE);
+					}
+					else
+						y += dy;
+				}
+			}
 		}
 	}
 
@@ -88,7 +94,7 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 
 void Skeleton::Render()
 {
-	if (state != SKELETON_INACTIVE)
+ 	if (state != SKELETON_INACTIVE)
 		animation_set->at(state)->Render(1, nx, x, y);
 	RenderActiveBoundingBox();
 }
@@ -100,10 +106,8 @@ void Skeleton::SetState(int state)
 	switch (state)
 	{
 	case SKELETON_ACTIVE:
-		if (nx > 0) 
-			vx = SKELETON_WALKING_SPEED_X;
-		else 
-			vx = -SKELETON_WALKING_SPEED_X;
+		vx = vy = 0;
+		lastTimeThrown = GetTickCount();
 		break;
 	case SKELETON_DESTROYED:
 		vx = vy = 0;
@@ -117,14 +121,15 @@ void Skeleton::SetState(int state)
 		StartRespawnTimeCounter();
 		break;
 	case SKELETON_JUMP:
-		vx = 0.1;
-		vy = -0.7;
+		vx = 0.09;
+		vy = -0.5;
 		isDroppedItem = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
 		isJumping = true;
 		break;
 	case SKELETON_HIT:
+		
 		vx = vy = 0;
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		break;
@@ -135,18 +140,18 @@ void Skeleton::SetState(int state)
 
 void Skeleton::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 11; // 10,32
-	top = y + 2;  // 60,64
+	left = x + 11;
+	top = y + 2;  
 	right = left + SKELETON_BBOX_WIDTH;
 	bottom = top + SKELETON_BBOX_HEIGHT;
 }
 
 void Skeleton::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = entryPosition.x + 224;
-	right = entryPosition.x + 256;
-	top = entryPosition.y ;
-	bottom = entryPosition.y + 160;
+	left = entryPosition.x - RAVEN_ACTIVE_BBOX_WIDTH;
+	right = entryPosition.x + RAVEN_ACTIVE_BBOX_WIDTH;
+	top = entryPosition.y - RAVEN_ACTIVE_BBOX_HEIGHT;
+	bottom = entryPosition.y + RAVEN_ACTIVE_BBOX_HEIGHT;
 }
 
 void Skeleton::LoseHP(int x)
@@ -155,4 +160,31 @@ void Skeleton::LoseHP(int x)
 
 	if (hp == 0)
 		SetState(SKELETON_DESTROYED);
+}
+
+bool Skeleton::CanHit()
+{
+	float dx = abs(x - simonPostion.x);
+	if (dx > 132 && dx < 160 && state == SKELETON_ACTIVE)
+	{
+		if (GetTickCount() - lastTimeThrown > 1000)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void Skeleton::Hit(Grid* grid)
+{
+	// Tạo bone
+	auto bone = new Bone();
+	bone->SetPosition(x + 5, y + 10);
+	bone->SetOrientation(nx);
+	bone->SetState(0);
+	bone->SetEnable(true);
+
+	if (y > 480)
+		Unit* unit = new Unit(grid, bone, x + 5, y);
+	Unit* unit = new Unit(grid, bone, x + 5, y + 10);
 }

@@ -1,7 +1,5 @@
 #include "BreakWall.h"
 
-
-
 BreakWall::BreakWall()
 {
 	SetState(0);

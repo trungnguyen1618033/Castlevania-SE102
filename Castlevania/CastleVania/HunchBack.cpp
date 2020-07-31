@@ -1,14 +1,11 @@
 ﻿#include "HunchBack.h"
 
-
-
-
 HunchBack::HunchBack()
 {
 	hp = 1;
 	score = 500;
 	attack = 2;
-	respawnWaitingTime = 10000;
+	respawnWaitingTime = 5000;
 }
 
 void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
@@ -23,21 +20,15 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovin
 		SetState(HUNCHBACK_INACTIVE);
 		return;
 	}
-
 	vy += HUNCHBACK_GRAVITY * dt;
 	Enemy::Update(dt);
 
-
-	// Check collision between zombie and ground (jumping on ground)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
-
-	//DebugOut(L"%d ", coEvents.size());
-
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -109,20 +100,22 @@ void HunchBack::SetState(int state)
 
 }
 
+
 void HunchBack::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 27;  // (10/64)
-	top = y;
-	right = left + 10;
-	bottom = top + 32	;
+	left = x + 11;
+	top = y ;
+	right = left + HUNCHBACK_BBOX_WIDTH;
+	bottom = top + HUNCHBACK_BBOX_HEIGHT;
 }
+
 
 void HunchBack::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = entryPosition.x + 160;
-	right = entryPosition.x + 180;
-	top = entryPosition.y + 32 ;
-	bottom = entryPosition.y + 160;
+	left = entryPosition.x - HUNCHBACK_ACTIVE_BBOX_WIDTH + 32;
+	right = entryPosition.x + HUNCHBACK_ACTIVE_BBOX_WIDTH;
+	top = entryPosition.y ;
+	bottom = entryPosition.y + HUNCHBACK_ACTIVE_BBOX_HEIGHT;
 }
 
 void HunchBack::LoseHP(int x)
@@ -131,4 +124,22 @@ void HunchBack::LoseHP(int x)
 
 	if (hp == 0)
 		SetState(HUNCHBACK_DESTROYED);
+}
+
+void HunchBack::GetOrientation()
+{
+	// lấy phương hướng
+	int nx;
+
+	if (x < simonPostion.x)
+	{
+		nx = 1;
+	}
+	else
+	{
+		nx = -1;
+		vx = -HUNCHBACK_RUNNING_SPEED_X;
+	}
+
+	SetOrientation(nx);
 }

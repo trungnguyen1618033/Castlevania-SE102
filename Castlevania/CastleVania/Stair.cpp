@@ -1,8 +1,5 @@
 #include "Stair.h"
 
-// Stair
-#define STAIR_BBOX_WIDTH			32
-#define STAIR_BBOX_HEIGHT			32
 
 Stair::Stair()
 {

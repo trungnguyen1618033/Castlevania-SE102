@@ -63,7 +63,6 @@ public:
 
 	bool isDead = false;
 
-
 	LPGAMEOBJECT stairCollided = nullptr;
 
 	
@@ -123,9 +122,6 @@ public:
 	// Kiểm tra va chạm với vùng hoạt động của enemy
 	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects);
 
-
-
-	void SetSimon(int s, int l, int h, int e ,int w);
 	
 	
 };

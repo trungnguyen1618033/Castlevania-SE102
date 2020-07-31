@@ -49,6 +49,7 @@ public:
 	int subWeapon;
 	int stateWhip;
 
+
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 	void Init(HWND hWnd);

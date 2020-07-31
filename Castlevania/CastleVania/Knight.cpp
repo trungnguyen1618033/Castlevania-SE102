@@ -1,8 +1,5 @@
 ﻿#include "Knight.h"
 
-
-#define KNIGHT_SPEED	0.03f
-
 Knight::Knight()
 {
 	hp = 3;

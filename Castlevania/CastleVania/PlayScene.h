@@ -46,8 +46,6 @@ protected:
 	vector<LPGAMEOBJECT> listMovingObjectsToRender;
 	vector<Weapon*> weaponlist;	// dùng mảng để sử dụng double, triple shot
 
-	BlockMove* block;
-
 	Portal* portal;
 
 	bool isSetSimonAutoWalk = false;
@@ -99,7 +97,6 @@ public:
 	void UpdateTimeCounter();
 
 	bool isGameReset = false;
-	bool isGameOver = false;
 	bool isGamePause = false;
 
 	void Simon_Update(DWORD dt);
@@ -114,18 +111,17 @@ public:
 	void SetEnemiesSpawnPositon();				// Tạo vị trí xuất hiện enemies
 	vector<Weapon*>* GetWeaponList() { return &weaponlist; }
 
-	
-	// Item Effect
+	// Hiệu ứng Items
 	bool IsUsingStopWatch() { return isUsingStopWatch; }
 	bool IsDoubleShot() { return isDoubleShot; }
 	bool IsTripleShot() { return isTripleShot; }
-
 
 	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
 	void DoubleShotEffect();
 	void TripleShotEffect();
 
-	void ResetGame();							// Reset lại trạng thái của game (map, simon...) sau khi simon chết
+	// Reset lại trạng thái của game (map, simon...) sau khi simon chết
+	void ResetGame();							
 
 };
 

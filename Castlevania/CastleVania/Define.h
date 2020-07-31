@@ -62,7 +62,19 @@
 	#define WHIP_BBOX_WIDTH				50
 	#define WHIP_BBOX_HEIGHT			15
 
+	// Ground
+	#define GROUND_BBOX_WIDTH 32
+	#define GROUND_BBOX_HEIGHT 32
 
+	// Stair
+	#define STAIR_BBOX_WIDTH			32
+	#define STAIR_BBOX_HEIGHT			32
+
+	// Torch 
+	#define TORCH_BBOX_WIDTH		32
+	#define TORCH_BBOX_HEIGHT		64
+
+	//  ID Items
 	#define KNIFE			0
 	#define WHIPITEM		1
 	#define SMALL_HEART		2
@@ -80,46 +92,126 @@
 	#define MAGIC_CRYSTAL	14
 	#define CROWN			15
 
+	// Items
+	#define ITEM_FALLING_SPEED_X			0.15f
+	#define ITEM_FALLING_SPEED_X_VARIATION	0.01f
+	#define ITEM_FALLING_SPEED_Y			0.15f
+	#define ITEM_SMALLHEART_FALLING_SPEED_Y	0.1f
+	#define ITEM_TIME_DESTROYED				4000
+
 	#define ITEM_TIME_DESTROYED			5000
 
+	// Weapon
+	#define WEAPON_KNIFE				0
+	#define	WEAPON_AXE					1
+	#define WEAPON_BOOMERANG			2
+	#define WEAPON_HOLY_WATER			3
+	#define	WEAPON_STOP_WATCH			4
+	#define HOLY_WATER_BROKEN			5
 
-	#define ZOMBIE_ACTIVE		0
-	#define ZOMBIE_DESTROYED	1
-	#define ZOMBIE_INACTIVE		2
+	#define KNIFE_SPEED					0.2f
+	#define KNIFE_BBOX_WIDTH			32
+	#define KNIFE_BBOX_HEIGHT			32
 
+	#define AXE_BBOX_WIDTH				30
+	#define AXE_BBOX_HEIGHT				28
+
+	#define AXE_SPEED_X			0.2f
+	#define AXE_SPEED_Y			0.5f
+	#define AXE_GRAVITY			0.001f
+
+	#define BOOMERANG_SPEED		0.5f
+	#define BOOMERANG_TURNBACK_SPEED		0.01f
+
+	#define HOLY_WATER_GRAVITY	0.001f
+	#define HOLY_WATER_SPEED_X	0.25f
+	#define HOLY_WATER_SPEED_Y	0.1f
+	#define HOLY_WATER_TIME_EFFECT	1000
+
+
+	// BreakWalk
+	#define NORMAL				0
+	#define BREAK				1
+	// Wall pieces
+	#define	WALLPIECES_GRAVITY			0.0005f
+	#define WALLPIECES_TIME				2000
+	#define	WALL_GRAVITY			0.0005f
+	#define WALL_TIME				2000
+
+	// BlockMove
+	#define BLOCK_BBOX_WIDTH		64
+	#define BLOCK_BBOX_HEIGHT		16
+	#define SPEED_BLOCK				0.075f
+	
+
+	// Zombie
+	#define ZOMBIE_ACTIVE			0
+	#define ZOMBIE_DESTROYED		1
+	#define ZOMBIE_INACTIVE			2
 	#define ZOMBIE_WALKING_SPEED		0.1f
 	#define ZOMBIE_RESPAWN_TIME			5000
 	#define ZOMBIE_GRAVITY				0.002f
-
 	#define ZOMBIE_BBOX_WIDTH			10
 	#define ZOMBIE_BBOX_HEIGHT			60
-
 	#define ZOMBIE_ACTIVE_BBOX_WIDTH			200
 	#define ZOMBIE_ACTIVE_BBOX_HEIGHT			200
 
+
+	// Bat
 	#define BAT_ACTIVE			0
 	#define BAT_DESTROYED		1
 	#define BAT_INACTIVE		3
 	#define BAT_IDLE			2
-
 	#define BAT_BBOX_WIDTH			10
 	#define BAT_BBOX_HEIGHT			32
-	#define BAT_ACTIVE_BBOX_WIDTH			100 
-	#define BAT_ACTIVE_BBOX_HEIGHT			100
-
+	#define BAT_ACTIVE_BBOX_WIDTH			192 
+	#define BAT_ACTIVE_BBOX_HEIGHT			112
+	#define BAT_FLYING_SPEED_Y	0.1f
+	#define BAT_MAX_Y			144
 	#define BAT_FLYING_SPEED_X	0.1f
 	#define BAT_FLYING_SPEED_Y	0.15f
 	#define BAT_SPEED_VARIATION 0.006f
 	#define BAT_RESPAWN_TIME	5000
 
+	// Bone
+	#define BONE_SPEED_X			0.16f
+	#define BONE_SPEED_Y			0.40f
+	#define BONE_GRAVITY			0.001f
+
+	#define BONE_BBOX_WIDTH			32
+	#define BONE_BBOX_HEIGHT		28
+
+	// Enemys
 	#define ACTIVE			0
 	#define DESTROYED		1
 	#define INACTIVE		2
 
-	#define GROUND_BBOX_WIDTH 32
-	#define GROUND_BBOX_HEIGHT 32
+	#define ENEMY_DEFAULT_BBOX_WIDTH	32
+	#define ENEMY_DEFAULT_BBOX_HEIGHT	32
 
+	// Knight
 
+	#define KNIGHT_SPEED	0.03f
+
+	// Raven
+	#define RAVEN_FLYING_SPEED_X 0.12f
+	#define RAVEN_FLYING_SPEED_Y 0.1f
+	#define RAVEN_BBOX_WIDTH			10
+	#define RAVEN_BBOX_HEIGHT			32
+	#define RAVEN_ACTIVE_BBOX_WIDTH		128
+	#define RAVEN_ACTIVE_BBOX_HEIGHT	160
+
+	// Skeleton
+	#define SKELETON_JUMP_SPEED_Y		0.7f
+	#define SKELETON_GRAVITY				0.0015f
+	#define SKELETON_WALKING_SPEED_X		0.1f
+
+	#define SKELETON_BBOX_WIDTH				10
+	#define SKELETON_BBOX_HEIGHT			60
+	#define RAVEN_ACTIVE_BBOX_WIDTH			256
+	#define RAVEN_ACTIVE_BBOX_HEIGHT		160
+
+	// Boss
 	#define BOSS_ACTIVE			0
 	#define BOSS_DESTROYED		1
 	#define BOSS_INACTIVE		2
@@ -136,27 +228,22 @@
 	#define BOSS_RECT_RANDOMSPOT_BBOX_WIDTH		200
 	#define BOSS_RECT_RANDOMSPOT_BBOX_HEIGHT	200
 
-	#define ENEMY_DEFAULT_BBOX_WIDTH	32
-	#define ENEMY_DEFAULT_BBOX_HEIGHT	32
-
-	#define NORMAL				0
-	#define BREAK				1
-	// Wall pieces
-	#define	WALLPIECES_GRAVITY			0.0005f
-	#define WALLPIECES_TIME				2000
-
+	// HunchBack
 	#define HUNCHBACK_ACTIVE			0
 	#define HUNCHBACK_DESTROYED			1
 	#define HUNCHBACK_INACTIVE			4
-	#define HUNCHBACK_IDLE				3
-	#define HUNCHBACK_JUMP				2
+	#define HUNCHBACK_IDLE				2
 
 	#define HUNCHBACK_RUNNING_SPEED_X	0.12f
 	#define HUNCHBACK_RUNNING_SPEED_Y	0.26f
 	#define HUNCHBACK_GRAVITY			0.001f
 
+	#define HUNCHBACK_BBOX_WIDTH			10
+	#define HUNCHBACK_BBOX_HEIGHT			32
+	#define HUNCHBACK_ACTIVE_BBOX_WIDTH		160
+	#define HUNCHBACK_ACTIVE_BBOX_HEIGHT	224
 
-
+	// Ghost
 	#define GHOST_ACTIVE			0
 	#define GHOST_DESTROYED			1
 	#define GHOST_INACTIVE			2
@@ -164,6 +251,7 @@
 	#define GHOST_FLYING_SPEED_X	0.048f
 	#define GHOST_FLYING_SPEED_Y	0.012f
 
+	// Target
 	#define TORCH		0
 	#define KNIGHT		1
 	#define BAT			2
@@ -177,28 +265,3 @@
 	#define BREAKWALL	10
 
 
-	#define KNIFE_SPEED					0.2f
-	#define KNIFE_BBOX_WIDTH			32
-	#define KNIFE_BBOX_HEIGHT			32
-	#define AXE_BBOX_WIDTH				30
-	#define AXE_BBOX_HEIGHT				28
-
-	#define WEAPON_KNIFE				0
-	#define	WEAPON_AXE					1
-	#define WEAPON_BOOMERANG			2
-	#define WEAPON_HOLY_WATER			3
-	#define	WEAPON_STOP_WATCH			4
-	#define HOLY_WATER_BROKEN			5
-
-
-	#define AXE_SPEED_X			0.2f
-	#define AXE_SPEED_Y			0.5f
-	#define AXE_GRAVITY			0.001f
-
-	#define BOOMERANG_SPEED		0.5f
-	#define BOOMERANG_TURNBACK_SPEED		0.01f
-
-	#define HOLY_WATER_GRAVITY	0.001f
-	#define HOLY_WATER_SPEED_X	0.25f
-	#define HOLY_WATER_SPEED_Y	0.1f
-	#define HOLY_WATER_TIME_EFFECT	1000

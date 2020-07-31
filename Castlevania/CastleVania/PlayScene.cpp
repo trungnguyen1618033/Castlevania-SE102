@@ -300,8 +300,6 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		return;
 	}
 
-	
-
 }
 
 void PlayScene::_ParseSection_TILEMAP(string line)
@@ -402,19 +400,16 @@ void PlayScene::Load()
 
 	if(id == 2)
 	{
-		player->SetPosition(732, 376);
 		player->SetState(ASCEND);
-		player->stairDirection = 1;
 	}
 	if(id == 4)
 	{
-		player->SetPosition(170, 374);
 		player->SetOrientation(-1);
 		player->SetState(ASCEND);
-		player->stairDirection = 1;
 	}
 	if (id == 3)
 	{
+	/*	player->SetPosition(320, 304);*/
 		player->SetOrientation(-1);
 	}
 
@@ -425,6 +420,7 @@ void PlayScene::Load()
 		weapon->SetEnable(false);
 		weaponlist.push_back(weapon);
 	}
+	isBossFighting = false;
 
 }
 
@@ -465,45 +461,32 @@ void PlayScene::Update(DWORD dt)
 		GetColliableObjects(object, coObjects);
 		object->Update(dt, &coObjects, isUsingStopWatch);
 
-		if (dynamic_cast<Skeleton*>(object))
-		{
-			Skeleton* skeleton = dynamic_cast<Skeleton*>(object);
-
-			if (skeleton->GetState() == SKELETON_ACTIVE && abs(player->x - skeleton->GetEntryPosition().x) < 150)
-			{
-				skeleton->SetState(SKELETON_HIT);
-				// Tạo bone
-				float sx, sy, nx;
-
-				skeleton->GetPosition(sx, sy);
-				nx = skeleton->GetOrientation();
-
-				auto bone = new Bone();
-				bone->SetPosition(sx + 5, sy + 10);
-				bone->SetOrientation(nx);
-				bone->SetState(0);
-				bone->SetEnable(true);
-				int new_nx;
-
-				listObjects.push_back(bone);
-			}
-			else
-			{
-				skeleton->SetState(SKELETON_INACTIVE);
-				float simon_x, simon_y;
-				player->GetPosition(simon_x, simon_y);
-
-				int nx = simon_x > skeleton->GetEntryPosition().x ? 1 : -1;
-			
-				skeleton->SetOrientation(nx);
-			}
-		}
-		else if (dynamic_cast<Ghost*>(object))
+		if (dynamic_cast<Ghost*>(object))
 		{
 			Ghost* ghost = dynamic_cast<Ghost*>(object);
 			float sx, sy;
 			player->GetPosition(sx, sy);
 			ghost->SetSimonPosition(sx, sy);
+		}
+		else if (dynamic_cast<HunchBack*>(object))
+		{
+			HunchBack* hunchback = dynamic_cast<HunchBack*>(object);
+			float sx, sy;
+			player->GetPosition(sx, sy);
+			hunchback->SetSimonPosition(sx, sy);
+		}
+		else if (dynamic_cast<Skeleton*>(object))
+		{
+			Skeleton* skeleton = dynamic_cast<Skeleton*>(object);
+			float sx, sy;
+			player->GetPosition(sx, sy);
+			skeleton->SetSimonPosition(sx, sy);
+			if (skeleton->CanHit() == true)
+			{
+				skeleton->SetState(SKELETON_HIT);
+
+				skeleton->Hit(grid);
+			}
 		}
 		else if (dynamic_cast<Raven*>(object))
 		{
@@ -541,6 +524,10 @@ void PlayScene::Update(DWORD dt)
 void PlayScene::Render()
 {
 	Game* game = Game::GetInstance();
+
+	if (game->GetChangeScene() == true)
+		return;
+
 	tilemaps->Get(id)->Draw(game->GetCameraPositon());
 
 	for (auto obj : listStaticObjectsToRender)
@@ -551,16 +538,6 @@ void PlayScene::Render()
 		obj->Render();
 		//obj->RenderBoundingBox();
 	}
-	for (auto obj : listStairs)
-	{
-		//obj->RenderBoundingBox();
-	}
-	/*for (auto obj : listObjects)
-	{
-		if(dynamic_cast<Ground*>(obj))
-			obj->RenderBoundingBox();
-	}*/
-
 	for (auto obj : listMovingObjectsToRender)
 	{
 		if (obj->IsEnable() == false)
@@ -598,8 +575,6 @@ void PlayScene::Render()
 	}
 	
 
-	if(block != NULL)
-		block->Render();
 	portal->RenderBoundingBox();
 
 }
@@ -654,7 +629,6 @@ void PlayScene::SetDropItems()
 			(dynamic_cast<Bat*>(object) && object->GetState() == BAT_DESTROYED) ||
 			(dynamic_cast<Raven*>(object) && object->GetState() == RAVEN_DESTROYED))
 		{
-			DebugOut(L"here: %d\n", idItem);
 			idItem = GetRandomItem();
 			object->GetPosition(x, y);
 			object->SetIsDroppedItem(true);
@@ -701,23 +675,41 @@ void PlayScene::SetInactivation()
 	{
 		if (IsInViewport(object) == false)
 		{
-			if (dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_ACTIVE)
+			if (dynamic_cast<Knight*>(object) && object->GetState() == KNIGHT_ACTIVE)
 			{
-				auto zombie = dynamic_cast<Zombie*>(object);
-				zombie->SetState(ZOMBIE_INACTIVE);
+				auto knight = dynamic_cast<Knight*>(object);
+				knight->SetState(KNIGHT_INACTIVE);
 			}
-			if (dynamic_cast<Ghost*>(object) && object->GetState() == GHOST_ACTIVE)
+			else if (dynamic_cast<Ghost*>(object) && object->GetState() == GHOST_ACTIVE)
 			{
 				auto ghost = dynamic_cast<Ghost*>(object);
 				ghost->SetState(GHOST_INACTIVE);
 			}
-			if (dynamic_cast<HunchBack*>(object) && object->GetState() == HUNCHBACK_ACTIVE)
+			else if (dynamic_cast<HunchBack*>(object) && object->GetState() == HUNCHBACK_ACTIVE)
 			{
 				auto hunchback = dynamic_cast<HunchBack*>(object);
 				hunchback->SetState(HUNCHBACK_INACTIVE);
 			}
+			else if (dynamic_cast<Raven*>(object) && object->GetState() == RAVEN_ACTIVE)
+			{
+				auto raven = dynamic_cast<Raven*>(object);
+				raven->SetState(RAVEN_INACTIVE);
+			}
+			else if (dynamic_cast<Skeleton*>(object) && object->GetState() == SKELETON_ACTIVE)
+			{
+				auto skeleton = dynamic_cast<Skeleton*>(object);
+				skeleton->SetState(SKELETON_INACTIVE);
+			}
+			else if (dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_ACTIVE)
+			{
+				auto zombie = dynamic_cast<Zombie*>(object);
+				zombie->SetState(ZOMBIE_INACTIVE);
+			}
+			else if (dynamic_cast<Bone*>(object) && object->IsEnable() == true)
+				object->SetEnable(false);
 			else if (dynamic_cast<Items*>(object) && object->IsEnable() == true)
 				object->SetEnable(false);
+
 		}
 	}
 
@@ -748,16 +740,17 @@ void PlayScene::UpdateCameraPosition()
 {
 	Game* game = Game::GetInstance();
 
-	if (isBossFighting == true)	// Boss fight -> not moving camera
+	if (isBossFighting == true)	// ko cho camera di chuyển khi đánh với bos
 		return;
 
 	if (game->GetChangeScene() == true)
 		return;
-	/*if (boss->GetState() == BOSS_ACTIVE)
+
+	if (boss != NULL && boss->GetState() == BOSS_ACTIVE)
 	{
 		isBossFighting = true;
 		return;
-	}*/
+	}
 
 	if (id == 1)
 	{
@@ -793,10 +786,7 @@ void PlayScene::UpdateTimeCounter()
 	{
 		isSimonDead = false;
 		simonDeadTimeCounter = 0;
-		if (player->GetLife() == 0)
-			isGameOver = true;
-		else
-			ResetGame();
+		ResetGame();
 	}
 
 	// Double shot
@@ -979,7 +969,7 @@ void PlayScene::GetColliableObjects(LPGAMEOBJECT curObj, vector<LPGAMEOBJECT>& c
 				coObjects.push_back(obj);
 			else if(dynamic_cast<BreakWall*>(obj) && obj->GetState() == NORMAL)
 				coObjects.push_back(obj);
-			else if (player->isAutoWalk == false)
+			else if (player->isAutoWalk == false) // nếu simon auto-walk sẽ không xét va chạm với enemy
 			{
 				if (dynamic_cast<Bone*>(obj) && obj->IsEnable() == true)
 					coObjects.push_back(obj);
@@ -1038,40 +1028,11 @@ void PlayScene::SetEnemiesSpawnPositon()
 	Game* game = Game::GetInstance();
 	for (auto obj : listObjects)
 	{
-		if (dynamic_cast<Zombie*>(obj))
-		{
-			Zombie* zombie = dynamic_cast<Zombie*>(obj);
-
-			if (zombie->GetState() != ZOMBIE_INACTIVE && zombie->isSettedPosition == false)
-			{
-				zombie->isSettedPosition = true;
-
-				float simon_x, simon_y;
-				player->GetPosition(simon_x, simon_y);
-
-				int nx = zombie->GetEntryPosition().x < simon_x ? 1 : -1;
-				zombie->SetOrientation(nx);
-
-				// Cần random một khoảng nhỏ để tránh việc các zombie spawn cùng lúc, tại cùng một vị trí
-				int randomDistance = rand() % 30;
-
-				float x, y;
-				y = zombie->GetEntryPosition().y;
-				
-				if (nx == -1)
-					x = game->GetCameraPositon().x + SCREEN_WIDTH - (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
-				else
-					x = game->GetCameraPositon().x + (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
-
-				zombie->SetPosition(x, y);
-				zombie->SetState(ZOMBIE_ACTIVE);
-			}
-		}
-		else if (dynamic_cast<Knight*>(obj))
+		 if (dynamic_cast<Knight*>(obj))
 		{
 			Knight* knight = dynamic_cast<Knight*>(obj);
 
-			if (knight->GetState() == KNIGHT_INACTIVE && knight->IsEnable()== true)
+			if (knight->GetState() == KNIGHT_INACTIVE)
 			{
 				if (IsInViewport(knight) == true)
 				{
@@ -1095,6 +1056,8 @@ void PlayScene::SetEnemiesSpawnPositon()
 
 			if (ghost->GetState() != GHOST_INACTIVE && ghost->isSettedPosition == false)
 			{
+				ghost->isSettedPosition = true;
+
 				float simon_x, simon_y;
 				player->GetPosition(simon_x, simon_y);
 
@@ -1108,38 +1071,76 @@ void PlayScene::SetEnemiesSpawnPositon()
 		{
 			HunchBack* hunchback = dynamic_cast<HunchBack*>(obj);
 
-			if (hunchback->IsAbleToActivate() == true && IsInViewport(hunchback) == true)
+			if (hunchback->GetState() == HUNCHBACK_INACTIVE)
 			{
-				hunchback->SetState(HUNCHBACK_IDLE);
+				if (hunchback->IsAbleToActivate() == true && IsInViewport(hunchback) == true && abs(player->x - hunchback->GetEntryPosition().x) > 200)
+				{
+					int nx = hunchback->GetEntryPosition().x < player->x ? 1 : -1;
+					hunchback->SetOrientation(nx);
+					hunchback->SetState(HUNCHBACK_IDLE);
+				}
 			}
 		}
 		else if (dynamic_cast<Skeleton*>(obj))
 		{
 			Skeleton* skeleton = dynamic_cast<Skeleton*>(obj);
 
-			if (skeleton->GetState() == SKELETON_INACTIVE)
+			if (skeleton->GetState() != SKELETON_INACTIVE && skeleton->isSettedPosition == false)
 			{
-				if (skeleton->IsAbleToActivate() == true && IsInViewport(skeleton) == true)
-				{
-					int nx = skeleton->GetEntryPosition().x < player->x ? 1 : -1;
-					skeleton->SetOrientation(-nx);
+				skeleton->isSettedPosition = true;
 
-					skeleton->SetState(SKELETON_ACTIVE);
-				}
+				float simon_x, simon_y;
+				player->GetPosition(simon_x, simon_y);
+
+				int nx = skeleton->GetEntryPosition().x < simon_x ? 1 : -1;
+				skeleton->SetOrientation(nx);
+
+				skeleton->SetState(SKELETON_JUMP);
 			}
 		}
 		else if (dynamic_cast<Raven*>(obj))
 		{
 			Raven* raven = dynamic_cast<Raven*>(obj);
 
-			if (raven->IsAbleToActivate() == true && IsInViewport(raven) == true)
+			if (raven->GetState() == RAVEN_INACTIVE)
 			{
-				int nx = raven->GetEntryPosition().x < player->x ? 1 : -1;
-				raven->SetOrientation(nx);
-				raven->SetState(RAVEN_IDLE);
+				if (raven->IsAbleToActivate() == true && IsInViewport(raven) == true && abs(player->x - raven->GetEntryPosition().x) > 200)
+				{
+					int nx = raven->GetEntryPosition().x < player->x ? 1 : -1;
+					raven->SetOrientation(nx);
+					raven->SetState(HUNCHBACK_IDLE);
+				}
 			}
 		}
-		
+		else if (dynamic_cast<Zombie*>(obj))
+		{
+			Zombie* zombie = dynamic_cast<Zombie*>(obj);
+
+			if (zombie->GetState() != ZOMBIE_INACTIVE && zombie->isSettedPosition == false)
+			{
+				zombie->isSettedPosition = true;
+
+				float simon_x, simon_y;
+				player->GetPosition(simon_x, simon_y);
+
+				int nx = zombie->GetEntryPosition().x < simon_x ? 1 : -1;
+				zombie->SetOrientation(nx);
+
+				// Cần random một khoảng nhỏ để tránh việc các zombie spawn cùng lúc, tại cùng một vị trí
+				int randomDistance = rand() % 30;
+
+				float x, y;
+				y = zombie->GetEntryPosition().y;
+
+				if (nx == -1)
+					x = game->GetCameraPositon().x + SCREEN_WIDTH - (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
+				else
+					x = game->GetCameraPositon().x + (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
+
+				zombie->SetPosition(x, y);
+				zombie->SetState(ZOMBIE_ACTIVE);
+			}
+		}
 	}
 }
 
@@ -1167,7 +1168,7 @@ void PlayScene::ResetGame()
 {
 	isGameReset = true;
 	isSimonDead = false;
-	isGameOver = false;
+	
 
 	int life = player->GetLife();
 
@@ -1397,7 +1398,7 @@ void PlaySceneKeyHandler::Simon_Hit_Weapon()
 	if (simon->GetSubWeapon() == -1 || simon->GetEnergy() == 0) // không có vũ khí hoặc enery = 0
 		return;
 
-	if (simon->GetSubWeapon() == 3)
+	if (simon->GetSubWeapon() == 4)
 	{
 		if (simon->GetEnergy() < 5)
 			return;
@@ -1460,7 +1461,6 @@ void PlaySceneKeyHandler::Simon_Stair_Down()
 			simon->SetState(IDLE);
 		else
 			simon->SetState(DUCK);
-
 		return;
 	}
 
@@ -1522,7 +1522,7 @@ void PlaySceneKeyHandler::Simon_Stair_Up()
 		simon->GetPosition(simon_x, temp_y);
 
 		if (stairDirection == 1) 
-			stair_x -= 31.0f;
+			stair_x -= 32.0f;
 		else 
 			stair_x += 5.0f;
 

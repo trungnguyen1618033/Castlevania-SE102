@@ -292,7 +292,8 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon, 2 = Torch
 # SIMON
-0	912	60	0
+0	738	370	0
+#0	732	376	0
 
 15	64	208	15
 

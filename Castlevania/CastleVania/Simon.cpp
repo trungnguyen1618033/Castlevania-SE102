@@ -15,6 +15,9 @@ Simon::Simon() : GameObject()
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	/*DebugOut(L"dt: %d\n", dt);*/
+	if (dt > 64)
+		dt = 16;
 	GameObject::Update(dt);
 	
 	// Update vy
@@ -47,6 +50,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	if (coEvents.size() == 0 && isAutoWalk == false)
 	{
+		
 		x += dx;
 		y += dy;
 		if (vy > 0.2f)
@@ -70,7 +74,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 			if (dynamic_cast<Portal*>(e->obj))
 			{
-				//DebugOut(L"hello\n");
 				Portal* p = dynamic_cast<Portal*>(e->obj);
 				Game::GetInstance()->SwitchScene(p->GetSceneId());
 			}
@@ -114,7 +117,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				SetState(IDLE);
 			}
 			else if (dynamic_cast<Knight*>(e->obj) || dynamic_cast<Bat*>(e->obj) || dynamic_cast<Ghost*>(e->obj) || dynamic_cast<HunchBack*>(e->obj) ||
-				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj))
+				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj) || dynamic_cast<Bone*>(e->obj))
 			{
 				if (state != UPGRADE && isUntouchable == false)
 				{
@@ -148,6 +151,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 					{
 						Boss* boss = dynamic_cast<Boss*>(e->obj);
 						LoseHP(boss->GetAttack());
+					}
+					else if (dynamic_cast<Bone*>(e->obj))
+					{
+						LoseHP(1);
 					}
 
 					if (isStandOnStair == false || hp == 0)  // Simon đứng trên cầu thang sẽ không nhấp nháy
@@ -194,6 +201,9 @@ void Simon::Render()
 
 	if (isUntouchable == true)  // Để render Simon nhấp nháy trong trạng thái isUntouchable
 		alpha = rand() % 255;
+
+	if (state == -1)
+		return;
 
 	animation_set->at(state)->Render(1, nx, x, y, alpha);
 }
@@ -430,7 +440,7 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 				if (dx == GROUND_BBOX_WIDTH && dy == GROUND_BBOX_HEIGHT) // vì bậc nằm duoi nên dy = +...
 					canMoveDownStair = true;
 			}
-			return true; // collision between Simon and stairs
+			return true; // va chạm Simon và stairs
 		}
 
 	}
@@ -468,7 +478,8 @@ void Simon::DoAutoWalk()
 		nx = nxAfterAutoWalk;
 
 		SetState(state);
-		if (state == DESCEND) y += 1.0f; // + 1.0f để đảm bảo simon sẽ va chạm với bậc thang trong lần update kế tiếp
+		if (state == DESCEND) 
+			y += 1.0f; // + 1.0f để đảm bảo simon sẽ va chạm với bậc thang trong lần update kế tiếp
 
 		isAutoWalk = false;
 		autoWalkDistance = 0;
@@ -515,7 +526,8 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 			else if (dynamic_cast<Ghost*>(enemy))
 			{
 				Ghost* ghost = dynamic_cast<Ghost*>(enemy);
-				ghost->SetState(GHOST_ACTIVE);
+				if(ghost->GetState() == GHOST_INACTIVE && ghost->IsAbleToActivate())
+					ghost->SetState(GHOST_ACTIVE);
 			}
 			else if (dynamic_cast<HunchBack*>(enemy))
 			{
@@ -526,7 +538,7 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 			else if (dynamic_cast<Raven*>(enemy))
 			{
 				Raven* raven = dynamic_cast<Raven*>(enemy);
-				if (raven->IsEnable() == true)
+				if (raven->GetState() == RAVEN_IDLE)
 					raven->SetState(RAVEN_ACTIVE);
 			}
 			else if (dynamic_cast<Zombie*>(enemy))
@@ -538,9 +550,8 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 			else if (dynamic_cast<Skeleton*>(enemy))
 			{
 				Skeleton* skeleton = dynamic_cast<Skeleton*>(enemy);
-
-				if (skeleton->GetState() == SKELETON_INACTIVE)
-					skeleton->SetState(SKELETON_ACTIVE);
+				if (skeleton->GetState() == SKELETON_INACTIVE && skeleton->IsAbleToActivate())
+					skeleton->SetState(SKELETON_JUMP);
 			}
 			else if (dynamic_cast<Boss*>(enemy))
 			{
@@ -559,14 +570,6 @@ void Simon::LoseHP(int x)
 		hp = 0;
 }
 
-void Simon::SetSimon(int s, int l, int h, int e, int w)
-{
-	score = s;
-	life = l;
-	hp = h;
-	energy = e;
-	subWeapon = s;
-}
 
 
 

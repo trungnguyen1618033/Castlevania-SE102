@@ -401,8 +401,8 @@ void Game::SwitchScene(int scene_id)
 			game->hp = 16;
 			game->energy = 99;
 			game->subWeapon = -1;
-
 			game->stateWhip = 0;
+
 		}
 		else
 		{

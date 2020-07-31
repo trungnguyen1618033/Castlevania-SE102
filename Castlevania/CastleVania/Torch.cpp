@@ -1,8 +1,6 @@
 ﻿#include "Torch.h"
 #include "PlayScene.h"
 
-#define TORCH_BBOX_WIDTH		32
-#define TORCH_BBOX_HEIGHT		64
 
 Torch::Torch()
 {

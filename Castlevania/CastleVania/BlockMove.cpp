@@ -1,8 +1,6 @@
 #include "BlockMove.h"
 
-#define BLOCK_BBOX_WIDTH		64
-#define BLOCK_BBOX_HEIGHT		16
-#define SPEED_BLOCK				0.075f
+
 
 BlockMove::BlockMove() : GameObject()
 {

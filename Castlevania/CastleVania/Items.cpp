@@ -1,11 +1,5 @@
 ﻿#include "Items.h"
 
-#define ITEM_FALLING_SPEED_X			0.15f
-#define ITEM_FALLING_SPEED_X_VARIATION	0.01f
-#define ITEM_FALLING_SPEED_Y			0.15f
-#define ITEM_SMALLHEART_FALLING_SPEED_Y	0.1f
-#define ITEM_TIME_DESTROYED				4000
-
 Items::Items() :GameObject()
 {
 	vy = ITEM_FALLING_SPEED;

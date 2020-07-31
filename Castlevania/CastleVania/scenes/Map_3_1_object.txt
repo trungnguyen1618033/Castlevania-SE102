@@ -13,6 +13,7 @@
 18	textures\Enemys\Ghost.png	255	255	255
 19	textures\Enemys\Hunchback.png	255	255	255
 20	textures\Enemys\Skeleton.png	255	255	255
+30	textures\Enemys\Bone.png	255	255	255
 
 80	textures\Spark.png	255	255	255
 90	textures\Pause.png	255	255	255
@@ -148,6 +149,11 @@
 2003	70	0	102	64	20
 2004	104	0	136	64	20
 
+#BONE
+3001	0	0	32	32	30
+3002	32	0	64	32	30
+3003	64	0	96	32	30
+
 #SPARK
 8001	0	0	16	20	80
 
@@ -248,6 +254,9 @@
 2001	2001	150	2002	150
 2002	2003	150	2004	150
 
+#BONE
+3001	3001	100	3002	100	3003	100
+
 #SPARK
 8001	8001	100
 
@@ -277,7 +286,9 @@
 # HUNCHBACK
 19	1901	9901	1901	1901
 # SKELETON
-20	2001	2002	2001
+20	2001	2002	2001	2001
+# BONE
+30	3001
 
 # id	file_image_path	file_text	width	height
 [TILEMAP]
@@ -291,7 +302,7 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon, 2 = Torch
 # SIMON
-0	1472	272	0
+0	1464	272	0
 
 # CANDLE
 2	1456	304	2	1
@@ -389,15 +400,15 @@
 10	576	304	10	-1
 
 # GHOST
-18	1308	304	18
+18	1404	336	18
 
 # HUNCHBACK
-19	852	240	19
+19	868	240	19
 19	608	240	19
 19	352	176	19
 
 # SKELETON
-20	96	240	20
+20	12	240	20
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

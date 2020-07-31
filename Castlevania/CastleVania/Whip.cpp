@@ -1,7 +1,5 @@
 ﻿#include "Whip.h"
 
-
-
 Whip::Whip()
 {
 	SetState(WHIP_2);

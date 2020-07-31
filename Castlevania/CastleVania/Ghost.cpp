@@ -1,13 +1,11 @@
 ﻿#include "Ghost.h"
 
-
-
 Ghost::Ghost()
 {
-	hp = 2;
+	hp = 1;
 	score = 300;
 	attack = 2;
-	respawnWaitingTime = 10000;
+	respawnWaitingTime = 5000;
 	velocityVariation = 0.001f;
 
 }
@@ -25,6 +23,7 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 		SetState(GHOST_INACTIVE);
 		return;
 	}
+	GetOrientation();
 
 	Enemy::Update(dt);
 
@@ -104,6 +103,17 @@ void Ghost::LoseHP(int x)
 void Ghost::GetOrientation()
 {
 	// lấy phương hướng
-	
+	int nx;
+
+	if (x < simonPostion.x)
+	{
+		nx = 1;
+		vx *= -1;
+	}
+	else
+		nx = -1;
+
+	SetOrientation(nx);
+
 }
 

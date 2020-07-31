@@ -1,9 +1,11 @@
 #include "Bone.h"
-#define BONE_SPEED				0.2f
 
 Bone::Bone()
 {
 	SetState(0);
+	AnimationSets* animation_sets = AnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(30);
+	SetAnimationSet(ani_set);
 }
 
 void Bone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
@@ -11,7 +13,7 @@ void Bone::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	if (stopMoving == true)
 		return;
 
-	vy += 0.001f * dt;
+	vy += BONE_GRAVITY * dt;
 	GameObject::Update(dt);
 	x += dx;
 	y += dy;
@@ -30,10 +32,10 @@ void Bone::SetState(int state)
 	{
 	case 0:
 		if (nx == 1)
-			vx = BONE_SPEED;
+			vx = BONE_SPEED_X;
 		else
-			vx = -BONE_SPEED;
-		vy = 0.5;
+			vx = -BONE_SPEED_X;
+		vy = -BONE_SPEED_Y;
 		break;
 	default:
 		break;
@@ -44,6 +46,6 @@ void Bone::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y;
-	right = left + 32;
-	bottom = top + 28;
+	right = left + BONE_BBOX_WIDTH;
+	bottom = top + BONE_BBOX_HEIGHT;
 }

@@ -1,6 +1,5 @@
 #include "Bat.h"
 
-#define BAT_FLYING_SPEED_Y	0.1f
 
 Bat::Bat()
 {
@@ -32,13 +31,11 @@ void Bat::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	if (vy >= BAT_FLYING_SPEED_Y)
 		vy = 0;
-	if (y > 144)
+	if (y > BAT_MAX_Y)
 		vy = 0;
-
 
 	x += dx;
 	y += dy;
-
 
 }
 
@@ -46,13 +43,13 @@ void Bat::Render()
 {
 	if(state !=	BAT_INACTIVE)
 		animation_set->at(state)->Render(1, nx, x, y);
-	RenderActiveBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Bat::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x + 11;
-	top = y + 11;
+	top = y;
 	right = left + BAT_BBOX_WIDTH;
 	bottom = top + BAT_BBOX_HEIGHT;
 }
@@ -60,8 +57,8 @@ void Bat::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Bat::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = entryPosition.x;
+	right = entryPosition.x + BAT_ACTIVE_BBOX_WIDTH;
 	top = entryPosition.y;
-	right = entryPosition.x + 192;
 	bottom = entryPosition.y + BAT_ACTIVE_BBOX_HEIGHT;
 }
 

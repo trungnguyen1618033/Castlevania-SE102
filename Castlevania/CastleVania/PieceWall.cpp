@@ -1,8 +1,5 @@
 #include "PieceWall.h"
 
-#define	WALL_GRAVITY			0.0005f
-#define WALL_TIME				2000
-
 PieceWall::PieceWall()
 {
 	SetState(0);
