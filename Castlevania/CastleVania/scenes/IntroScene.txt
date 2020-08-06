@@ -1,0 +1,109 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\Simon.png	255	255	255
+1	textures\IntroScene.png	255	255	255
+2	textures\IntroObjects.png	255	255	255
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# SIMON
+# idle 
+1	0	0	60	64	0
+# walk
+2	60	0	120	64	0
+3	120	0	180	64	0
+4	180	0	240	64	0
+# jump 
+5	240	0	300	64	0
+# duck
+6	300	198	360	262	0
+# ascend
+7	240	66	300	130	0
+8	300	66	360	130	0
+# descend
+9	120	66	180	130	0
+10	180	66	240	130	0
+# hurt
+11	0	66	60	130	0
+# standing
+12	300	0	360	64	0
+13	360	0	420	64	0
+14	420	0	480	64	0
+# ducking
+15	420	66	480	130	0
+16	0	132	60	196	0
+17	60	132	120	196	0
+# ascending
+18	300	132	360	196	0
+19	360	132	420	196	0
+20	420	132	480	196	0
+# descending
+21	120	132	180	196	0
+22	180	132	240	196	0
+23	240	132	300	196	0
+# upgrade
+24	120	198	180	262	0
+25	60	198	120	262	0
+26	0	198	60	262	0
+# dead
+27	240	198	300	264	0
+# behind
+28	60	66	120	130	0
+
+# 
+201	0	0	128	56	2
+202	128	0	144	28	2
+203	144	0	160	28	2
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+# ==== SIMON =========
+# ==== SIMON =========
+# idle
+1	1	100
+# walk
+2	1	100	2	100	3	100	4	100
+# jump
+3	5	100
+# duck
+4	6	100
+# ascend
+5	7	100	8	100
+# descend
+6	9	100	10	100
+# hurt
+7	1	100	11	400	6	100
+# standing
+8	12	100	13	100	14	100
+# ducking
+9	15	100	16	100	17	100
+# ascending
+10	18	100	19	100	20	100
+# descending
+11	21	100	22	100	23	100
+# upgrade
+12	24	50	25	50	26	50
+# dead
+13	27	100
+# behind
+14	28	100
+
+201	201	100
+202	202	100	203	100
+
+[ANIMATION_SETS]
+# SIMON
+0	1	2	3	4	5	6	7	8	9	10	11	12	13	14
+
+201	201
+202	202
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 0 = Simon, 2 = Torch
+# SIMON
+0	450	335	0
+# CLOUD
+1	450	100	201
+# BATINTRO
+2	100	50	202
+2	100	50	202
+2	100	50	202

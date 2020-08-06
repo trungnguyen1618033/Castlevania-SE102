@@ -2,6 +2,10 @@
 
 #include <d3dx9.h>
 #include "KeyEventHandler.h"
+#include <Windows.h>
+#include <unordered_map>
+#include <stdlib.h>
+using namespace std;
 
 class Scene
 {
@@ -21,6 +25,11 @@ public:
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
 	int GetId() { return id; }
+
+	void _ParseSection_TEXTURES(string line);
+	void _ParseSection_SPRITES(string line);
+	void _ParseSection_ANIMATIONS(string line);
+	void _ParseSection_ANIMATION_SETS(string line);
 	
 };
 typedef Scene* LPSCENE;

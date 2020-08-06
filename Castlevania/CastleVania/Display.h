@@ -40,9 +40,9 @@ protected:
 	int item = -1;
 
 public:
-
+	static Display* _instance;
 	
-	Display(Game* game, PlayScene * scene);
+	Display(Game* game);
 	~Display();
 
 	void Init();
@@ -50,8 +50,7 @@ public:
 	void Render();
 	void Delete();
 
-	//void SetCheckIn(bool x) { checkIn = x; }
-	//bool GetCheckIn() { return checkIn; }
+	static Display* GetInstance();
 
-	//void SaveProperties(int s, int l, int h, int e, int w);
+
 };

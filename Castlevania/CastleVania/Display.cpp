@@ -7,10 +7,12 @@
 #define FILEPATH_TEX_RECT			L"textures\\Rect.png"
 
 
-Display::Display(Game* game, PlayScene* scene)
+Display* Display::_instance = NULL;
+
+Display::Display(Game* game)
 {
 	this->game = game;
-	this->scene = scene;
+	this->scene = (PlayScene*)game->GetCurrentScene();
 	this->simon = scene->GetPlayer();
 	this->boss = scene->GetBoss();
 
@@ -29,28 +31,26 @@ void Display::Init()
 {
 	// textures HP 
 	Textures* textures = Textures::GetInstance();
-	textures->Add(ID_TEX_HP, FILEPATH_TEX_HP, D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_TEX_RECT, FILEPATH_TEX_RECT, D3DCOLOR_XRGB(255, 255, 255));
+	//textures->Add(ID_TEX_HP, FILEPATH_TEX_HP, D3DCOLOR_XRGB(255, 255, 255));
+	//textures->Add(ID_TEX_RECT, FILEPATH_TEX_RECT, D3DCOLOR_XRGB(255, 255, 255));
 
 	LPDIRECT3DTEXTURE9 texHP = textures->Get(ID_TEX_HP);
 	LPDIRECT3DTEXTURE9 texRect = textures->Get(ID_TEX_RECT);
 
+	Sprites* sprites = Sprites::GetInstance();
+
 	for (int i = 0; i < 16; i++)
 	{
-		Sprite* player = new Sprite(10000, 0, 0, 8, 15, texHP);
-		playerHP.push_back(player);
+		playerHP.push_back(sprites->Get(9701));
 
-		Sprite* lose = new Sprite(10001, 8, 0, 16, 15, texHP);
-		loseHP.push_back(lose);
+		loseHP.push_back(sprites->Get(9702));
 
-		Sprite* enemy = new Sprite(10002, 16, 0, 24, 15, texHP);
-		enemyHP.push_back(enemy);
+		enemyHP.push_back(sprites->Get(9703));
 	}
 
 	// sprite weapon
 	subWeaponBox = new Sprite(110, 0, 0, 95, 40, texRect);
 
-	Sprites* sprites = Sprites::GetInstance();
 	subWeaponList.push_back(sprites->Get(301)); 
 	subWeaponList.push_back(sprites->Get(801));
 	subWeaponList.push_back(sprites->Get(901));
@@ -84,6 +84,9 @@ void Display::Init()
 
 void Display::Update(DWORD dt, bool stopwatch)
 {
+	if (scene->GetId() < 0)
+		return;
+
 	score = simon->GetScore();
 	energy = simon->GetEnergy();
 	life = simon->GetLife();
@@ -159,6 +162,9 @@ void Display::Update(DWORD dt, bool stopwatch)
 
 void Display::Render()
 {
+
+	if (game->GetCurrentScene()->GetId() < 0)
+		return;
 	if (game->GetChangeScene() == true)
 		return;
 
@@ -181,7 +187,6 @@ void Display::Render()
 
 	if (subWeapon != -1) // simon get subweapon
 	{
-		
 		subWeaponList[subWeapon]->Draw(0, -1, 305, 38);
 	}
 
@@ -217,6 +222,13 @@ void Display::Delete()
 	playerHP.clear();
 	enemyHP.clear();
 	loseHP.clear();
+}
+
+Display* Display::GetInstance()
+{
+	if (_instance == NULL)
+		_instance = new Display(Game::GetInstance());
+	return _instance;
 }
 
 

@@ -14,6 +14,34 @@
 	#define DIRECTINPUT_VERSION		0x0800
 	#define KEYBOARD_BUFFER_SIZE	1024
 
+	// PlayScene
+	#define SCENE_SECTION_UNKNOWN -1
+	#define SCENE_SECTION_TEXTURES 2
+	#define SCENE_SECTION_SPRITES 3
+	#define SCENE_SECTION_ANIMATIONS 4
+	#define SCENE_SECTION_ANIMATION_SETS	5
+	#define SCENE_SECTION_OBJECTS	6
+	#define SCENE_SECTION_TILEMAP	7
+	#define SCENE_SECTION_GRID		8
+
+	#define OBJECT_TYPE_SIMON		0
+	#define OBJECT_TYPE_TORCH		2
+	#define OBJECT_TYPE_GROUND		7
+	#define OBJECT_TYPE_STAIR		8
+	#define OBJECT_TYPE_BLOCK		15
+	#define OBJECT_TYPE_BREAK		10
+	#define OBJECT_TYPE_KNIGHT		16
+	#define OBJECT_TYPE_BAT			17
+	#define OBJECT_TYPE_GHOST		18
+	#define OBJECT_TYPE_HUNCHBACK	19
+	#define OBJECT_TYPE_SKELETON	20
+	#define OBJECT_TYPE_RAVEN		21
+	#define OBJECT_TYPE_ZOMBIE		22
+	#define OBJECT_TYPE_BOSS		23
+	#define OBJECT_TYPE_PORTAL		50
+
+	#define MAX_SCENE_LINE 1024
+
 	// special texture to draw object bounding box
 	#define ID_TEX_BBOX				-100
 	#define ID_TEX_BBOX_2			-200
@@ -44,6 +72,7 @@
 	#define DESCENDING	10
 	#define	UPGRADE		11
 	#define DEAD		12
+	#define BEHIND		13
 
 	#define SIMON_STAIR_SPEED_X			0.08f
 	#define SIMON_STAIR_SPEED_Y			0.08f

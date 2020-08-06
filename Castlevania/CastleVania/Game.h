@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include "Scene.h"
 
+
 class Game
 {
 	static Game * _instance;
@@ -46,7 +47,7 @@ public:
 	int life;
 	int hp;
 	int energy;
-	int subWeapon;
+	int subWeapon = -1;
 	int stateWhip;
 
 

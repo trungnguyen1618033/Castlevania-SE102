@@ -3,6 +3,8 @@
 #include <fstream>
 #include "debug.h"
 #include "PlayScene.h"
+#include "IntroScene.h"
+#include "TitleScene.h"
 
 Game* Game::_instance = NULL;
 
@@ -57,8 +59,6 @@ void Game::Init(HWND hWnd)
 	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
 
 	// Initialize sprite helper from Direct3DX helper library
-	if (spriteHandler != NULL)
-		spriteHandler->Release();
 	D3DXCreateSprite(d3ddv, &spriteHandler);
 
 	DebugOut(L"[INFO] Init Game done\n");
@@ -200,9 +200,7 @@ void Game::ProcessKeyboard()
 		}
 	}
 
-
 	keyHandler->KeyState((BYTE*)&keyStates);
-
 
 	// Collect all buffered events
 	DWORD dwElements = KEYBOARD_BUFFER_SIZE;
@@ -390,17 +388,40 @@ void Game::SwitchScene(int scene_id)
 	LPSCENE s = scenes[current_scene];
 
 	//Lấy các thuộc tính của simon ở màn trước
-	if (current_scene != 0)
+	if (current_scene >= 0)
 	{
-		PlayScene* scene = (PlayScene*)scenes[current_scene - 1];
-		Simon* simon = scene->GetPlayer();
-		if (simon == NULL)
+		if (current_scene == 0)
 		{
 			game->score = 0;
 			game->life = 3;
 			game->hp = 16;
 			game->energy = 99;
 			game->subWeapon = -1;
+			game->stateWhip = 0;
+		}
+		else
+		{
+			PlayScene* scene = (PlayScene*)scenes[current_scene - 1];
+			Simon* simon = scene->GetPlayer();
+			game->score = simon->GetScore();
+			game->life = simon->GetLife();
+			game->hp = simon->GetHP();
+			game->energy = simon->GetEnergy();
+			game->subWeapon = simon->GetSubWeapon();
+			DebugOut(L"2: %d\n", game->subWeapon);
+
+			Whip* whip = scene->GetWhip();
+			game->stateWhip = whip->GetState();
+		}
+		
+		/*if (simon == NULL)
+		{
+			game->score = 0;
+			game->life = 3;
+			game->hp = 16;
+			game->energy = 99;
+			game->subWeapon = -1;
+			DebugOut(L"1: %d\n", game->subWeapon);
 			game->stateWhip = 0;
 
 		}
@@ -411,10 +432,11 @@ void Game::SwitchScene(int scene_id)
 			game->hp = simon->GetHP();
 			game->energy = simon->GetEnergy();
 			game->subWeapon = simon->GetSubWeapon();
+			DebugOut(L"2: %d\n", game->subWeapon);
 
 			Whip* whip = scene->GetWhip();
 			game->stateWhip = whip->GetState();
-		}
+		}*/
 	}
 
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
@@ -428,7 +450,7 @@ void Game::SwitchScene(int scene_id)
 	s->Load();
 
 	//Cập nhập các thuộc tính của simon từ màn trước đến màn tiếp theo
-	if (current_scene != 0)
+	if (current_scene >= 0)
 	{
 		PlayScene* scene = (PlayScene*)scenes[current_scene];
 		Simon* simon = scene->GetPlayer();
@@ -464,7 +486,19 @@ void Game::_ParseSection_SCENES(string line)
 	if (tokens.size() < 2) return;
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
-
-	LPSCENE scene = new PlayScene(id, path);
+	LPSCENE scene;
+	switch (id)
+	{
+	case -2:
+		scene = new TitleScene(id, path);
+		break;
+	case -1:
+		scene = new IntroScene(id, path);
+		break;
+	default:
+		scene = new PlayScene(id, path);
+		break;
+	}
 	scenes[id] = scene;
+	
 }

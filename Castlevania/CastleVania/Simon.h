@@ -24,6 +24,8 @@ using namespace std;
 
 class Simon : public GameObject
 {
+	static Simon* _instance;
+
 	int score;
 	int life;
 	int hp;
@@ -37,7 +39,6 @@ class Simon : public GameObject
 
 	bool isUntouchable = false;
 	DWORD untouchable_start = 0;
-
 
 public:
 	Simon();
@@ -65,7 +66,6 @@ public:
 
 	LPGAMEOBJECT stairCollided = nullptr;
 
-	
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	void Render();
 	void SetState(int state);
@@ -122,7 +122,7 @@ public:
 	// Kiểm tra va chạm với vùng hoạt động của enemy
 	void CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects);
 
-	
+	static Simon* GetInstance();
 	
 };
 

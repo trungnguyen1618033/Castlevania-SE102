@@ -1,7 +1,9 @@
 [SETTINGS]
-start	0
+start	-2
 #scene list
 [SCENES]
+-2	scenes/TitleScene.txt
+-1	scenes/IntroScene.txt
 0	scenes/Map_1_object.txt
 1	scenes/Map_2_1_object.txt
 2	scenes/Map_2_2_object.txt

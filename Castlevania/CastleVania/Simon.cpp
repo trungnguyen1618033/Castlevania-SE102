@@ -1,20 +1,24 @@
 ﻿#include "Simon.h"
 
+
+Simon* Simon::_instance = NULL;
+
 Simon::Simon() : GameObject()
 {
 	SetState(IDLE);
-
 	score = 0;
 	energy = 99;
 	life = 3;
 	subWeapon = -1;
 	hp = 16;
-	
 }
 
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	if (state == BEHIND)
+		return;
+
 	/*DebugOut(L"dt: %d\n", dt);*/
 	if (dt > 64)
 		dt = 16;
@@ -38,6 +42,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		untouchable_start = 0;
 		isUntouchable = false;
+	}
+
+	if (coObjects == NULL)
+	{
+		if (isAutoWalk == false)
+		{
+			x += dx;
+			y += dy;
+		}
+
+		return;
 	}
 		
 	// Check collision between Simon and other objects
@@ -286,6 +301,12 @@ void Simon::SetState(int state)
 		vx = 0;
 		vy = 0;
 		life -= 1;
+		break;
+	case BEHIND:
+		vx = 0;
+		vy = 0;
+		animation_set->at(state)->Reset();
+		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		break;
 	default:
 		break;
@@ -560,6 +581,12 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 			}
 		}
 	}
+}
+
+Simon* Simon::GetInstance()
+{
+	if (_instance == NULL) _instance = new Simon();
+	return _instance;
 }
 
 void Simon::LoseHP(int x)

@@ -15,6 +15,8 @@
 
 80	textures\Spark.png	255	255	255
 90	textures\Pause.png	255	255	255
+97	textures\HP.png	255	255	255
+98	textures\Rect.png	255	255	255
 99	textures\Effect.png	255	255	255
 -100	textures\bbox.png	255	255	255
 -200	textures\bbox2.png	255	255	255
@@ -149,6 +151,12 @@
 #SPARK
 8001	0	0	16	20	80
 
+# HP
+9701	0	0	8	15	97
+9702	8	0	16	15	97
+9703	16	0	24	15	97
+# RECT
+9801	16	0	24	15	98
 #Effect Explore
 9901	0	0	32	60	99
 9902	32	0	64	60	99

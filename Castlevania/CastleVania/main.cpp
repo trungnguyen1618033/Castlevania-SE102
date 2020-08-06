@@ -10,11 +10,15 @@
 #include "Torch.h"
 #include "TileMap.h"
 #include "Display.h"
-
+#include "IntroScene.h"
+#include "TitleScene.h"
 
 
 Game* game;
 Display* display;
+//IntroScene* introScene;
+//TitleScene* titleScene;
+
 
 
 
@@ -36,8 +40,8 @@ void Update(DWORD dt)
 {
 	if (Game::GetInstance()->GetChangeScene() == true)
 	{
-		display->Delete();
-		display = new Display(game, (PlayScene*)game->GetCurrentScene());
+		/*display->Delete();*/
+		display = new Display(game);
 
 		display->Init();
 		Game::GetInstance()->SetChangeScene(false);
@@ -45,8 +49,11 @@ void Update(DWORD dt)
 	}
 	Game::GetInstance()->GetCurrentScene()->Update(dt);
 	
-	PlayScene* scene = (PlayScene*)Game::GetInstance()->GetCurrentScene();
-	display->Update(dt, scene->IsUsingStopWatch());
+	if (Game::GetInstance()->GetCurrentScene()->GetId() >= 0)
+	{
+		PlayScene* scene = (PlayScene*)Game::GetInstance()->GetCurrentScene();
+		display->Update(dt, scene->IsUsingStopWatch());
+	}
 
 }
 
@@ -171,7 +178,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game->Load(L"Simon-game.txt");
 
-	display = new Display(game, (PlayScene*)game->GetCurrentScene());
+	display = Display::GetInstance();
 	display->Init();
 
 	Run();
