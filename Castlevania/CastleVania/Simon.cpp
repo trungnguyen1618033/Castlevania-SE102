@@ -16,10 +16,11 @@ Simon::Simon() : GameObject()
 
 void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+
 	if (state == BEHIND)
 		return;
 
-	/*DebugOut(L"dt: %d\n", dt);*/
+	
 	if (dt > 64)
 		dt = 16;
 	GameObject::Update(dt);
@@ -46,14 +47,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	if (coObjects == NULL)
 	{
+		
 		if (isAutoWalk == false)
 		{
 			x += dx;
 			y += dy;
-		}
 
+		}
 		return;
 	}
+
 		
 	// Check collision between Simon and other objects
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -70,6 +73,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 		y += dy;
 		if (vy > 0.2f)
 			isFalling = true;
+
 	}
 	else
 	{
@@ -392,7 +396,9 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem)
 				stateShot = idItem;
 				isGotTripleShotItem = true;
 				break;
-			
+			case MAGIC_CRYSTAL:
+				isGotMagicCrystalItem = true;
+				break;
 			default:
 				break;
 			}
@@ -507,6 +513,7 @@ void Simon::DoAutoWalk()
 		stateAfterAutoWalk = -1;
 		nxAfterAutoWalk = 0;
 	}
+	/*DebugOut(L"3: x: %f, y: %f\n", x, y);*/
 }
 
 bool Simon::IsHit()
@@ -587,6 +594,14 @@ Simon* Simon::GetInstance()
 {
 	if (_instance == NULL) _instance = new Simon();
 	return _instance;
+}
+
+void Simon::AddHP(int x)
+{
+	hp += x;
+
+	if (hp >= 16)
+		hp = 16;
 }
 
 void Simon::LoseHP(int x)

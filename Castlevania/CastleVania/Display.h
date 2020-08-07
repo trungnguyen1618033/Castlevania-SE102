@@ -27,6 +27,7 @@ protected:
 
 	LPDIRECT3DTEXTURE9 pause;
 	LPDIRECT3DTEXTURE9 over;
+	Sprite* choice;
 
 
 	int score;

@@ -41,7 +41,7 @@ void Ghost::Render()
 {
 	if (state != GHOST_INACTIVE)
 		animation_set->at(state)->Render(1, nx, x, y);
-	RenderActiveBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Ghost::SetState(int state)
@@ -105,15 +105,20 @@ void Ghost::GetOrientation()
 	// lấy phương hướng
 	int nx;
 
-	if (x < simonPostion.x)
+	if (x - simonPostion.x < 32 && vx < 0)
 	{
 		nx = 1;
 		vx *= -1;
+		SetOrientation(nx);
 	}
-	else
+	else if (x > simonPostion.x && vx > 0)
+	{
 		nx = -1;
-
-	SetOrientation(nx);
+		vx *= -1;
+		SetOrientation(nx);
+	}
+		
+	
 
 }
 

@@ -96,7 +96,7 @@ void Skeleton::Render()
 {
  	if (state != SKELETON_INACTIVE)
 		animation_set->at(state)->Render(1, nx, x, y);
-	RenderActiveBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Skeleton::SetState(int state)

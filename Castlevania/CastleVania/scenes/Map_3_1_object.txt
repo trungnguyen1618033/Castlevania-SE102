@@ -17,6 +17,7 @@
 
 80	textures\Spark.png	255	255	255
 90	textures\Pause.png	255	255	255
+96	textures\GameOver.png	255	255	255
 97	textures\HP.png	255	255	255
 98	textures\Rect.png	255	255	255
 99	textures\Effect.png	255	255	255

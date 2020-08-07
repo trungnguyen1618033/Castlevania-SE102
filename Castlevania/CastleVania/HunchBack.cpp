@@ -20,6 +20,18 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovin
 		SetState(HUNCHBACK_INACTIVE);
 		return;
 	}
+
+	if (x - simonPostion.x > 72 && vx > 0)
+	{
+		SetOrientation(-1);
+		vx *= -1;
+	}
+	else if(simonPostion.x - x > 72 && vx < 0)
+	{
+		SetOrientation(1);
+		vx *= -1;
+	}
+
 	vy += HUNCHBACK_GRAVITY * dt;
 	Enemy::Update(dt);
 
@@ -60,7 +72,7 @@ void HunchBack::Render()
 {
 	if (state != HUNCHBACK_INACTIVE)
 		animation_set->at(state)->Render(1, nx, x, y);
-	RenderActiveBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void HunchBack::SetState(int state)

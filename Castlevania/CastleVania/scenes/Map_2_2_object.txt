@@ -16,6 +16,7 @@
 
 80	textures\Spark.png	255	255	255
 90	textures\Pause.png	255	255	255
+96	textures\GameOver.png	255	255	255
 97	textures\HP.png	255	255	255
 98	textures\Rect.png	255	255	255
 99	textures\Effect.png	255	255	255
@@ -300,8 +301,8 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Simon, 2 = Torch
 # SIMON
-0	738	370	0
-#0	732	376	0
+0	736	370	0
+
 
 15	64	208	15
 

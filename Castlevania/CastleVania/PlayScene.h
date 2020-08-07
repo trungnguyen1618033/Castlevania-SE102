@@ -54,6 +54,7 @@ protected:
 	int stopWatchCounter = 0;
 
 	bool isSimonDead = false;			// dừng update simon khi ở trạng thái dead
+	bool isDead = false;
 	int simonDeadTimeCounter = 0;
 
 	bool isDoubleShot = false;
@@ -64,12 +65,21 @@ protected:
 
 	bool isBossFighting = false;
 
+	bool gameDelayTimeHP = false;
+	int delayTimeHP = 0;												
+
+	bool gameDelayGameOver = false;
+	int delayTimeGameOver = 0;
+
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TILEMAP(string line);
 	void _ParseSection_GRID(string line);
 	
 public:
 	PlayScene(int id, LPCWSTR filePath);
+
+
+	int isNeedToAddScoreTime = -1;				// Cộng điểm dựa vào thời gian còn lại bên Player: -1: không, 0: cần, 1: đã xong.
 
 	virtual void Load();
 	virtual void Update(DWORD dt);
@@ -93,6 +103,8 @@ public:
 
 	bool isGameReset = false;
 	bool isGamePause = false;
+	bool isGameOver = false;
+	int choiceGameOver = 0;					// Lựa chọn khi game over
 
 	void Simon_Update(DWORD dt);
 	void Whip_Update(DWORD dt);
@@ -115,8 +127,14 @@ public:
 	void DoubleShotEffect();
 	void TripleShotEffect();
 
+
+	bool IsDead() { return isDead; }
+	void SetDead(bool x) { this->isDead = x; }
 	// Reset lại trạng thái của game (map, simon...) sau khi simon chết
-	void ResetGame();							
+	void ResetGame(int i);							
+
+	// Chơi game xong 
+	void DoneGame();
 
 };
 
@@ -132,13 +150,13 @@ public:
 	PlaySceneKeyHandler(Scene* s) :KeyHandler(s) {};
 
 
-	void Simon_Jump();
-	void Simon_Hit();
-	void Simon_Hit_Weapon();
+	void SimonJump();
+	void SimonHit();
+	void SimonHitWeapon();
 
-	void Simon_Stair_Down();
-	void Simon_Stair_Up();
-	bool Simon_Stair_Stand();
+	void SimonStairDown();
+	void SimonStairUp();
+	bool SimonStairStand();
 
 	bool AnimationDelay();
 	bool CanProcessKeyboard();

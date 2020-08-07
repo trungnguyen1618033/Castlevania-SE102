@@ -39,6 +39,7 @@ void Knight::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				vx = -KNIGHT_SPEED;
 		}
 	}
+
 	
 	Enemy::Update(dt);
 	x += dx;

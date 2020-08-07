@@ -84,6 +84,7 @@ public:
 
 	// Cập nhập thuộc tính
 	void AddScore(int x) { score += x; }
+	void AddHP(int x);
 	void LoseEnergy(int x) { energy -= x; }
 	void LoseHP(int x);
 	void SetScore(int x) { score = x; }

@@ -40,9 +40,7 @@ void Update(DWORD dt)
 {
 	if (Game::GetInstance()->GetChangeScene() == true)
 	{
-		/*display->Delete();*/
 		display = new Display(game);
-
 		display->Init();
 		Game::GetInstance()->SetChangeScene(false);
 		return;

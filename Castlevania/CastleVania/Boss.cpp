@@ -65,7 +65,7 @@ void Boss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 void Boss::Render()
 {
 	animation_set->at(state)->Render(1, nx, x, y);
-	RenderActiveBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Boss::SetState(int state)
@@ -125,6 +125,7 @@ D3DXVECTOR2 Boss::GetRandomSpot()
 
 	float distance = 0;
 
+	// chọn điểm random sao cho quãng đường bay dài dài
 	do
 	{
 		randomSpot.x = left + rand() % (2 * BOSS_RECT_RANDOMSPOT_BBOX_WIDTH);

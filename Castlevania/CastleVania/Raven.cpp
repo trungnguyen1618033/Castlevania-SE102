@@ -60,7 +60,7 @@ void Raven::Render()
 {
 	if (state != RAVEN_INACTIVE)
 		animation_set->at(state)->Render(1, nx, x, y);
-	RenderActiveBoundingBox();
+	//RenderActiveBoundingBox();
 }
 
 void Raven::SetState(int state)

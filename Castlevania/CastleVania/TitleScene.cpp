@@ -92,7 +92,7 @@ void TitleSceneKeyHandler::KeyState(BYTE* states)
 
 void TitleSceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	DebugOut(L"[INFO TitleSceneKey] KeyDown: %d\n", KeyCode);
 	Game::GetInstance()->SwitchScene(-1);
 	/*TitleScene* s = dynamic_cast<TitleScene*>(scene);
 	s->SwitchScene();*/

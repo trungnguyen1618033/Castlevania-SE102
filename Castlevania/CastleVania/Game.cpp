@@ -390,7 +390,22 @@ void Game::SwitchScene(int scene_id)
 	//Lấy các thuộc tính của simon ở màn trước
 	if (current_scene >= 0)
 	{
-		if (current_scene == 0)
+		PlayScene* scene = (PlayScene*)scenes[current_scene];
+		if (scene->IsDead())
+		{
+			Simon* simon = scene->GetPlayer();
+			game->score = simon->GetScore();
+			game->life = simon->GetLife();
+			game->hp = simon->GetHP();
+			game->energy = simon->GetEnergy();
+			game->subWeapon = simon->GetSubWeapon();
+
+			Whip* whip = scene->GetWhip();
+			game->stateWhip = whip->GetState();
+
+			scene->SetDead(false);
+		}
+		else if (current_scene == 0)
 		{
 			game->score = 0;
 			game->life = 3;
@@ -403,40 +418,29 @@ void Game::SwitchScene(int scene_id)
 		{
 			PlayScene* scene = (PlayScene*)scenes[current_scene - 1];
 			Simon* simon = scene->GetPlayer();
-			game->score = simon->GetScore();
-			game->life = simon->GetLife();
-			game->hp = simon->GetHP();
-			game->energy = simon->GetEnergy();
-			game->subWeapon = simon->GetSubWeapon();
-			DebugOut(L"2: %d\n", game->subWeapon);
 
-			Whip* whip = scene->GetWhip();
-			game->stateWhip = whip->GetState();
+			if (simon == NULL)
+			{
+				game->score = 0;
+				game->life = 3;
+				game->hp = 16;
+				game->energy = 99;
+				game->subWeapon = -1;
+				game->stateWhip = 0;
+			}
+			else
+			{
+				game->score = simon->GetScore();
+				game->life = simon->GetLife();
+				game->hp = simon->GetHP();
+				game->energy = simon->GetEnergy();
+				game->subWeapon = simon->GetSubWeapon();
+		
+				Whip* whip = scene->GetWhip();
+				game->stateWhip = whip->GetState();
+			}
 		}
 		
-		/*if (simon == NULL)
-		{
-			game->score = 0;
-			game->life = 3;
-			game->hp = 16;
-			game->energy = 99;
-			game->subWeapon = -1;
-			DebugOut(L"1: %d\n", game->subWeapon);
-			game->stateWhip = 0;
-
-		}
-		else
-		{
-			game->score = simon->GetScore();
-			game->life = simon->GetLife();
-			game->hp = simon->GetHP();
-			game->energy = simon->GetEnergy();
-			game->subWeapon = simon->GetSubWeapon();
-			DebugOut(L"2: %d\n", game->subWeapon);
-
-			Whip* whip = scene->GetWhip();
-			game->stateWhip = whip->GetState();
-		}*/
 	}
 
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources

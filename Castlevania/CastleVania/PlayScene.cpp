@@ -44,9 +44,10 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] SIMON object was created before! ");
 			return;
 		}
-		player = new Simon();
+		player = Simon::GetInstance();
 		player->SetPosition(x, y);
 		player->SetAnimationSet(ani_set);
+		player->SetState(IDLE);
 		break;
 	case OBJECT_TYPE_TORCH:
 	{
@@ -287,6 +288,7 @@ void PlayScene::Load()
 	if(id == 2)
 	{
 		player->SetState(ASCEND);
+		player->isAutoWalk = false;
 	}
 	if(id == 4)
 	{
@@ -315,6 +317,16 @@ void PlayScene::Update(DWORD dt)
 	// Pause Game
 	if (isGamePause == true)
 		return;
+
+	// Game over
+	if (player->isGotMagicCrystalItem == true)
+	{
+		DoneGame();
+
+		if (isGameOver == true)
+			return;
+	}
+
 
 	// Lấy danh sách object từ grid 
 	GetObjectFromGrid();
@@ -411,6 +423,9 @@ void PlayScene::Render()
 {
 	Game* game = Game::GetInstance();
 
+	if (isGameOver == true)
+		return;
+
 	if (game->GetChangeScene() == true)
 		return;
 
@@ -430,7 +445,7 @@ void PlayScene::Render()
 			continue;
 
 		obj->Render();
-		obj->RenderBoundingBox();
+		//obj->RenderBoundingBox();
 	}
 
 	for (auto obj : listItems)
@@ -438,7 +453,7 @@ void PlayScene::Render()
 		if (obj->IsEnable() == false)
 			continue;
 		obj->Render();
-		obj->RenderBoundingBox();
+		//obj->RenderBoundingBox();
 	}
 
 	player->Render();
@@ -460,8 +475,7 @@ void PlayScene::Render()
 		//whip->RenderBoundingBox();
 	}
 	
-
-	portal->RenderBoundingBox();
+	//portal->RenderBoundingBox();
 
 }
 
@@ -547,7 +561,7 @@ void PlayScene::SetDropItems()
 int PlayScene::GetRandomItem()
 {
 	srand(time(NULL));
-	int idItem = rand() % 15;
+	int idItem = rand() % 13;
 	return idItem;
 }
 
@@ -671,7 +685,10 @@ void PlayScene::UpdateTimeCounter()
 	{
 		isSimonDead = false;
 		simonDeadTimeCounter = 0;
-		ResetGame();
+		if(player->GetLife() == 0)
+			isGameOver = true;
+		else
+			ResetGame(id);
 	}
 
 	// Double shot
@@ -695,6 +712,7 @@ void PlayScene::Simon_Update(DWORD dt)
 	{
 		if (isSimonDead == false)
 		{
+			isDead = true;
 			isSimonDead = true;
 			simonDeadTimeCounter = GetTickCount();
 		}
@@ -1049,25 +1067,65 @@ void PlayScene::TripleShotEffect()
 	}
 }
 
-void PlayScene::ResetGame()
+void PlayScene::ResetGame(int i)
 {
 	isGameReset = true;
+	isGamePause = false;
 	isSimonDead = false;
+	isGameOver = false;
 	
-
-	int life = player->GetLife();
-
-	player = new Simon();
-	if (life > 0)
-		player->SetLife(life);
 
 	whip->SetState(0);
 
 	boss = new Boss();
 	boss->SetState(BOSS_INACTIVE);
 
-	Game::GetInstance()->SwitchScene(id);
+	Game::GetInstance()->SwitchScene(i);
 
+}
+
+void PlayScene::DoneGame()
+{
+	// 3 giai đoạn:
+	// + Cộng HP
+	// + Cộng điểm theo thời gian còn lại
+	// + Cộng điểm theo energy còn lại
+	if (player->GetHP() < 16)
+	{
+		if (GetTickCount() - delayTimeHP > 50)		// delay tăng máu
+		{
+			delayTimeHP = GetTickCount();
+			player->AddHP(1);
+		}
+
+		return;
+	}
+
+	if (isNeedToAddScoreTime == -1)
+	{
+		isNeedToAddScoreTime = 0;
+		return;
+	}
+	else if (isNeedToAddScoreTime == 0)
+	{
+		return;
+	}
+
+	if (player->GetEnergy() > 0)
+	{
+		player->LoseEnergy(1);
+		player->AddScore(100);
+		return;
+	}
+
+	if (isGameOver == false && delayTimeGameOver == 0)
+	{
+		delayTimeGameOver = GetTickCount();
+	}
+	else if (GetTickCount() - delayTimeGameOver > 3000)
+	{
+		isGameOver = true;
+	}
 }
 
 
@@ -1092,11 +1150,11 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 		{
 			if (simon->stairDirection == 1)// cầu thang trái dưới - phải trên
 			{
-				Simon_Stair_Up();
+				SimonStairUp();
 			}
 			else 
 			{
-				Simon_Stair_Down();
+				SimonStairDown();
 			}
 			return;
 		}
@@ -1109,11 +1167,11 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 		{
 			if (simon->GetStairDirection() == 1)// cầu thang trái dưới - phải trên
 			{
-				Simon_Stair_Down();
+				SimonStairDown();
 			}
 			else 
 			{
-				Simon_Stair_Up();
+				SimonStairUp();
 			}
 			return;
 		}
@@ -1124,7 +1182,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	{
 		if (StairCollisionsDetection() == true)
 		{
-			Simon_Stair_Down();
+			SimonStairDown();
 			return;
 		}
 		if (simon->isTouchGround == false || simon->isFalling == true)
@@ -1138,7 +1196,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 	{
 		if (StairCollisionsDetection() == true)
 		{
-			Simon_Stair_Up();
+			SimonStairUp();
 			return;
 		}
 		simon->SetState(IDLE);
@@ -1149,7 +1207,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 
 		if (StairCollisionsDetection() == true)
 		{
-			if (Simon_Stair_Stand() == true)
+			if (SimonStairStand() == true)
 				return;
 		}
 		simon->SetState(IDLE);
@@ -1158,17 +1216,42 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 
 void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
+	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+
+	PlayScene* s = (PlayScene*)scene;
+	
+	if (KeyCode == DIK_P)						// Pause game
+	{
+		s->isGamePause = !(s->isGamePause);
+		return;
+	}
+
+	if (s->isGameOver == true)
+	{
+		if (KeyCode == DIK_UP || KeyCode == DIK_DOWN)
+			s->choiceGameOver = (s->choiceGameOver + 1) % 2;
+		else if (KeyCode == DIK_A)
+		{
+			if (s->choiceGameOver == 0)		// Continue game
+			{
+				s->GetPlayer()->isGotMagicCrystalItem = false;
+				s->GetPlayer()->SetLife(3);
+				s->ResetGame(0);
+			}
+			else
+			{
+				HWND hWnd = GetActiveWindow();		// End game
+				DestroyWindow(hWnd);
+			}
+		}
+
+		return;
+	}
 
 	if (CanProcessKeyboard() == false)
 		return;
 
-	if (KeyCode == DIK_P)						// Pause game
-	{
-		((PlayScene*)scene)->isGamePause = !(((PlayScene*)scene)->isGamePause);
-		return;
-	}
-
-	Simon* simon = ((PlayScene*)scene)->GetPlayer();
+	Simon* simon = s->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_1:
@@ -1211,16 +1294,16 @@ void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		simon->isGotTripleShotItem = true;
 		break;
 	case DIK_SPACE:
-		Simon_Jump();
+		SimonJump();
 		break;
 	case DIK_A:
-		Simon_Hit();
+		SimonHit();
 		break;
 	case DIK_S:
-		Simon_Hit_Weapon();
+		SimonHitWeapon();
 		break;
 	case DIK_H:
-		simon->SetState(HURT);
+		simon->SetState(DEAD);
 		break;
 	default:
 		break;
@@ -1232,7 +1315,7 @@ void PlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 }
 
-void PlaySceneKeyHandler::Simon_Jump()
+void PlaySceneKeyHandler::SimonJump()
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 	if (simon->isTouchGround == false || simon->IsHit() == true)
@@ -1240,7 +1323,7 @@ void PlaySceneKeyHandler::Simon_Jump()
 	simon->SetState(JUMP);
 }
 
-void PlaySceneKeyHandler::Simon_Hit()
+void PlaySceneKeyHandler::SimonHit()
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 	if (simon->IsHit() == true)
@@ -1267,7 +1350,7 @@ void PlaySceneKeyHandler::Simon_Hit()
 	}
 }
 
-void PlaySceneKeyHandler::Simon_Hit_Weapon()
+void PlaySceneKeyHandler::SimonHitWeapon()
 {
 	PlayScene* playscene = (PlayScene*)scene;
 
@@ -1329,12 +1412,12 @@ void PlaySceneKeyHandler::Simon_Hit_Weapon()
 		{
 			simon->LoseEnergy(1);
 			simon->isHitWeapons = true;
-			Simon_Hit();
+			SimonHit();
 		}
 	}
 }
 
-void PlaySceneKeyHandler::Simon_Stair_Down()
+void PlaySceneKeyHandler::SimonStairDown()
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 
@@ -1381,7 +1464,7 @@ void PlaySceneKeyHandler::Simon_Stair_Down()
 	return;
 }
 
-void PlaySceneKeyHandler::Simon_Stair_Up()
+void PlaySceneKeyHandler::SimonStairUp()
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 	int stairDirection = simon->GetStairDirection();
@@ -1432,7 +1515,7 @@ void PlaySceneKeyHandler::Simon_Stair_Up()
 	return;
 }
 
-bool PlaySceneKeyHandler::Simon_Stair_Stand()
+bool PlaySceneKeyHandler::SimonStairStand()
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
 

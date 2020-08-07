@@ -84,6 +84,9 @@ void Display::Init()
 
 void Display::Update(DWORD dt, bool stopwatch)
 {
+	if (scene->isGameOver == true)
+		return;
+
 	if (scene->GetId() < 0)
 		return;
 
@@ -130,9 +133,22 @@ void Display::Update(DWORD dt, bool stopwatch)
 	if (remainTime <= 0)
 	{
 		remainTime = 0;
+		if (scene->isNeedToAddScoreTime == -1)		// không phải hết thời gian do cộng điểm win
+		{
+			if (simon->isTouchGround == true && simon->GetState() != DEAD)
+				simon->SetState(DEAD);
+		}
+	}
 
-		if (simon->isTouchGround == true && simon->GetState() != DEAD)
-			simon->SetState(DEAD);
+	if (scene->isNeedToAddScoreTime == 0)
+	{
+		if (remainTime > 0)
+		{
+			time += CLOCKS_PER_SEC;
+			simon->AddScore(10);
+		}
+		else
+			scene->isNeedToAddScoreTime = 1;
 	}
 
 
@@ -165,8 +181,20 @@ void Display::Render()
 
 	if (game->GetCurrentScene()->GetId() < 0)
 		return;
+
 	if (game->GetChangeScene() == true)
 		return;
+
+	if (scene->isGameOver == true)
+	{
+		// vẽ textures game over
+		over = Textures::GetInstance()->Get(96);
+		game->Draw(0, 0, 150, 150, over, 0, 0, 215, 179);
+
+		// vẽ icon lựa chọn của người chơi
+		choice = Sprites::GetInstance()->Get(403);
+		choice->Draw(0, 0, 160, 244 + 50 * scene->choiceGameOver);
+	}
 
 	if (scene->isGamePause == true)
 	{

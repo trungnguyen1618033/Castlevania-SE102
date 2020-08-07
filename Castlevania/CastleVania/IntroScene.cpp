@@ -174,7 +174,6 @@ void IntroSceneKeyHandler::KeyState(BYTE* states)
 
 void IntroSceneKeyHandler::OnKeyDown(int KeyCode)
 {
-
 }
 
 void IntroSceneKeyHandler::OnKeyUp(int KeyCode)
