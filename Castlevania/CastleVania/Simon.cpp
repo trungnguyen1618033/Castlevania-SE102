@@ -20,6 +20,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	if (state == BEHIND)
 		return;
 
+	if (y > 500)
+	{
+		SetState(DEAD);
+		y = 500;
+		DebugOut(L"y: %d\n", y);
+	}
 	
 	if (dt > 64)
 		dt = 16;

@@ -285,8 +285,11 @@ void PlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
+	if (id == 0)
+		player->SetOrientation(1);
 	if(id == 2)
 	{
+		player->SetOrientation(1);
 		player->SetState(ASCEND);
 		player->isAutoWalk = false;
 	}
@@ -708,6 +711,7 @@ void PlayScene::UpdateTimeCounter()
 
 void PlayScene::Simon_Update(DWORD dt)
 {
+
 	if (player->GetState() == DEAD)
 	{
 		if (isSimonDead == false)
