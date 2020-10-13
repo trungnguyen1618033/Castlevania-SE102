@@ -13,11 +13,17 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Objects">
+    <Filter Include="Objects">
       <UniqueIdentifier>{da7a4e09-ed4c-4b30-b927-44e3da05a600}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Objects">
-      <UniqueIdentifier>{802492c1-7187-4ac3-80a6-635009322bdd}</UniqueIdentifier>
+    <Filter Include="Objects\Emenys">
+      <UniqueIdentifier>{fdc78abb-96d1-4ed2-ab1b-6a5ff23a4906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Statics">
+      <UniqueIdentifier>{0e5f8b5b-a3e6-4d26-9da7-8be484a83fb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{243972ac-d5c5-49e9-9c90-cf7b5b32e19e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -51,39 +57,180 @@
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayScene.h">
+    <ClInclude Include="Simon.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bat.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="Raven.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="HunchBack.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>Header Files\Objects</Filter>
+    <ClInclude Include="Bone.h">
+      <Filter>Objects\Emenys</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Objects</Filter>
+    <ClInclude Include="BreakWall.h">
+      <Filter>Objects\Statics</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground.h">
+      <Filter>Objects\Statics</Filter>
     </ClInclude>
     <ClInclude Include="Portal.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Simon.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Torch.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Whip.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Items.h">
-      <Filter>Header Files\Objects</Filter>
+      <Filter>Objects\Statics</Filter>
     </ClInclude>
     <ClInclude Include="Stair.h">
-      <Filter>Header Files\Objects</Filter>
+      <Filter>Objects\Statics</Filter>
+    </ClInclude>
+    <ClInclude Include="Torch.h">
+      <Filter>Objects\Statics</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Objects\Emenys</Filter>
+    </ClInclude>
+    <ClInclude Include="PieceWall.h">
+      <Filter>Objects\Statics</Filter>
+    </ClInclude>
+    <ClInclude Include="Display.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockMove.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="BatIntro.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="OverGame.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Textures.cpp">
+    <ClCompile Include="Bat.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Bone.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="HunchBack.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Raven.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>Objects\Emenys</Filter>
+    </ClCompile>
+    <ClCompile Include="BatIntro.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="OverGame.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="BreakWall.cpp">
+      <Filter>Objects\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground.cpp">
+      <Filter>Objects\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="PieceWall.cpp">
+      <Filter>Objects\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Objects\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="Stair.cpp">
+      <Filter>Objects\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="Torch.cpp">
+      <Filter>Objects\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockMove.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Display.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Animations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="debug.cpp">
@@ -95,53 +242,26 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprites.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TileMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Animations.cpp">
+    <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyEventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayScene.cpp">
+    <ClCompile Include="Sprites.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>Source Files\Objects</Filter>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Portal.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Simon.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Torch.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Whip.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Items.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Stair.cpp">
-      <Filter>Source Files\Objects</Filter>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

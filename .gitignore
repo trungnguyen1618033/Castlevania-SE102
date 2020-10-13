@@ -348,3 +348,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+Castlevania/CastleVania/textures/Enemys/Leopad.png
+
+Castlevania/CastleVania/textures/Enemys/RedBat.png
+
+Castlevania/CastleVania/textures/Door.png
