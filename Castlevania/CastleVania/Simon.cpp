@@ -89,8 +89,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 		if (isAutoWalk == false)
 		{
-			x += min_tx * dx + nx * 0.1f;
-			y += min_ty * dy + ny * 0.1f;
+			x += min_tx * dx + nx * 0.3f;
+			y += min_ty * dy + ny * 0.3f;
 		}
 
 		for (UINT i = 0; i < coEventsResult.size(); i++)
