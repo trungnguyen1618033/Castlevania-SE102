@@ -29,7 +29,7 @@ public:
 
 	void LoadResources();	
 	void Load_MapData();	
-	void Draw(D3DXVECTOR3 camPosition);	
+	void Draw(D3DXVECTOR3 camPosition, bool isCrossEffect = false);
 
 	int GetMapWidth() { return map_Width; }
 

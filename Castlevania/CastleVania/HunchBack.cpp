@@ -115,8 +115,8 @@ void HunchBack::SetState(int state)
 
 void HunchBack::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 11;
-	top = y ;
+	left = x;
+	top = y;
 	right = left + HUNCHBACK_BBOX_WIDTH;
 	bottom = top + HUNCHBACK_BBOX_HEIGHT;
 }

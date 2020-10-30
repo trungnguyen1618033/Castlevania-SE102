@@ -59,6 +59,10 @@
 	#define SIMON_GRAVITY				0.002f
 	#define SIMON_GRAVITY_LOWER			0.001f
 
+	
+	#define SIMON_HP					16
+	#define SIMON_ENERGY				99
+
 	#define IDLE		0
 	#define WALK		1
 	#define JUMP		2
@@ -73,6 +77,16 @@
 	#define	UPGRADE		11
 	#define DEAD		12
 	#define BEHIND		13
+	#define IDLE_INVISIBLE			14
+	#define WALK_INVISIBLE			15
+	#define JUMP_INVISIBLE			16
+	#define DUCK_INVISIBLE			17
+	#define ASCEND_INVISIBLE		18
+	#define DESCEND_INVISIBLE		19
+	#define STANDING_INVISIBLE		20
+	#define DUCKING_INVISIBLE		21
+	#define ASCENDING_INVISIBLE		22
+	#define DESCENDING_INVISIBLE	23
 
 	#define SIMON_STAIR_SPEED_X			0.08f
 	#define SIMON_STAIR_SPEED_Y			0.08f
@@ -82,6 +96,8 @@
 
 	#define SIMON_UNTOUCHABLE_TIME		2000
 	#define SIMON_DEAD_TIME				3000
+	#define SIMON_INVISIBLE_TIME		4000
+
 	// Whip
 	#define WHIP		0
 	#define WHIP_1		1
@@ -120,6 +136,9 @@
 	#define TRIPLE_SHOT		13
 	#define MAGIC_CRYSTAL	14
 	#define CROWN			15
+	#define FOOD			16
+	#define INVISIBLE_BOTLE	17
+	#define CROSS			18
 
 	// Items
 	#define ITEM_FALLING_SPEED_X			0.15f
@@ -156,6 +175,10 @@
 	#define HOLY_WATER_SPEED_X	0.25f
 	#define HOLY_WATER_SPEED_Y	0.1f
 	#define HOLY_WATER_TIME_EFFECT	1000
+
+	#define STOP_WATCH_TIME			2000
+	#define CROSS_TIME				500
+
 
 
 	// BreakWalk
@@ -222,6 +245,9 @@
 
 	#define KNIGHT_SPEED	0.03f
 
+	#define KNIGHT_BBOX_WIDTH	32
+	#define KNIGHT_BBOX_HEIGHT	64
+
 	// Raven
 	#define RAVEN_FLYING_SPEED_X 0.12f
 	#define RAVEN_FLYING_SPEED_Y 0.1f
@@ -267,7 +293,7 @@
 	#define HUNCHBACK_RUNNING_SPEED_Y	0.26f
 	#define HUNCHBACK_GRAVITY			0.001f
 
-	#define HUNCHBACK_BBOX_WIDTH			10
+	#define HUNCHBACK_BBOX_WIDTH			32
 	#define HUNCHBACK_BBOX_HEIGHT			32
 	#define HUNCHBACK_ACTIVE_BBOX_WIDTH		160
 	#define HUNCHBACK_ACTIVE_BBOX_HEIGHT	224

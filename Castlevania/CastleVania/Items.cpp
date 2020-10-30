@@ -1,5 +1,6 @@
 ﻿#include "Items.h"
 
+
 Items::Items() :GameObject()
 {
 	vy = ITEM_FALLING_SPEED;
@@ -128,19 +129,23 @@ void Items::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		right = left + 28;
 		bottom = top + 32;
 		break;
+	case FOOD:
+		right = left + 32;
+		bottom = top + 26;
+		break;
+	case INVISIBLE_BOTLE:
+		right = left + 29;
+		bottom = top + 36;
+		break;
+	case CROSS:
+		right = left + 32;
+		bottom = top + 32;
+		break;
 	default:
 		right = left;
 		bottom = top;
 		break;
 	}
-}
-
-
-
-void Items::GetRandomItem()
-{
-	srand(time(NULL));
-	state = rand() % 12;
 }
 
 void Items::SetState(int state)

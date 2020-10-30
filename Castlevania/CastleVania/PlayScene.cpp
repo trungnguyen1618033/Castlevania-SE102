@@ -334,6 +334,9 @@ void PlayScene::Update(DWORD dt)
 	// Lấy danh sách object từ grid 
 	GetObjectFromGrid();
 
+	// Cross effect
+	CrossEffect();
+
 	// Cập nhật bộ đếm thời gian
 	UpdateTimeCounter();
 
@@ -411,7 +414,15 @@ void PlayScene::Update(DWORD dt)
 	if (isBossFighting == true && player->x < game->GetCameraPositon().x)
 		player->x = game->GetCameraPositon().x;
 
-
+	if (isUsingStopWatch == true)
+		game->stopMove = true;
+	else
+		game->stopMove = false;
+	if (isGamePause == true)
+		game->isPause = true;
+	else
+		game->isPause = false;
+	
 	// Xoá các object đi ra khỏi vùng viewport
 	SetInactivation();
 
@@ -431,8 +442,8 @@ void PlayScene::Render()
 
 	if (game->GetChangeScene() == true)
 		return;
-
-	tilemaps->Get(id)->Draw(game->GetCameraPositon());
+	
+	tilemaps->Get(id)->Draw(game->GetCameraPositon(), isCrossEffect);
 
 	for (auto obj : listStaticObjectsToRender)
 	{
@@ -446,9 +457,10 @@ void PlayScene::Render()
 	{
 		if (obj->IsEnable() == false)
 			continue;
+			
 
 		obj->Render();
-		//obj->RenderBoundingBox();
+		obj->RenderBoundingBox();
 	}
 
 	for (auto obj : listItems)
@@ -516,6 +528,7 @@ void PlayScene::SetDropItems()
 		if (dynamic_cast<Torch*>(object) && object->GetState() == EFFECTEXPLODE)
 		{
 			idItem = GetRandomItem();
+			DebugOut(L"idItem: %d\n", idItem);
 			object->GetPosition(x, y);
 			object->SetIsDroppedItem(true);
 		}
@@ -563,9 +576,41 @@ void PlayScene::SetDropItems()
 
 int PlayScene::GetRandomItem()
 {
-	srand(time(NULL));
-	int idItem = rand() % 13;
-	return idItem;
+	/*srand(time(NULL));
+	int idItem = rand() % 15;
+	return idItem;*/
+
+	std::map<int, int> randomRange = {
+		{STOP_WATCH,	1},
+		{KNIFE,		4},
+		{AXE,			6},
+		{HOLY_WATER,	8},
+		{BOOMERANG,		10},
+		{SMALL_HEART,	60},
+		{BIG_HEART,	70},
+		{CROSS,			72},
+		{INVISIBLE_BOTLE, 74},
+		{WHIPITEM,			80},
+		{MONEY_BAG_RED,	85},
+		{MONEY_BAG_BLUE, 89},
+		{MONEY_BAG_WHITE,	92},
+		{MONEY_BAG,94},
+		{DOUBLE_SHOT,	96},
+		{TRIPLE_SHOT,	98},
+		{FOOD,		100} };
+
+	bool canDropItem = (rand() % 100) < 80 ? true : false; // tỉ lệ rớt item là 80/100
+
+	if (canDropItem == false)
+		return -1;
+
+	int randomValue = rand() % 100;
+
+	for (auto i = randomRange.begin(); i != randomRange.end(); i++)
+	{
+		if (randomValue < (*i).second)
+			return (*i).first;
+	}
 }
 
 void PlayScene::SetInactivation()
@@ -677,10 +722,16 @@ void PlayScene::UpdateCameraPosition()
 void PlayScene::UpdateTimeCounter()
 {
 	// Stop Watch
-	if (isUsingStopWatch == true && GetTickCount() - stopWatchCounter > 2000)
+	if (isUsingStopWatch == true && GetTickCount() - stopWatchCounter > STOP_WATCH_TIME)
 	{
 		isUsingStopWatch = false;
 		stopWatchCounter = 0;
+	}
+	// Cross
+	if (isCrossEffect == true && GetTickCount() - crossTimeCounter > CROSS_TIME)
+	{
+		isCrossEffect = false;
+		crossTimeCounter = 0;
 	}
 
 	// Simon dead
@@ -932,6 +983,10 @@ void PlayScene::UpdateGrid()
 
 void PlayScene::SetEnemiesSpawnPositon()
 {
+	// Không spawn enemies khi hiệu ứng cross còn diễn ra
+	if (GetTickCount() - crossTimeCounter < SIMON_INVISIBLE_TIME)
+		return;
+
 	Game* game = Game::GetInstance();
 	for (auto obj : listObjects)
 	{
@@ -1046,6 +1101,59 @@ void PlayScene::SetEnemiesSpawnPositon()
 
 				zombie->SetPosition(x, y);
 				zombie->SetState(ZOMBIE_ACTIVE);
+			}
+		}
+	}
+}
+
+void PlayScene::CrossEffect()
+{
+	if (player->isGotCrossItem == true)
+	{
+		player->isGotCrossItem = false;
+		isCrossEffect = true;
+		crossTimeCounter = GetTickCount();
+
+		for (UINT i = 0; i < listObjects.size(); i++)
+		{
+			// Cross chỉ tác dụng với các object nằm trong viewport
+			if (IsInViewport(listObjects[i]) == false)
+				continue;
+
+			if (dynamic_cast<Knight*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			{
+				auto knight = dynamic_cast<Knight*>(listObjects[i]);
+				knight->SetState(KNIGHT_DESTROYED);
+			}
+			else if (dynamic_cast<Bat*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			{
+				auto bat = dynamic_cast<Bat*>(listObjects[i]);
+				bat->SetState(BAT_DESTROYED);
+			}
+			else if (dynamic_cast<Ghost*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			{
+				auto ghost = dynamic_cast<Ghost*>(listObjects[i]);
+				ghost->SetState(GHOST_DESTROYED);
+			}
+			else if (dynamic_cast<HunchBack*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			{
+				auto hunchBack = dynamic_cast<HunchBack*>(listObjects[i]);
+				hunchBack->SetState(HUNCHBACK_DESTROYED);
+			}
+			else if (dynamic_cast<Raven*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			{
+				auto raven = dynamic_cast<Raven*>(listObjects[i]);
+				raven->SetState(RAVEN_DESTROYED);
+			}
+			else if (dynamic_cast<Skeleton*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			{
+				auto skeleton = dynamic_cast<Skeleton*>(listObjects[i]);
+				skeleton->SetState(SKELETON_DESTROYED);
+			}
+			else if (dynamic_cast<Zombie*>(listObjects[i]) && listObjects[i]->GetState() == ACTIVE)
+			{
+				auto zombie = dynamic_cast<Zombie*>(listObjects[i]);
+				zombie->SetState(ZOMBIE_DESTROYED);
 			}
 		}
 	}
@@ -1297,6 +1405,12 @@ void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_E:
 		simon->isGotTripleShotItem = true;
 		break;
+	case DIK_R:
+		simon->isGotCrossItem = true;
+		break;
+	case DIK_T:
+		simon->StartInvisible();
+		break;
 	case DIK_SPACE:
 		SimonJump();
 		break;
@@ -1537,7 +1651,10 @@ bool PlaySceneKeyHandler::SimonStairStand()
 		}
 		simon->StandOnStair();
 		simon->animation_set->at(ASCEND)->Reset();
+		simon->animation_set->at(ASCEND_INVISIBLE)->Reset();
 		simon->animation_set->at(DESCEND)->Reset();
+		simon->animation_set->at(DESCEND_INVISIBLE)->Reset();
+
 		return true;
 	}
 	return false;

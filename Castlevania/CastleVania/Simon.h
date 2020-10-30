@@ -39,6 +39,8 @@ class Simon : public GameObject
 
 	bool isUntouchable = false;
 	DWORD untouchable_start = 0;
+	bool isInvisible = false;
+	DWORD invisibleTime_start = 0;
 
 public:
 	Simon();
@@ -51,7 +53,7 @@ public:
 
 	bool isFalling = false;
 	bool isTouchGround = false; 
-	bool isStandOnStair = false; // trạng thái đang đứng trên cầu thang 
+	bool isStandOnStair = false;	 // trạng thái đang đứng trên cầu thang 
 	bool canMoveUpStair = false;	// có thể di chuyển lên cầu thang
 	bool canMoveDownStair = false;	// có thể di chuyển xuống cầu thang
 	bool isAutoWalk = false;		// tự động đi
@@ -59,6 +61,7 @@ public:
 
 	bool isGotDoubleShotItem = false; // Double shot item
 	bool isGotTripleShotItem = false; // Triple shot item
+	bool isGotCrossItem = false;	//Item thánh giá 
 
 	bool isGotMagicCrystalItem = false;
 
@@ -70,6 +73,7 @@ public:
 	void Render();
 	void SetState(int state);
 	void StartUntouchable() { isUntouchable = true; untouchable_start = GetTickCount(); }
+	void StartInvisible() { isInvisible = true; invisibleTime_start = GetTickCount(); }
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 

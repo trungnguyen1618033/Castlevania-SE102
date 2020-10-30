@@ -102,6 +102,8 @@ void Knight::SetState(int state)
 		isDroppedItem = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
+		animation_set->at(state)->Reset();
+		animation_set->at(state)->SetAniStartTime(GetTickCount());
 		break;
 	case KNIGHT_DESTROYED:
 		vx = 0;
@@ -123,8 +125,8 @@ void Knight::GetBoundingBox(float& left, float& top, float& right, float& bottom
 {
 	left = x;
 	top = y;
-	right = left + ZOMBIE_BBOX_WIDTH;
-	bottom = top + ZOMBIE_BBOX_HEIGHT;
+	right = left + KNIGHT_BBOX_WIDTH;
+	bottom = top + KNIGHT_BBOX_HEIGHT;
 }
 
 void Knight::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)

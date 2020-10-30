@@ -50,6 +50,9 @@ public:
 	int subWeapon = -1;
 	int stateWhip;
 
+	bool isPause = false;
+	bool stopMove = false;
+
 
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }

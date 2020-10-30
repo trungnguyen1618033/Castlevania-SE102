@@ -84,10 +84,15 @@ void TileMap::Load_MapData()
 }
 
 
-void TileMap::Draw(D3DXVECTOR3 camPosition)
+void TileMap::Draw(D3DXVECTOR3 camPosition, bool isCrossEffect)
 {
 	int start_col_to_draw = (int)camPosition.x / 32;
 	int end_col_to_draw = (int)(camPosition.x + SCREEN_WIDTH) / 32;
+
+	// Hiệu ứng của item cross
+	int alpha = 255;
+	if (isCrossEffect == true) 
+		alpha = rand() % 255;
 
 	for (int i = 0; i < nums_row; i++)
 	{
@@ -98,7 +103,7 @@ void TileMap::Draw(D3DXVECTOR3 camPosition)
 				return;
 			float x = TILE_WIDTH * (j - start_col_to_draw) + camPosition.x - (int)camPosition.x % 32;
 			float y = TILE_HEIGHT * i + 80;
-			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y);
+			sprites->Get(1000 * ID + map_Data[i][j])->Draw(1, -1, x, y, alpha);
 		}
 	}
 

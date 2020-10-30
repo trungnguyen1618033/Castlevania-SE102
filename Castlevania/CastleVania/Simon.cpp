@@ -7,10 +7,10 @@ Simon::Simon() : GameObject()
 {
 	SetState(IDLE);
 	score = 0;
-	energy = 99;
+	energy = SIMON_ENERGY;
 	life = 3;
 	subWeapon = -1;
-	hp = 16;
+	hp = SIMON_HP;
 }
 
 
@@ -50,6 +50,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 		untouchable_start = 0;
 		isUntouchable = false;
 	}
+	
+	if (GetTickCount() - invisibleTime_start > SIMON_INVISIBLE_TIME)
+	{
+		invisibleTime_start = 0;
+		isInvisible = false;
+	}
+
 
 	if (coObjects == NULL)
 	{
@@ -144,7 +151,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 			else if (dynamic_cast<Knight*>(e->obj) || dynamic_cast<Bat*>(e->obj) || dynamic_cast<Ghost*>(e->obj) || dynamic_cast<HunchBack*>(e->obj) ||
 				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj) || dynamic_cast<Bone*>(e->obj))
 			{
-				if (state != UPGRADE && isUntouchable == false)
+				if (state != UPGRADE && isUntouchable == false && isInvisible == false)
 				{
 					if (dynamic_cast<Knight*>(e->obj))
 					{
@@ -216,21 +223,71 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 void Simon::Render()
 {
 
-	int tempState = state;
+	int tempState = state;	// Sử dụng biến tạm để không thay đổi trạng thái gốc của Simon
 	int alpha = 255;
+	float ratio = 0;
 
 	// Khi Simon rơi từ trên cao xuống thì luôn co chân
-	// Sử dụng biến tạm để không thay đổi trạng thái gốc của Simon
-	if (state !=DEAD  && IsHit() == false && isFalling == true)
+	if (state != DEAD  && IsHit() == false && isFalling == true)
 		tempState = DUCK;
 
 	if (isUntouchable == true)  // Để render Simon nhấp nháy trong trạng thái isUntouchable
 		alpha = rand() % 255;
+	else if (GetTickCount()- invisibleTime_start < SIMON_INVISIBLE_TIME) // Simon tàng hình
+	{
+		ratio = (float)(GetTickCount() - invisibleTime_start) / SIMON_INVISIBLE_TIME;
 
+		if (ratio < 0.3f)			// trong suốt
+			alpha = 0;
+		else if (ratio < 0.6f)		// nhấp nháy
+			alpha = 200 * (rand() % 100 < 20);
+		else						// render animation của invisible
+		{
+			switch (tempState)
+			{
+			case IDLE:	
+				tempState = IDLE_INVISIBLE; 
+				break;
+			case WALK:	
+				tempState = WALK_INVISIBLE; 
+				break;
+			case DUCK:	
+				tempState = DUCK_INVISIBLE;
+				break;
+			case JUMP:	
+				tempState = JUMP_INVISIBLE; 
+				break;
+			case ASCEND:	
+				tempState = ASCEND_INVISIBLE; 
+				break;
+			case DESCEND:	
+				tempState = DESCEND_INVISIBLE; 
+				break;
+			case ASCENDING:
+				tempState = ASCENDING_INVISIBLE; 
+				break;
+			case DESCENDING:	
+				tempState = DESCENDING_INVISIBLE; 
+				break;
+			case STANDING: 
+				tempState = STANDING_INVISIBLE; 
+				break;
+			case DUCKING:	
+				tempState = DUCKING_INVISIBLE; 
+				break;
+			default:
+				break;
+			}
+		}
+	}
 	if (state == -1)
 		return;
 
-	animation_set->at(state)->Render(1, nx, x, y, alpha);
+	DebugOut(L"Set: %d\n", tempState);
+	animation_set->at(tempState)->Render(1, nx, x, y, alpha);
+	int currentFrame = animation_set->at(tempState)->GetCurrentFrame();
+	DebugOut(L"Frame: %d\n", currentFrame);
+	animation_set->at(state)->SetCurrentFrame(currentFrame);
 }
 
 void Simon::SetState(int state)
@@ -308,6 +365,7 @@ void Simon::SetState(int state)
 		break;
 	case DEAD:
 		isUntouchable = false;
+		isInvisible = false;
 		vx = 0;
 		vy = 0;
 		life -= 1;
@@ -404,6 +462,17 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem)
 				break;
 			case MAGIC_CRYSTAL:
 				isGotMagicCrystalItem = true;
+				break;
+			case FOOD:
+				hp += 2;
+				if (hp > SIMON_HP)
+					hp = SIMON_HP;
+				break;
+			case INVISIBLE_BOTLE:
+				StartInvisible();
+				break;
+			case CROSS:
+				isGotCrossItem = true;
 				break;
 			default:
 				break;
