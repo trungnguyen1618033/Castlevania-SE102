@@ -79,10 +79,10 @@ void Ghost::SetState(int state)
 
 void Ghost::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 11;
-	top = y + 11;
-	right = left + 10;
-	bottom = top + 10;
+	left = x;
+	top = y;
+	right = left + 32;
+	bottom = top + 32;
 }
 
 void Ghost::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)

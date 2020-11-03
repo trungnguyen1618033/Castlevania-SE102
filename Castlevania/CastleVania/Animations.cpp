@@ -28,6 +28,7 @@ void Animation::Render(int accordingCam, int nx, float x, float y, int alpha)
 	else
 	{
 		DWORD t = frames[currentFrame]->GetTime();
+		
 		if (now - lastFrameTime >= t) {
 			currentFrame++;
 			lastFrameTime = now;
@@ -37,6 +38,7 @@ void Animation::Render(int accordingCam, int nx, float x, float y, int alpha)
 				currentFrame = 0;
 			}
 		}
+		
 	}
 
 	frames[currentFrame]->GetSprite()->Draw(accordingCam, nx, x, y, alpha);

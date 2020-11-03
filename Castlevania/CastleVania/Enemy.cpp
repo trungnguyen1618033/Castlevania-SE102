@@ -17,6 +17,7 @@ void Enemy::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 	GameObject::Update(dt);
 }
 
+
 void Enemy::SetState(int state)
 {
 	GameObject::SetState(state);

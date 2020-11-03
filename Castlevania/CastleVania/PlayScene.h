@@ -21,6 +21,7 @@
 #include "Bone.h"
 #include "Grid.h"
 
+#include <map>
 
 
 class PlayScene : public Scene
@@ -70,6 +71,9 @@ protected:
 
 	bool gameDelayGameOver = false;
 	int delayTimeGameOver = 0;
+
+	bool isCrossEffect = false;
+	int crossTimeCounter = 0;
 
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TILEMAP(string line);
@@ -122,6 +126,7 @@ public:
 	bool IsUsingStopWatch() { return isUsingStopWatch; }
 	bool IsDoubleShot() { return isDoubleShot; }
 	bool IsTripleShot() { return isTripleShot; }
+	void CrossEffect();
 
 	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
 	void DoubleShotEffect();

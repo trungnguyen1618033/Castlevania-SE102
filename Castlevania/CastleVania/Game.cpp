@@ -396,7 +396,7 @@ void Game::SwitchScene(int scene_id)
 			Simon* simon = scene->GetPlayer();
 			game->score = simon->GetScore();
 			game->life = simon->GetLife();
-			game->hp = simon->GetHP();
+			game->hp = 16;
 			game->energy = simon->GetEnergy();
 			game->subWeapon = simon->GetSubWeapon();
 

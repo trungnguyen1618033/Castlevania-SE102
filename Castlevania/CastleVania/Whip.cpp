@@ -228,7 +228,7 @@ void Whip::Render(int currentID)
 	RenderSpark();
 	if (currentID >= 0)
 		animation_set->at(state)->RenderByID(currentID, nx, x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Whip::SetWhipPosition(D3DXVECTOR3 simonPositon, bool isStand)

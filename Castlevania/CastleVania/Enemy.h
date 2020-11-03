@@ -22,6 +22,7 @@ public:
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMoving = false);
 	virtual void Render() = 0;
+	
 	virtual void SetState(int state);
 
 	virtual void LoseHP(int x);
