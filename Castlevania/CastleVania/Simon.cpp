@@ -283,10 +283,8 @@ void Simon::Render()
 	if (state == -1)
 		return;
 
-	DebugOut(L"Set: %d\n", tempState);
 	animation_set->at(tempState)->Render(1, nx, x, y, alpha);
 	int currentFrame = animation_set->at(tempState)->GetCurrentFrame();
-	DebugOut(L"Frame: %d\n", currentFrame);
 	animation_set->at(state)->SetCurrentFrame(currentFrame);
 }
 
