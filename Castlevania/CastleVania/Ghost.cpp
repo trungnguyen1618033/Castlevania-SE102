@@ -29,12 +29,22 @@ void Ghost::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	vy += velocityVariation;
 
+	if (y <= simonPostion.y) {
+		y += 0.25f;
+	}
+	else
+	{
+		y -= 0.35f;
+	}
+
 	if (vy > 0.025f || vy < -0.025f) {
 		velocityVariation = -velocityVariation;
+
 	}
 
 	x += dx;
 	y += dy;
+
 }
 
 void Ghost::Render()
