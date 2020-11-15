@@ -12,7 +12,6 @@ Skeleton::Skeleton(float min, float max)
 
 void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
-	DebugOut(L"SKE X: %f", x);
 	if (stopMoving == true)
 		return;
 
@@ -36,7 +35,7 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 
 	if (this->state == SKELETON_ACTIVE)
 	{
-		
+
 		if (x <= xMin)
 		{
 			x = xMin;
@@ -48,14 +47,14 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 			velocityVariation = -1;
 		}
 		vx += velocityVariation * 0.01f;
-		
+		GetOrientation();
+
 		
 		/*if (vx > 0.14f) 
 			velocityVariation = -1;
 		else if (vx < -0.14f)  
 			velocityVariation = 1;*/
 	}
-
 	Enemy::Update(dt);
 	vy += SKELETON_GRAVITY * dt;
 
@@ -94,8 +93,10 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 					{
 						vy = 0;
 
-						if (state == SKELETON_JUMP) // jump xong chạm đất -> walk
+						if (state == SKELETON_JUMP) {
+							// jump xong chạm đất -> walk
 							SetState(SKELETON_ACTIVE);
+						}
 					}
 					else
 						y += dy;
@@ -181,10 +182,17 @@ void Skeleton::LoseHP(int x)
 bool Skeleton::CanHit()
 {
 	float dx = abs(x - simonPostion.x);
-	if (dx > 132 && dx < 160 && state == SKELETON_ACTIVE)
+	if (dx > 60 && dx < 160 && state == SKELETON_ACTIVE)
 	{
-		if (GetTickCount() - lastTimeThrown > 1000)
+		if (numThrow == 3){
+			if (GetTickCount() - lastTimeThrown > 3000) {
+				numThrow = 1;
+				return true;
+			}
+		}
+		else if (GetTickCount() - lastTimeThrown > 1000)
 		{
+			numThrow++;
 			return true;
 		}
 	}
@@ -197,10 +205,42 @@ void Skeleton::Hit(Grid* grid)
 	auto bone = new Bone();
 	bone->SetPosition(x + 5, y + 10);
 	bone->SetOrientation(nx);
-	bone->SetState(0);
 	bone->SetEnable(true);
+	// Co the tang case -> tang numThrow theo
+	switch (numThrow)
+	{
+	case 1:
+		bone->SetNum(1.0f);
+		break;
+	case 2:
+		bone->SetNum(0.5f);
+		break;
+	case 3:		
+		bone->SetNum(1.5f);
+		break;
+	default:
+		break;
+	}
+	bone->SetState(0);
 
 	if (y > 480)
 		Unit* unit = new Unit(grid, bone, x + 5, y);
 	Unit* unit = new Unit(grid, bone, x + 5, y + 10);
+}
+
+void Skeleton::GetOrientation()
+{
+	// lấy phương hướng
+	int nx;
+
+	if (x - simonPostion.x < 32 && vx < 0)
+	{
+		nx = 1;
+		SetOrientation(nx);
+	}
+	else if (x > simonPostion.x && vx > 0)
+	{
+		nx = -1;
+		SetOrientation(nx);
+	}
 }

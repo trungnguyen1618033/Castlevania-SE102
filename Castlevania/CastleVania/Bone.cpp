@@ -32,9 +32,9 @@ void Bone::SetState(int state)
 	{
 	case 0:
 		if (nx == 1)
-			vx = BONE_SPEED_X;
+			vx = num*BONE_SPEED_X;
 		else
-			vx = -BONE_SPEED_X;
+			vx = -num*BONE_SPEED_X;
 		vy = -BONE_SPEED_Y;
 		break;
 	default:

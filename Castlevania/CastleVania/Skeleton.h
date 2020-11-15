@@ -16,7 +16,7 @@ class Skeleton : public Enemy
 
 	DWORD lastTimeThrown = 0;
 	int velocityVariation = 1;
-
+	int numThrow = 0;
 public:
 	float xMin, xMax;
 
@@ -28,7 +28,7 @@ public:
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
-
+	virtual void GetOrientation();
 	virtual void LoseHP(int x);
 
 	bool CanHit();

@@ -127,8 +127,5 @@ void Ghost::GetOrientation()
 		vx *= -1;
 		SetOrientation(nx);
 	}
-		
-	
-
 }
 
