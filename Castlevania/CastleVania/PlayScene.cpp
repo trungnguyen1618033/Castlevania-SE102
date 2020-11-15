@@ -1436,7 +1436,7 @@ void PlaySceneKeyHandler::OnKeyUp(int KeyCode)
 void PlaySceneKeyHandler::SimonJump()
 {
 	Simon* simon = ((PlayScene*)scene)->GetPlayer();
-	if (simon->isTouchGround == false || simon->IsHit() == true)
+	if (simon->isTouchGround == false || simon->IsHit() == true || SimonStairStand() == true)
 		return;
 	simon->SetState(JUMP);
 }

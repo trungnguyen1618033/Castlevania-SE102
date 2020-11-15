@@ -442,7 +442,7 @@
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	288	60	0	320	80	2
+50	264	50	0	320	60	2
 
 
 
