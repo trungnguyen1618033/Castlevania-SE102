@@ -1,15 +1,18 @@
 ﻿#include "Skeleton.h"
 
-Skeleton::Skeleton()
+Skeleton::Skeleton(float min, float max)
 {
 	hp = 2;
 	score = 300;
 	respawnWaitingTime = 5000;
 	isJumping = false;
+	xMin = min;
+	xMax = max;
 }
 
 void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 {
+	DebugOut(L"SKE X: %f", x);
 	if (stopMoving == true)
 		return;
 
@@ -33,11 +36,24 @@ void Skeleton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving
 
 	if (this->state == SKELETON_ACTIVE)
 	{
+		
+		if (x <= xMin)
+		{
+			x = xMin;
+			velocityVariation = 1;
+		}
+		if (x >= xMax)
+		{
+			x = xMax;
+			velocityVariation = -1;
+		}
 		vx += velocityVariation * 0.01f;
-		if (vx > 0.14f) 
+		
+		
+		/*if (vx > 0.14f) 
 			velocityVariation = -1;
 		else if (vx < -0.14f)  
-			velocityVariation = 1;;
+			velocityVariation = 1;*/
 	}
 
 	Enemy::Update(dt);

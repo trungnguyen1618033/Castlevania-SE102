@@ -490,7 +490,7 @@
 19	352	176	19
 
 # SKELETON
-20	12	240	20
+20	12	240	20	72	106
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

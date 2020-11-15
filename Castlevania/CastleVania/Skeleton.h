@@ -18,7 +18,9 @@ class Skeleton : public Enemy
 	int velocityVariation = 1;
 
 public:
-	Skeleton();
+	float xMin, xMax;
+
+	Skeleton(float min, float max);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	virtual void Render();
