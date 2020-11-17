@@ -144,6 +144,9 @@
     <ClInclude Include="OverGame.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="AreaDead.h">
+      <Filter>Objects\Statics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bat.cpp">
@@ -262,6 +265,9 @@
     </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AreaDead.cpp">
+      <Filter>Objects\Statics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

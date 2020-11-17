@@ -24,7 +24,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		SetState(DEAD);
 		y = 500;
-		DebugOut(L"y: %d\n", y);
+		//DebugOut(L"y: %d\n", y);
 	}
 	
 	if (dt > 64)
@@ -131,6 +131,12 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				if (state == ASCEND || state == DESCEND)
 					if (nx != 0) 
 						x -= nx * 0.1f;
+			}
+			else if (dynamic_cast<AreaDead*>(e->obj))
+			{
+				AreaDead* area = dynamic_cast<AreaDead*>(e->obj);
+				SetState(DEAD);
+				return;
 			}
 			else if (dynamic_cast<BlockMove*>(e->obj))
 			{
@@ -646,7 +652,29 @@ void Simon::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listObjects)
 			{
 				Zombie* zombie = dynamic_cast<Zombie*>(enemy);
 				if (zombie->GetState() == ZOMBIE_INACTIVE && zombie->IsAbleToActivate())
+				{
+					zombie->isSettedPosition = true;
+					float simon_x, simon_y;
+					GetPosition(simon_x, simon_y);
+
+					int nx = zombie->GetEntryPosition().x < simon_x ? 1 : -1;
+					zombie->SetOrientation(nx);
+
+					// Cần random một khoảng nhỏ để tránh việc các zombie spawn cùng lúc, tại cùng một vị trí
+					int randomDistance = rand() % 20;
+
+					float x, y;
+					y = zombie->GetEntryPosition().y;
+
+					if (nx == -1)
+						x = Game::GetInstance()->GetCameraPositon().x + SCREEN_WIDTH - (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
+					else
+						x = Game::GetInstance()->GetCameraPositon().x + (ENEMY_DEFAULT_BBOX_WIDTH + randomDistance);
+
+					zombie->SetPosition(x, y);
 					zombie->SetState(ZOMBIE_ACTIVE);
+				}
+					
 			}
 			else if (dynamic_cast<Skeleton*>(enemy))
 			{

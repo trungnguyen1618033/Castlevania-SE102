@@ -10,6 +10,7 @@ protected:
 	DWORD respawnTime_Start;
 	bool isRespawnWaiting;
 	int respawnWaitingTime;
+	bool theFirst = true;
 
 	D3DXVECTOR2 entryPosition;
 

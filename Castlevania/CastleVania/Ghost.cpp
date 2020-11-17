@@ -58,6 +58,7 @@ void Ghost::SetState(int state)
 		isDroppedItem = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
+		theFirst = false;
 		break;
 	case GHOST_DESTROYED:
 		vx = 0;

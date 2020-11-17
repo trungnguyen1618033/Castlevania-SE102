@@ -5,7 +5,7 @@ Raven::Raven()
 	hp = 1;
 	score = 200;
 	attack = 2;
-	respawnWaitingTime = 5000;
+	respawnWaitingTime = 7000;
 }
 
 void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
@@ -81,6 +81,7 @@ void Raven::SetState(int state)
 		isDroppedItem = false;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
+		theFirst = false;
 		break;
 	case RAVEN_DESTROYED:
 		vx = 0;

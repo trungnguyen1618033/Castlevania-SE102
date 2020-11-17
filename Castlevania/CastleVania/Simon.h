@@ -19,6 +19,7 @@
 #include "Raven.h"
 #include "Zombie.h"
 #include "Boss.h"
+#include "AreaDead.h"
 
 using namespace std;
 

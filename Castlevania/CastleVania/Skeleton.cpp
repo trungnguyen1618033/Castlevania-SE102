@@ -108,6 +108,7 @@ void Skeleton::SetState(int state)
 	case SKELETON_ACTIVE:
 		vx = vy = 0;
 		lastTimeThrown = GetTickCount();
+		theFirst = false;
 		break;
 	case SKELETON_DESTROYED:
 		vx = vy = 0;

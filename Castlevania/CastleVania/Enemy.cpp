@@ -57,6 +57,8 @@ void Enemy::StartRespawnTimeCounter()
 
 bool Enemy::IsAbleToActivate()
 {
+	if (theFirst == true)
+		return true;
 	DWORD now = GetTickCount();
 
 	if (isRespawnWaiting == true && now - respawnTime_Start >= respawnWaitingTime)

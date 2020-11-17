@@ -20,6 +20,7 @@
 #include "Skeleton.h"
 #include "Bone.h"
 #include "Grid.h"
+#include "AreaDead.h"
 
 #include <map>
 

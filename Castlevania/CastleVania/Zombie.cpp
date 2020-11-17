@@ -5,7 +5,7 @@ Zombie::Zombie()
 	hp = 1;
 	score = 100;
 	attack = 2;
-	respawnWaitingTime = 4000;
+	respawnWaitingTime = 5000;
 }
 
 Zombie::~Zombie()
@@ -100,6 +100,7 @@ void Zombie::SetState(int state)
 	case ZOMBIE_DESTROYED:
 		vx = 0;
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
+		theFirst = false;
 		break;
 	case ZOMBIE_INACTIVE:
 		x = entryPosition.x;

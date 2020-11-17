@@ -150,6 +150,7 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Bat.h" />
     <ClInclude Include="BatIntro.h" />
+    <ClInclude Include="AreaDead.h" />
     <ClInclude Include="BlockMove.h" />
     <ClInclude Include="Bone.h" />
     <ClInclude Include="Boss.h" />
@@ -191,6 +192,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Bat.cpp" />
     <ClCompile Include="BatIntro.cpp" />
+    <ClCompile Include="AreaDead.cpp" />
     <ClCompile Include="BlockMove.cpp" />
     <ClCompile Include="Bone.cpp" />
     <ClCompile Include="Boss.cpp" />
