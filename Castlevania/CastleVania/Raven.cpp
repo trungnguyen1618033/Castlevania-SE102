@@ -26,7 +26,6 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	}
 	if (isStopWaiting == false && (GetTickCount() - endTimeWaiting > 1500))
 	{
-
 		StartStopTimeCounter();
 	}
 
@@ -34,14 +33,17 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		if (GetTickCount() - startTimeWaiting > 1000)
 		{
-			//DebugOut(L"Fly");
+			//DebugOut(L"Fly\n");
 			endTimeWaiting = GetTickCount();
 			isStopWaiting = false;
 			startTimeWaiting = 0;
+
+			if (currentAttackPhase < 3) currentAttackPhase++;
+			else currentAttackPhase = 0;
 		}
 		else
 		{
-			//DebugOut(L"Waiting");
+			//DebugOut(L"Waiting\n");
 			vx = vy = 0;
 			return;
 		}
@@ -161,7 +163,9 @@ void Raven::GetVelocity()
 		vy = ny * dy / 1200;
 	}
 	
-	
-
-	
+	if (currentAttackPhase == 3)
+	{
+		vx *= 7.2f;
+		vy *= 7.2f;
+	}	
 }

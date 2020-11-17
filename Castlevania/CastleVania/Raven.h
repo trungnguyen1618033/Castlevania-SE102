@@ -10,6 +10,7 @@ class Raven : public Enemy
 {
 	int startTimeWaiting = 0;
 	int endTimeWaiting = 0;
+	int currentAttackPhase = 0;
 	bool isStopWaiting = false;
 
 public:

@@ -21,17 +21,52 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovin
 		return;
 	}
 
-	if (x - simonPostion.x > 72 && vx > 0)
+	if (isOnTurnDelay)
 	{
-		SetOrientation(-1);
-		vx *= -1;
-	}
-	else if(simonPostion.x - x > 72 && vx < 0)
-	{
-		SetOrientation(1);
-		vx *= -1;
+		turnDelayTime += dt;
+		if (turnDelayTime >= turningDelay)
+		{
+			isOnTurnDelay = false;
+			turnDelayTime = 0;			
+		}		
 	}
 
+	if (y > 360.f) // touch the ground
+		isJumping = false;
+
+	float _dx = abs(x - simonPostion.x);
+
+	if (!isJumping && !isOnTurnDelay && state == HUNCHBACK_ACTIVE)
+	{
+		if (_dx < 120.f)
+			isOnTurnDelay = true;
+
+		if (_dx < 50.f)
+		{
+			vy = -HUNCHBACK_RUNNING_SPEED_Y * 1.5f;
+			vx = HUNCHBACK_RUNNING_SPEED_X;
+			//DebugOut(L"HighJump!\n");
+		}
+		else
+		{
+			vy = -HUNCHBACK_RUNNING_SPEED_Y;
+			vx = HUNCHBACK_RUNNING_SPEED_X * 2.6f;
+			//DebugOut(L"MoveFAST!\n");
+		}
+
+		if (x - simonPostion.x > 0)
+		{
+			SetOrientation(-1);
+			vx *= -1;
+		}
+
+		if (x - simonPostion.x < 0)
+		{
+			SetOrientation(1);
+		}
+		isJumping = true;
+	}	
+	
 	vy += HUNCHBACK_GRAVITY * dt;
 	Enemy::Update(dt);
 
@@ -54,13 +89,12 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovin
 
 		x += dx;
 		y += min_ty * dy + ny * 0.1f;
-		if (ny == -1.0f)
+		if (ny == -1.0f && !isJumping)
 		{
 			if (state == HUNCHBACK_ACTIVE)
 			{
 				vy = -HUNCHBACK_RUNNING_SPEED_Y;
 			}
-
 		}
 	}
 
@@ -81,11 +115,7 @@ void HunchBack::SetState(int state)
 	switch (state)
 	{
 	case HUNCHBACK_ACTIVE:
-		if (nx > 0) 
-			vx = HUNCHBACK_RUNNING_SPEED_X;
-		else 
-			vx = -HUNCHBACK_RUNNING_SPEED_X;
-		vy = -HUNCHBACK_RUNNING_SPEED_Y;
+		isOnTurnDelay = true;		
 		break;
 	case HUNCHBACK_DESTROYED:
 		vx = 0;
@@ -136,22 +166,4 @@ void HunchBack::LoseHP(int x)
 
 	if (hp == 0)
 		SetState(HUNCHBACK_DESTROYED);
-}
-
-void HunchBack::GetOrientation()
-{
-	// lấy phương hướng
-	int nx;
-
-	if (x < simonPostion.x)
-	{
-		nx = 1;
-	}
-	else
-	{
-		nx = -1;
-		vx = -HUNCHBACK_RUNNING_SPEED_X;
-	}
-
-	SetOrientation(nx);
 }
