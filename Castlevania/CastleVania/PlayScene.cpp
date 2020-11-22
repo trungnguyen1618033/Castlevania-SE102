@@ -562,7 +562,9 @@ void PlayScene::SetDropItems()
 		}
 		else if (dynamic_cast<Boss*>(object) && object->GetState() == BOSS_DESTROYED)
 		{
-			if (boss->IsDroppedItem() == false)
+			//Nguyen
+			if (boss->IsDroppedItem() == false && boss->GetisDropItem() == true)
+			//
 			{
 				boss->SetEnable(false);
 				boss->SetIsDroppedItem(true);

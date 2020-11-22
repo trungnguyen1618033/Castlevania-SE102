@@ -34,6 +34,8 @@ public:
 	void StartStopTimeCounter() { isStopWaiting = true; startTimeWaiting = GetTickCount(); }
 
 	int GetIdTarget() { return idTarget; }
-
+	//Nguyen
+	bool GetisDropItem() { return dropItem; }
+	//
 };
 

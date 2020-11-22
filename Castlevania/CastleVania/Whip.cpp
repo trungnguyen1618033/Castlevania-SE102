@@ -212,11 +212,15 @@ void Whip::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 			{
 				e->LoseHP(1);
 				targetTypeHit = BOSS;
-
+				//Nguyen
+				sparkEffect.push_back({ left, top });
+				//
 				if (e->GetState() == BOSS_DESTROYED)
 				{
 					scoreReceived += e->GetScore();
-					sparkEffect.push_back({ left, top });
+					//Nguyen
+					//sparkEffect.push_back({ left, top });
+					//
 				}
 			}
 		}
