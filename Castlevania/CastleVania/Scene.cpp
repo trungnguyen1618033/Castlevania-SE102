@@ -21,7 +21,7 @@ void Scene::_ParseSection_TEXTURES(string line)
 	if (tokens.size() < 5) return; // skip invalid lines
 
 	int texID = atoi(tokens[0].c_str());
-	wstring path = ToWSTR(tokens[1]);
+	string path = tokens[1];
 	int R = atoi(tokens[2].c_str());
 	int G = atoi(tokens[3].c_str());
 	int B = atoi(tokens[4].c_str());
@@ -45,7 +45,7 @@ void Scene::_ParseSection_SPRITES(string line)
 	LPDIRECT3DTEXTURE9 tex = Textures::GetInstance()->Get(texID);
 	if (tex == NULL)
 	{
-		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
+		DebugOut("[ERROR] Texture ID %d not found!\n", texID);
 		return;
 	}
 
@@ -58,7 +58,7 @@ void Scene::_ParseSection_ANIMATIONS(string line)
 
 	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
 
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+	//DebugOut("--> %s\n",ToWSTR(line).c_str());
 
 	LPANIMATION ani = new Animation();
 

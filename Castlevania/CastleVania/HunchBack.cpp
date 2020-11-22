@@ -45,13 +45,13 @@ void HunchBack::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovin
 		{
 			vy = -HUNCHBACK_RUNNING_SPEED_Y * 1.5f;
 			vx = HUNCHBACK_RUNNING_SPEED_X;
-			//DebugOut(L"HighJump!\n");
+			//DebugOut("HighJump!\n");
 		}
 		else
 		{
 			vy = -HUNCHBACK_RUNNING_SPEED_Y;
 			vx = HUNCHBACK_RUNNING_SPEED_X * 2.6f;
-			//DebugOut(L"MoveFAST!\n");
+			//DebugOut("MoveFAST!\n");
 		}
 
 		if (x - simonPostion.x > 0)

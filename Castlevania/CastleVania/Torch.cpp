@@ -55,6 +55,7 @@ void Torch::SetState(int state)
 		break;
 	case EFFECTEXPLODE:
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
+		Game::gameSound->playSound(HITSOFT);
 		break;
 	default:
 		break;

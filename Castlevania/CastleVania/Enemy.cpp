@@ -25,6 +25,7 @@ void Enemy::SetState(int state)
 
 void Enemy::LoseHP(int x)
 {
+	Game::gameSound->playSound(HITSOFT);
 	hp -= x;
 
 	if (hp <= 0)

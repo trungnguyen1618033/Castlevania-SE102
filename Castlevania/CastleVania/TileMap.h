@@ -16,7 +16,7 @@ class TileMap
 	int nums_row;			
 	int nums_col;		
 
-	LPCWSTR filePath_tex;
+	LPCSTR filePath_tex;
 	LPCWSTR filePath_data;
 	int ID;					
 
@@ -25,7 +25,7 @@ public:
 
 	Sprites* sprites;		
 
-	TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height);
+	TileMap(int ID, LPCSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height);
 
 	void LoadResources();	
 	void Load_MapData();	
@@ -43,7 +43,7 @@ class TileMaps
 	unordered_map<int, LPTILEMAP> tilemaps;
 
 public:
-	void Add(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height);
+	void Add(int ID, LPCSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height);
 	LPTILEMAP Get(int ID) { return tilemaps[ID]; }
 
 	static TileMaps* GetInstance();

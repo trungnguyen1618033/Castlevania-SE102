@@ -16,7 +16,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
 
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+	//DebugOut("--> %s\n",ToWSTR(line).c_str());
 
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
@@ -41,7 +41,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_SIMON:
 		if (player != NULL)
 		{
-			DebugOut(L"[ERROR] SIMON object was created before! ");
+			DebugOut("[ERROR] SIMON object was created before! ");
 			return;
 		}
 		player = Simon::GetInstance();
@@ -193,7 +193,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		unit = new Unit(grid, boss, x, y);
 		break;
 	default:
-		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+		DebugOut("[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
 
@@ -206,7 +206,7 @@ void PlayScene::_ParseSection_TILEMAP(string line)
 	if (tokens.size() < 7) return; // skip invalid lines
 
 	int mapID = atoi(tokens[0].c_str());
-	wstring path_img = ToWSTR(tokens[1]);
+	string path_img = tokens[1];
 	wstring path_text = ToWSTR(tokens[2]);
 	int W = atoi(tokens[3].c_str());
 	int H = atoi(tokens[4].c_str());
@@ -215,7 +215,7 @@ void PlayScene::_ParseSection_TILEMAP(string line)
 
 	tilemaps->Add(mapID, path_img.c_str(), path_text.c_str(), W, H);
 	
-	//DebugOut(L"ok_______\n");
+	//DebugOut("ok_______\n");
 	Game::GetInstance()->SetCamPos(x, y);
 	
 }
@@ -237,7 +237,7 @@ void PlayScene::_ParseSection_GRID(string line)
 
 void PlayScene::Load()
 {
-	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
+	DebugOut("[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 	
 	ifstream f;
 	f.open(sceneFilePath);
@@ -293,7 +293,7 @@ void PlayScene::Load()
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	DebugOut("[INFO] Done loading scene resources %s\n", sceneFilePath);
 
 	if (id == 0)
 		player->SetOrientation(1);
@@ -540,7 +540,7 @@ void PlayScene::SetDropItems()
 		if (dynamic_cast<Torch*>(object) && object->GetState() == EFFECTEXPLODE)
 		{
 			idItem = GetRandomItem();
-			DebugOut(L"idItem: %d\n", idItem);
+			DebugOut("idItem: %d\n", idItem);
 			object->GetPosition(x, y);
 			object->SetIsDroppedItem(true);
 		}
@@ -963,7 +963,7 @@ void PlayScene::GetObjectFromGrid()
 	listMovingObjectsToRender.clear();
 
 	grid->Get(Game::GetInstance()->GetCameraPositon(), listUnits);
-	//DebugOut(L"%d \n", listUnits.size());
+	//DebugOut("%d \n", listUnits.size());
 
 	for (UINT i = 0; i < listUnits.size(); i++)
 	{
@@ -1322,7 +1322,7 @@ void PlaySceneKeyHandler::KeyState(BYTE* state)
 
 void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	DebugOut("[INFO] KeyDown: %d\n", KeyCode);
 
 	PlayScene* s = (PlayScene*)scene;
 	
@@ -1424,7 +1424,7 @@ void PlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 void PlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+	DebugOut("[INFO] KeyUp: %d\n", KeyCode);
 }
 
 void PlaySceneKeyHandler::SimonJump()

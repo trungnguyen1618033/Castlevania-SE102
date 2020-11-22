@@ -6,7 +6,7 @@ PieceWall::PieceWall()
 	AnimationSets* animation_sets = AnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(11);
 	SetAnimationSet(ani_set);
-	DebugOut(L"Init Piece wall\n");
+	DebugOut("Init Piece wall\n");
 }
 
 void PieceWall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)

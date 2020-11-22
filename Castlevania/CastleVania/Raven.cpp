@@ -33,7 +33,7 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		if (GetTickCount() - startTimeWaiting > 1000)
 		{
-			//DebugOut(L"Fly\n");
+			//DebugOut("Fly\n");
 			endTimeWaiting = GetTickCount();
 			isStopWaiting = false;
 			startTimeWaiting = 0;
@@ -43,7 +43,7 @@ void Raven::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 		}
 		else
 		{
-			//DebugOut(L"Waiting\n");
+			//DebugOut("Waiting\n");
 			vx = vy = 0;
 			return;
 		}

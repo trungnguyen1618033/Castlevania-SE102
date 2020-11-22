@@ -25,6 +25,9 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{243972ac-d5c5-49e9-9c90-cf7b5b32e19e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{eb53b871-4e96-45b8-871c-8614c84b4cdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Textures.h">
@@ -147,6 +150,15 @@
     <ClInclude Include="AreaDead.h">
       <Filter>Objects\Statics</Filter>
     </ClInclude>
+    <ClInclude Include="dsutil.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="dxutil.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="GSound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bat.cpp">
@@ -268,6 +280,15 @@
     </ClCompile>
     <ClCompile Include="AreaDead.cpp">
       <Filter>Objects\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="dxutil.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="dsutil.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="GSound.cpp">
+      <Filter>Sound</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

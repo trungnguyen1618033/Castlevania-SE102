@@ -12,6 +12,7 @@ void BreakWall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovin
 {
 	if (state == BREAK && isBreakToPieces == false)
 	{
+		Game::gameSound->playSound(BRICKBREAK);
 		isBreakToPieces = true;
 		pieces = new WallPieces(x, y);
 	}

@@ -216,13 +216,17 @@ void Weapon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMoving)
 				Boss* boss = dynamic_cast<Boss*>(e->obj);
 				boss->LoseHP(2);
 				targetTypeHit = BOSS;
-
+				//Nguyen
+				float l, t, r, b;
+				e->obj->GetBoundingBox(l, t, r, b);
+				sparkEffect.push_back({ l, t });
+				//
 				if (boss->GetState() == BOSS_DESTROYED)
 				{
 					scoreReceived += boss->GetScore();
-					float l, t, r, b;
-					e->obj->GetBoundingBox(l, t, r, b);
-					sparkEffect.push_back({ l, t });
+					/*float l, t, r, b;
+					e->obj->GetBoundingBox(l, t, r, b);*/
+					//sparkEffect.push_back({ l, t });
 				}
 
 				UpdateCollisionState();
@@ -278,6 +282,7 @@ void Weapon::SetState(int state)
 		else 
 			vx = -KNIFE_SPEED;
 		vy = 0;
+		Game::gameSound->playSound(SOUNDKNIFE);
 		break;
 	case WEAPON_AXE:
 		if (nx > 0) 
@@ -285,19 +290,23 @@ void Weapon::SetState(int state)
 		else 
 			vx = -AXE_SPEED_X;
 		vy = -AXE_SPEED_Y;
+		Game::gameSound->playSound(WHIPATTACK_AXE);
 		break;
 	case WEAPON_BOOMERANG:
 		vx = nx * BOOMERANG_SPEED;
 		vy = 0;
+		Game::gameSound->playSound(WHIPATTACK_AXE);
 		break;
 	case WEAPON_HOLY_WATER:
 		vx = nx * HOLY_WATER_SPEED_X;
 		vy = -HOLY_WATER_SPEED_Y;
+		Game::gameSound->playSound(DOWNWATER);
 		break;
 	case HOLY_WATER_BROKEN:
 		vx = 0;
 		vy = 0;
 		HolyWaterEffect();
+		Game::gameSound->playSound(HOLYWATERBREAK);
 		break;
 	default:
 		break;

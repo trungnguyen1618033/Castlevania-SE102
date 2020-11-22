@@ -17,7 +17,7 @@ void BlockMove::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMovin
 {
 	GameObject::Update(dt);
 
-	//DebugOut(L"dx_b: %d\n", this->dx);
+	//DebugOut("dx_b: %d\n", this->dx);
 	x += dx;
 
 	if (x <= 64)

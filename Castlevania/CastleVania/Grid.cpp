@@ -136,10 +136,10 @@ void Grid::Out()
 				unit = unit->next;
 			}
 
-			DebugOut(L"%d\t", c);
+			DebugOut("%d\t", c);
 		}
 
-		DebugOut(L"\n");
+		DebugOut("\n");
 	}
 }
 

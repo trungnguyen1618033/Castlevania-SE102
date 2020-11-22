@@ -1,10 +1,10 @@
 ﻿#include "Display.h"
-#define FILEPATH_FONT				L"font\\prstart.ttf"
+#define FILEPATH_FONT				"font\\prstart.ttf"
 #define DEFAULT_TIME_PLAY			300
 #define ID_TEX_HP					97
 #define ID_TEX_RECT					98
-#define FILEPATH_TEX_HP				L"textures\\HP.png"
-#define FILEPATH_TEX_RECT			L"textures\\Rect.png"
+#define FILEPATH_TEX_HP				"textures\\HP.png"
+#define FILEPATH_TEX_RECT			"textures\\Rect.png"
 
 
 Display* Display::_instance = NULL;
@@ -68,11 +68,11 @@ void Display::Init()
 	HRESULT hr = D3DXCreateFont(
 		game->GetDirect3DDevice(), 16, 0, FW_NORMAL, 1, false,
 		DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-		ANTIALIASED_QUALITY, FF_DONTCARE, L"Press Start", &font);
+		ANTIALIASED_QUALITY, FF_DONTCARE, "Press Start", &font);
 
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] Create font failed\n");
+		DebugOut("[ERROR] Create font failed\n");
 		return;
 	}
 

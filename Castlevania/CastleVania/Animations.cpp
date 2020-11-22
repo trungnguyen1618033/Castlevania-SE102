@@ -42,7 +42,7 @@ void Animation::Render(int accordingCam, int nx, float x, float y, int alpha)
 	}
 
 	frames[currentFrame]->GetSprite()->Draw(accordingCam, nx, x, y, alpha);
-	//DebugOut(L"[INFO] State: %d\n", ani);
+	//DebugOut("[INFO] State: %d\n", ani);
 }
 
 void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
@@ -92,7 +92,7 @@ LPANIMATION_SET AnimationSets::Get(unsigned int id)
 {
 	LPANIMATION_SET ani_set = animation_sets[id];
 	if (ani_set == NULL)
-		DebugOut(L"[ERROR] Failed to find animation set id: %d\n", id);
+		DebugOut("[ERROR] Failed to find animation set id: %d\n", id);
 
 	return ani_set;
 }

@@ -11,7 +11,7 @@ void IntroScene::_ParseSection_OBJECTS(string line)
 {
 	vector<string> tokens = split(line);
 
-	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
+	//DebugOut("--> %s\n",ToWSTR(line).c_str());
 
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
@@ -36,7 +36,7 @@ void IntroScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_SIMON:
 		if (player != NULL)
 		{
-			DebugOut(L"[ERROR] SIMON object was created before! ");
+			DebugOut("[ERROR] SIMON object was created before! ");
 			return;
 		}
 		player = Simon::GetInstance();
@@ -63,7 +63,7 @@ void IntroScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	default:
-		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+		DebugOut("[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
 
@@ -87,7 +87,7 @@ IntroScene::~IntroScene()
 
 void IntroScene::Load()
 {
-	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
+	DebugOut("[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -136,7 +136,7 @@ void IntroScene::Load()
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	DebugOut("[INFO] Done loading scene resources %s\n", sceneFilePath);
 
 	view = Textures::GetInstance()->Get(1);
 }

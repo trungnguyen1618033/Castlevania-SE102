@@ -24,7 +24,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 	{
 		SetState(DEAD);
 		y = 500;
-		//DebugOut(L"y: %d\n", y);
+		//DebugOut("y: %d\n", y);
 	}
 	
 	if (dt > 64)
@@ -420,63 +420,82 @@ bool Simon::CheckCollisionWithItem(vector<LPGAMEOBJECT>* listItem)
 			{
 			case KNIFE:
 				subWeapon = idItem;
+				Game::gameSound->playSound(EATWEAPON_CHICKEN);
 				break;
 			case AXE:
 				subWeapon = 1;
+				Game::gameSound->playSound(EATWEAPON_CHICKEN);
 				break;
 			case BOOMERANG:
 				subWeapon = 2;
+				Game::gameSound->playSound(EATWEAPON_CHICKEN);
 				break;
 			case HOLY_WATER:
 				subWeapon = 3;
+				Game::gameSound->playSound(EATHEART);
 				break;
 			case STOP_WATCH:
 				subWeapon = 4;
+				Game::gameSound->playSound(EATHEART);
 				break;
 			case SMALL_HEART:
 				energy += 1;
+				Game::gameSound->playSound(EATHEART);
 				break;
 			case BIG_HEART:
 				energy += 5;
+				Game::gameSound->playSound(EATHEART);
 				break;
 			case WHIPITEM:
 				SetState(UPGRADE);
 				vx = 0;
 				isGotChainItem = true;
+				Game::gameSound->playSound(EATWEAPON_CHICKEN);
 				break;
 			case MONEY_BAG_RED:
 				score += 100;
+				Game::gameSound->playSound(EATMONEY);
 				break;
 			case MONEY_BAG_BLUE:
 				score += 400;
+				Game::gameSound->playSound(EATMONEY);
 				break;
 			case MONEY_BAG_WHITE:
 				score += 700;
+				Game::gameSound->playSound(EATMONEY);
 				break;
 			case MONEY_BAG:
 				score += 1000;
+				Game::gameSound->playSound(EATMONEY);
 				break;
 			case DOUBLE_SHOT:
 				stateShot = idItem;
 				isGotDoubleShotItem = true;
+				Game::gameSound->playSound(EATHEART);
 				break;
 			case TRIPLE_SHOT:
 				stateShot = idItem;
 				isGotTripleShotItem = true;
+				Game::gameSound->playSound(EATHEART);
 				break;
 			case MAGIC_CRYSTAL:
 				isGotMagicCrystalItem = true;
+				Game::gameSound->stopSound(BOSS_FIGHT);
+				Game::gameSound->playSound(EATCRYSTAL);
 				break;
 			case FOOD:
 				hp += 2;
 				if (hp > SIMON_HP)
 					hp = SIMON_HP;
+				Game::gameSound->playSound(EATWEAPON_CHICKEN);
 				break;
 			case INVISIBLE_BOTLE:
 				StartInvisible();
+				Game::gameSound->playSound(EATPOTION);
 				break;
 			case CROSS:
 				isGotCrossItem = true;
+				Game::gameSound->playSound(EATCROSS);
 				break;
 			default:
 				break;
@@ -509,7 +528,7 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 			
 		if (GameObject::AABB(simon_l, simon_t, simon_r, simon_b, stair_l - 10, stair_t, stair_r, stair_b) == true)
 		{
-			//DebugOut(L"collision\n");
+			//DebugOut("collision\n");
 
 			if (listStair->at(i)->GetState() == 0) 
 				stairDirection = 1;
@@ -592,7 +611,7 @@ void Simon::DoAutoWalk()
 		stateAfterAutoWalk = -1;
 		nxAfterAutoWalk = 0;
 	}
-	/*DebugOut(L"3: x: %f, y: %f\n", x, y);*/
+	/*DebugOut("3: x: %f, y: %f\n", x, y);*/
 }
 
 bool Simon::IsHit()

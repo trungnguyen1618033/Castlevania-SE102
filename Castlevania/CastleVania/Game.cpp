@@ -7,6 +7,7 @@
 #include "TitleScene.h"
 
 Game* Game::_instance = NULL;
+GSound* Game::gameSound = NULL;
 
 
 #define MAX_GAME_LINE 1024
@@ -52,7 +53,7 @@ void Game::Init(HWND hWnd)
 
 	if (d3ddv == NULL)
 	{
-		DebugOut(L"[ERROR] CreateDevice failed\n");
+		DebugOut("[ERROR] CreateDevice failed\n");
 		return;
 	}
 
@@ -61,7 +62,12 @@ void Game::Init(HWND hWnd)
 	// Initialize sprite helper from Direct3DX helper library
 	D3DXCreateSprite(d3ddv, &spriteHandler);
 
-	DebugOut(L"[INFO] Init Game done\n");
+	// Nguyen
+	// Init sound
+	Game::gameSound = new GSound();
+	Game::gameSound->LoadSound(hWnd);
+
+	DebugOut("[INFO] Init Game done\n");
 }
 
 void Game::InitKeyboard()
@@ -74,7 +80,7 @@ void Game::InitKeyboard()
 
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] DirectInput8Create failed\n");
+		DebugOut("[ERROR] DirectInput8Create failed\n");
 		return;
 	}
 
@@ -82,7 +88,7 @@ void Game::InitKeyboard()
 
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] CreateDevice failed\n");
+		DebugOut("[ERROR] CreateDevice failed\n");
 		return;
 	}
 
@@ -115,12 +121,12 @@ void Game::InitKeyboard()
 	hr = didv->Acquire();
 	if (hr != DI_OK)
 	{
-		DebugOut(L"[ERROR] DINPUT8::Acquire failed\n");
+		DebugOut("[ERROR] DINPUT8::Acquire failed\n");
 		return;
 	}
 
 
-	DebugOut(L"[INFO] Keyboard has been initialized successfully\n");
+	DebugOut("[INFO] Keyboard has been initialized successfully\n");
 }
 
 
@@ -189,13 +195,13 @@ void Game::ProcessKeyboard()
 			HRESULT h = didv->Acquire();
 			if (h == DI_OK)
 			{
-				DebugOut(L"[INFO] Keyboard re-acquired\n");
+				DebugOut("[INFO] Keyboard re-acquired\n");
 			}
 			else return;
 		}
 		else
 		{
-			//DebugOut(L"[ERROR] DINPUT::GetDeviceState failed\n");
+			//DebugOut("[ERROR] DINPUT::GetDeviceState failed\n");
 			return;
 		}
 	}
@@ -208,7 +214,7 @@ void Game::ProcessKeyboard()
 
 	if (FAILED(hr))
 	{
-		//DebugOut(L"[ERROR] DINPUT::GetDeviceState failed\n");
+		//DebugOut("[ERROR] DINPUT::GetDeviceState failed\n");
 		return;
 	}
 
@@ -339,13 +345,15 @@ Game::~Game()
 	if (backBuffer != NULL) backBuffer->Release();
 	if (d3ddv != NULL) d3ddv->Release();
 	if (d3d != NULL) d3d->Release();
+	// Nguyen
+	Game::gameSound->shutdownDirectSound();
 }
 
 
 void Game::Load(LPCWSTR gameFile)
 {
 
-	DebugOut(L"[INFO] Start loading game file : %s\n", gameFile);
+	DebugOut("[INFO] Start loading game file : %s\n", gameFile);
 
 	ifstream f;
 	f.open(gameFile);
@@ -374,7 +382,7 @@ void Game::Load(LPCWSTR gameFile)
 	}
 	f.close();
 
-	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
+	DebugOut("[INFO] Loading game file : %s has been loaded successfully\n", gameFile);
 
 	SwitchScene(current_scene);
 }
@@ -383,6 +391,7 @@ void Game::SwitchScene(int scene_id)
 {
 	
 	Game* game = Game::GetInstance();
+	int old_scene = current_scene;
 	current_scene = scene_id;
 
 	LPSCENE s = scenes[current_scene];
@@ -444,6 +453,29 @@ void Game::SwitchScene(int scene_id)
 	}
 
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
+	switch (old_scene)
+	{
+	case 0:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	case 1:
+		Game::gameSound->stopSound(LVL2_STALKER);
+		break;
+	case 2:
+		Game::gameSound->stopSound(LVL2_STALKER);
+		break;
+	case 3:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	case 4:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	case 5:
+		Game::gameSound->stopSound(BOSS_FIGHT);
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	}
+	
 	s->Unload();
 
 	Textures::GetInstance()->Clear();
@@ -452,6 +484,28 @@ void Game::SwitchScene(int scene_id)
 
 	game->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
+
+	switch (current_scene)
+	{
+	case 0:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	case 1:
+		Game::gameSound->playSoundLoop(LVL2_STALKER);
+		break;
+	case 2:
+		Game::gameSound->playSoundLoop(LVL2_STALKER);
+		break;
+	case 3:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	case 4:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	case 5:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	}
 
 	//Cập nhập các thuộc tính của simon từ màn trước đến màn tiếp theo
 	if (current_scene >= 0)
@@ -480,7 +534,7 @@ void Game::_ParseSection_SETTINGS(string line)
 	if (tokens[0] == "start")
 		current_scene = atoi(tokens[1].c_str());
 	else
-		DebugOut(L"[ERROR] Unknown game setting %s\n", ToWSTR(tokens[0]).c_str());
+		DebugOut("[ERROR] Unknown game setting %s\n", ToWSTR(tokens[0]).c_str());
 }
 
 void Game::_ParseSection_SCENES(string line)

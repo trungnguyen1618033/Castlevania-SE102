@@ -116,7 +116,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 
 	if (!hWnd)
 	{
-		OutputDebugString(L"[ERROR] CreateWindow failed");
+		OutputDebugString("[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
 		return FALSE;
 	}

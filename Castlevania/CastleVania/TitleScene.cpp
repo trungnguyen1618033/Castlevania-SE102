@@ -13,7 +13,7 @@ void TitleScene::SwitchScene()
 
 void TitleScene::Load()
 {
-	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
+	DebugOut("[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -61,7 +61,7 @@ void TitleScene::Load()
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	DebugOut("[INFO] Done loading scene resources %s\n", sceneFilePath);
 
 	view = Textures::GetInstance()->Get(1);
 	bird = Animations::GetInstance()->Get(101);
@@ -92,7 +92,7 @@ void TitleSceneKeyHandler::KeyState(BYTE* states)
 
 void TitleSceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	DebugOut(L"[INFO TitleSceneKey] KeyDown: %d\n", KeyCode);
+	DebugOut("[INFO TitleSceneKey] KeyDown: %d\n", KeyCode);
 	Game::GetInstance()->SwitchScene(-1);
 	/*TitleScene* s = dynamic_cast<TitleScene*>(scene);
 	s->SwitchScene();*/

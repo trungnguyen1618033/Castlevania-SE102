@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void DebugOut(wchar_t *fmt, ...);
+void DebugOut(PCSTR fmt, ...);
 
 vector<string> split(string line, string delimeter = "\t");
 wstring ToWSTR(string st);

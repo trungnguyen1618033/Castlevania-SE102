@@ -75,6 +75,8 @@ void Boss::SetState(int state)
 	switch (state)
 	{
 	case BOSS_ACTIVE:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		Game::gameSound->playSoundLoop(BOSS_FIGHT);
 		break;
 	case BOSS_DESTROYED:
 		vx = 0;

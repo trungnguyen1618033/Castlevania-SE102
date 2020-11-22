@@ -8,6 +8,7 @@
 #include "KeyEventHandler.h"
 #include <unordered_map>
 #include "Scene.h"
+#include "GSound.h"
 
 
 class Game
@@ -97,6 +98,10 @@ public:
 	void SetCamPos(float x, float y);
 
 	static Game * GetInstance();
+
+	// Nguyen
+	//Doi tuong Direct Sound
+	static GSound* gameSound;
 
 	~Game();
 };
