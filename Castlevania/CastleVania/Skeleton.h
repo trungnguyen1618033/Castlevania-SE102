@@ -16,9 +16,11 @@ class Skeleton : public Enemy
 
 	DWORD lastTimeThrown = 0;
 	int velocityVariation = 1;
-
+	int numThrow = 0;
 public:
-	Skeleton();
+	float xMin, xMax;
+
+	Skeleton(float min, float max);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	virtual void Render();
@@ -26,7 +28,7 @@ public:
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
-
+	virtual void GetOrientation();
 	virtual void LoseHP(int x);
 
 	bool CanHit();

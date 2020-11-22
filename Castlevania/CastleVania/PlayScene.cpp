@@ -157,7 +157,9 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_SKELETON:
 	{
-		Skeleton* skeleton = new Skeleton();
+		float min = atof(tokens[4].c_str());
+		float max = atof(tokens[5].c_str());
+		Skeleton* skeleton = new Skeleton(min, max);
 		skeleton->SetEntryPosition(x, y);
 		skeleton->SetAnimationSet(ani_set);
 		skeleton->SetState(SKELETON_INACTIVE);
