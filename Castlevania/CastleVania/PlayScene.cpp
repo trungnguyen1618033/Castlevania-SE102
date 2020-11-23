@@ -33,7 +33,7 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 
 	float r;
 	float b;
-	int scene_id;
+	int scene_id, scene_back;
 	int s, idItem;
 
 	switch (object_type)
@@ -90,7 +90,8 @@ void PlayScene::_ParseSection_OBJECTS(string line)
 		r = atof(tokens[4].c_str());
 		b = atof(tokens[5].c_str());
 		scene_id = atoi(tokens[6].c_str());
-		portal = new Portal(x, y, r, b, scene_id);
+		scene_back = atof(tokens[7].c_str());
+		portal = new Portal(x, y, r, b, scene_id, scene_back);
 		unit = new Unit(grid, portal, x, y);
 		break;
 	}
@@ -237,6 +238,7 @@ void PlayScene::_ParseSection_GRID(string line)
 
 void PlayScene::Load()
 {
+	
 	DebugOut("[INFO] Start loading scene resources from : %s \n", sceneFilePath);
 	
 	ifstream f;
@@ -297,23 +299,49 @@ void PlayScene::Load()
 
 	if (id == 0)
 		player->SetOrientation(1);
-	if(id == 2)
+	else if (id == 1)
+	{
+		if (Game::GetInstance()->backScene == true)
+		{
+			player->SetOrientation(-1);
+			player->SetPosition(228, 48);
+			player->SetState(DESCEND);
+			player->isFalling = false;
+		}
+		else
+			player->SetOrientation(1);
+	}
+	else if(id == 2)
 	{
 		player->SetOrientation(1);
 		player->isFalling = false;
 		player->SetState(ASCEND);
 		player->isAutoWalk = false;
 	}
-	if(id == 4)
+	else if(id == 4)
 	{
 		player->isFalling = false;
 		player->SetOrientation(-1);
 		player->SetState(ASCEND);
 	}
-	if (id == 3)
+
+	else if (id == 3)
 	{
-	/*	player->SetPosition(320, 304);*/
-		player->SetOrientation(-1);
+		if (Game::GetInstance()->backScene == true)
+		{
+			Game::GetInstance()->SetCamPos(0, 0);
+			player->SetOrientation(1);
+			player->SetPosition(160, 48);
+			player->SetState(DESCEND);
+			player->isFalling = false;
+			player->isAutoWalk = false;
+		}
+		else
+			player->SetOrientation(-1);
+	}
+	else if (id == 5)
+	{
+		player->SetOrientation(1);
 	}
 
 	whip = new Whip();
@@ -716,6 +744,11 @@ void PlayScene::UpdateCameraPosition()
 	}
 
 	if (id == 1)
+	{
+		game->SetCamPos(0, 0);
+		return;
+	}
+	if (id == 3 && Game::GetInstance()->backScene)
 	{
 		game->SetCamPos(0, 0);
 		return;

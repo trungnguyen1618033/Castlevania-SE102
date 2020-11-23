@@ -502,7 +502,7 @@ void Game::SwitchScene(int scene_id)
 	case 4:
 		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
 		break;
-	case 5:
+	case 5:	
 		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
 		break;
 	}
@@ -524,6 +524,100 @@ void Game::SwitchScene(int scene_id)
 
 	SetChangeScene(true);
 
+}
+
+void Game::BackScene(int scene_id)
+{
+	Game* game = Game::GetInstance();
+	int old_scene = current_scene;
+	current_scene = scene_id;
+	game->backScene = true;
+
+	LPSCENE s = scenes[current_scene];
+
+	//Lấy các thuộc tính của simon ở màn hiện tại
+	PlayScene* scene = (PlayScene*)scenes[old_scene];
+	Simon* simon = scene->GetPlayer();
+
+	game->score = simon->GetScore();
+	game->life = simon->GetLife();
+	game->hp = simon->GetHP();
+	game->energy = simon->GetEnergy();
+	game->subWeapon = simon->GetSubWeapon();
+
+	Whip* whip = scene->GetWhip();
+	game->stateWhip = whip->GetState();
+
+	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
+	switch (old_scene)
+	{
+	case 0:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	case 1:
+		Game::gameSound->stopSound(LVL2_STALKER);
+		break;
+	case 2:
+		Game::gameSound->stopSound(LVL2_STALKER);
+		break;
+	case 3:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	case 4:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	case 5:
+		Game::gameSound->stopSound(BOSS_FIGHT);
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	}
+
+	s->Unload();
+
+	Textures::GetInstance()->Clear();
+	Sprites::GetInstance()->Clear();
+	Animations::GetInstance()->Clear();
+
+	game->SetKeyHandler(s->GetKeyEventHandler());
+	s->Load();
+
+	switch (current_scene)
+	{
+	case 0:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	case 1:
+		Game::gameSound->playSoundLoop(LVL2_STALKER);
+		break;
+	case 2:
+		Game::gameSound->playSoundLoop(LVL2_STALKER);
+		break;
+	case 3:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	case 4:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	case 5:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	}
+
+	//Cập nhập các thuộc tính của simon từ màn trước đến màn tiếp theo
+	PlayScene* temp = (PlayScene*)s;
+	simon = temp->GetPlayer();
+	simon->SetScore(game->score);
+	simon->SetLife(game->life);
+	simon->SetHP(game->hp);
+	simon->SetEnergy(game->energy);
+	simon->SetSubWeapon(game->subWeapon);
+
+	whip = temp->GetWhip();
+	whip->SetState(game->stateWhip);
+
+	SetChangeScene(true);
+	if (Game::GetInstance()->backScene == true)
+		Game::GetInstance()->backScene = false;
 }
 
 void Game::_ParseSection_SETTINGS(string line)

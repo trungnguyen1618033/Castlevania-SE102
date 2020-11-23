@@ -53,6 +53,7 @@ public:
 
 	bool isPause = false;
 	bool stopMove = false;
+	bool backScene = false;
 
 
 	void InitKeyboard();
@@ -68,6 +69,7 @@ public:
 	void Load(LPCWSTR gameFile);
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void SwitchScene(int scene_id);
+	void BackScene(int scene_id);
 
 	bool GetChangeScene() { return changeScene; }
 	void SetChangeScene(bool x) { this->changeScene = x; }

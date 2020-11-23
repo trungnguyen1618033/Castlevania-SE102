@@ -107,7 +107,10 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 			if (dynamic_cast<Portal*>(e->obj))
 			{
 				Portal* p = dynamic_cast<Portal*>(e->obj);
-				Game::GetInstance()->SwitchScene(p->GetSceneId());
+				if (p->GetSceneBack() != -1)
+					Game::GetInstance()->BackScene(p->GetSceneId());
+				else	
+					Game::GetInstance()->SwitchScene(p->GetSceneId());
 			}
 			else if (dynamic_cast<Ground*>(e->obj) || dynamic_cast<BreakWall*>(e->obj))
 			{
@@ -158,6 +161,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 			{
 				LoseHP(1);
 				e->obj->SetEnable(false);
+				if (e->nx != 0) x -= dx;
+				if (e->ny != 0) y -= dy;
 			}
 			else if (dynamic_cast<Knight*>(e->obj) || dynamic_cast<Bat*>(e->obj) || dynamic_cast<Ghost*>(e->obj) || dynamic_cast<HunchBack*>(e->obj) ||
 				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj))
@@ -203,7 +208,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 						Boss* boss = dynamic_cast<Boss*>(e->obj);
 						LoseHP(boss->GetAttack());
 					}
-					
 					
 
 					if (isStandOnStair == false || hp == 0)  // Simon đứng trên cầu thang sẽ không nhấp nháy
@@ -547,7 +551,6 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 			stairCollided = listStair->at(i);
 
 			// bậc thang ở dưới so với chân Simon->có thể di chuyển xuống.
-			
 			if (y >= stair_t - 35) 
 				canMoveUpStair = true;
 			if (simon_b < stair_b)
@@ -568,11 +571,14 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 				float dx = abs(upstair_x - stair_l);
 				float dy = upstair_y - stair_t;
 
+
 				if (dx == GROUND_BBOX_WIDTH && dy == -GROUND_BBOX_HEIGHT) // vì bậc nằm trên nên dy = -...
 					canMoveUpStair = true;
 
 				if (dx == GROUND_BBOX_WIDTH && dy == GROUND_BBOX_HEIGHT) // vì bậc nằm duoi nên dy = +...
 					canMoveDownStair = true;
+
+				
 			}
 			return true; // va chạm Simon và stairs
 		}
