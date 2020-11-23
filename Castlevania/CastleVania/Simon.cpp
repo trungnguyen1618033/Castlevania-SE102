@@ -154,11 +154,17 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				}
 				SetState(IDLE);
 			}
+			else if (dynamic_cast<Bone*>(e->obj))
+			{
+				LoseHP(1);
+				e->obj->SetEnable(false);
+			}
 			else if (dynamic_cast<Knight*>(e->obj) || dynamic_cast<Bat*>(e->obj) || dynamic_cast<Ghost*>(e->obj) || dynamic_cast<HunchBack*>(e->obj) ||
-				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj) || dynamic_cast<Bone*>(e->obj))
+				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj))
 			{
 				if (state != UPGRADE && isUntouchable == false && isInvisible == false)
 				{
+					StartUntouchable();
 					if (dynamic_cast<Knight*>(e->obj))
 					{
 						Knight* knight = dynamic_cast<Knight*>(e->obj);
@@ -169,6 +175,13 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 						Bat* bat = dynamic_cast<Bat*>(e->obj);
 						bat->SetState(BAT_DESTROYED);
 						LoseHP(bat->GetAttack());
+					}
+					else if (dynamic_cast<Raven*>(e->obj))
+					{
+						Raven* raven = dynamic_cast<Raven*>(e->obj);
+						raven->SetState(RAVEN_DESTROYED);
+						SetState(DEAD);
+						return;
 					}
 					else if (dynamic_cast<Ghost*>(e->obj))
 					{
@@ -190,10 +203,8 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 						Boss* boss = dynamic_cast<Boss*>(e->obj);
 						LoseHP(boss->GetAttack());
 					}
-					else if (dynamic_cast<Bone*>(e->obj))
-					{
-						LoseHP(1);
-					}
+					
+					
 
 					if (isStandOnStair == false || hp == 0)  // Simon đứng trên cầu thang sẽ không nhấp nháy
 					{
@@ -208,8 +219,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 						SetState(HURT);
 					}
-					StartUntouchable();
-					LoseHP(2);
 				}
 				else
 				{

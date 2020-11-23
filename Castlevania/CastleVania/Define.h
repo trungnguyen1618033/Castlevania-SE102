@@ -91,8 +91,8 @@
 
 	#define SIMON_STAIR_SPEED_X			0.08f
 	#define SIMON_STAIR_SPEED_Y			0.08f
-	#define SIMON_HURT_SPEED_X		0.13f
-	#define SIMON_HURT_SPEED_Y		0.3f
+	#define SIMON_HURT_SPEED_X		0.11f
+	#define SIMON_HURT_SPEED_Y		0.25f
 
 
 	#define SIMON_UNTOUCHABLE_TIME		2000

@@ -3,7 +3,7 @@
 
 class HunchBack : public Enemy
 {
-	const float turningDelay = 1400.f;
+	const float turningDelay = 1450.f;
 	float turnDelayTime = 0;
 	bool isOnTurnDelay = false;	
 	bool isJumping = false;

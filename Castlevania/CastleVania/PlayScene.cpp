@@ -556,6 +556,8 @@ void PlayScene::SetDropItems()
 			(dynamic_cast<Bat*>(object) && object->GetState() == BAT_DESTROYED) ||
 			(dynamic_cast<Raven*>(object) && object->GetState() == RAVEN_DESTROYED))
 		{
+			if (dynamic_cast<Raven*>(object) && player->GetState() == DEAD)
+				return;
 			idItem = GetRandomItem();
 			object->GetPosition(x, y);
 			object->SetIsDroppedItem(true);
