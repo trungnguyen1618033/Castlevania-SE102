@@ -535,7 +535,7 @@ bool Simon::CheckCollisionWithStair(vector<LPGAMEOBJECT>* listStair)
 		listStair->at(i)->GetBoundingBox(stair_l, stair_t, stair_r, stair_b);
 
 			
-		if (GameObject::AABB(simon_l, simon_t, simon_r, simon_b, stair_l - 10, stair_t, stair_r, stair_b) == true)
+		if (GameObject::AABB(simon_l, simon_t, simon_r, simon_b, stair_l - 96, stair_t, stair_r, stair_b) == true)
 		{
 			//DebugOut("collision\n");
 

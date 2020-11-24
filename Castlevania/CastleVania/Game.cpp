@@ -455,6 +455,12 @@ void Game::SwitchScene(int scene_id)
 	// IMPORTANT: has to implement "unload" previous scene assets to avoid duplicate resources
 	switch (old_scene)
 	{
+	case -2:
+		Game::gameSound->stopSound(LVL1_VAMKILL);
+		break;
+	case -1:
+		Game::gameSound->stopSound(LVL2_STALKER);
+		break;
 	case 0:
 		Game::gameSound->stopSound(LVL1_VAMKILL);
 		break;
@@ -487,6 +493,12 @@ void Game::SwitchScene(int scene_id)
 
 	switch (current_scene)
 	{
+	case -2:
+		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
+		break;
+	case -1:
+		Game::gameSound->playSoundLoop(LVL2_STALKER);
+		break;
 	case 0:
 		Game::gameSound->playSoundLoop(LVL1_VAMKILL);
 		break;
