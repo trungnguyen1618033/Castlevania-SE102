@@ -121,26 +121,5 @@ void Grid::Get(D3DXVECTOR3 camPosition, vector<Unit*>& listUnits)
 	}
 }
 
-void Grid::Out()
-{
-	for (int i = 0; i < nums_row; i++)
-	{
-		for (int j = 0; j < nums_col; j++)
-		{
-			int c = 0;
-			Unit* unit = cells[i][j];
-
-			while (unit)
-			{
-				c++;
-				unit = unit->next;
-			}
-
-			DebugOut("%d\t", c);
-		}
-
-		DebugOut("\n");
-	}
-}
 
 

@@ -87,6 +87,7 @@ void Raven::SetState(int state)
 		vx = 0;
 		vy = 0;
 		animation_set->at(state)->SetAniStartTime(GetTickCount());
+		currentAttackPhase = 0;
 		break;
 	case RAVEN_INACTIVE:
 		x = entryPosition.x;
@@ -110,7 +111,7 @@ void Raven::SetState(int state)
 
 void Raven::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x + 11;
+	left = x + 8;
 	top = y;
 	right = left + RAVEN_BBOX_WIDTH;
 	bottom = top + RAVEN_BBOX_HEIGHT;

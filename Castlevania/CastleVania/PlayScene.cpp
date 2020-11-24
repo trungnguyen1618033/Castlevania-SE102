@@ -500,7 +500,7 @@ void PlayScene::Render()
 			
 
 		obj->Render();
-		obj->RenderBoundingBox();
+		//obj->RenderBoundingBox();
 	}
 
 	for (auto obj : listItems)
@@ -578,7 +578,7 @@ void PlayScene::SetDropItems()
 			object->SetIsDroppedItem(true);
 			idItem = object->idItem;
 			x = Game::GetInstance()->GetCameraPositon().x + SCREEN_WIDTH / 2;
-			y = Game::GetInstance()->GetCameraPositon().y + SCREEN_HEIGHT / 2;
+			y = Game::GetInstance()->GetCameraPositon().y + SCREEN_HEIGHT / 2 + 100;
 		}
 		else if ((dynamic_cast<Zombie*>(object) && object->GetState() == ZOMBIE_DESTROYED) ||
 			(dynamic_cast<Bat*>(object) && object->GetState() == BAT_DESTROYED) ||
@@ -679,7 +679,7 @@ void PlayScene::SetInactivation()
 			else if (dynamic_cast<HunchBack*>(object) && object->GetState() == HUNCHBACK_ACTIVE)
 			{
 				auto hunchback = dynamic_cast<HunchBack*>(object);
-				hunchback->SetState(HUNCHBACK_INACTIVE);
+				hunchback->SetState(HUNCHBACK_DESTROYED);
 			}
 			else if (dynamic_cast<Raven*>(object) && object->GetState() == RAVEN_ACTIVE)
 			{
@@ -731,7 +731,7 @@ void PlayScene::UpdateCameraPosition()
 {
 	Game* game = Game::GetInstance();
 
-	if (isBossFighting == true)	// ko cho camera di chuyển khi đánh với bos
+	if (isBossFighting == true)	// ko cho camera di chuyển khi đánh với boss
 		return;
 
 	if (game->GetChangeScene() == true)
@@ -1075,16 +1075,6 @@ void PlayScene::SetEnemiesSpawnPositon()
 					ghost->SetOrientation(nx);
 					ghost->SetState(GHOST_ACTIVE);
 				}
-
-				/*ghost->isSettedPosition = true;
-
-				float simon_x, simon_y;
-				player->GetPosition(simon_x, simon_y);
-
-				int nx = ghost->GetEntryPosition().x < simon_x ? 1 : -1;
-				ghost->SetOrientation(nx);
-
-				ghost->SetState(GHOST_ACTIVE);*/
 			}
 		}
 		else if (dynamic_cast<HunchBack*>(obj))

@@ -19,13 +19,6 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	if (state == BEHIND)
 		return;
-
-	if (y > 500)
-	{
-		SetState(DEAD);
-		y = 500;
-		//DebugOut("y: %d\n", y);
-	}
 	
 	if (dt > 64)
 		dt = 16;
@@ -157,21 +150,16 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 				}
 				SetState(IDLE);
 			}
-			else if (dynamic_cast<Bone*>(e->obj))
-			{
-				LoseHP(1);
-				e->obj->SetEnable(false);
-				if (e->nx != 0) x -= dx;
-				if (e->ny != 0) y -= dy;
-			}
 			else if (dynamic_cast<Knight*>(e->obj) || dynamic_cast<Bat*>(e->obj) || dynamic_cast<Ghost*>(e->obj) || dynamic_cast<HunchBack*>(e->obj) ||
-				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj))
+				dynamic_cast<Skeleton*>(e->obj) || dynamic_cast<Raven*>(e->obj) || dynamic_cast<Zombie*>(e->obj) || dynamic_cast<Boss*>(e->obj) || dynamic_cast<Bone*>(e->obj))
 			{
+				DebugOut("Enemy\n");
 				if (state != UPGRADE && isUntouchable == false && isInvisible == false)
 				{
 					StartUntouchable();
 					if (dynamic_cast<Knight*>(e->obj))
 					{
+						DebugOut("Knight\n");
 						Knight* knight = dynamic_cast<Knight*>(e->obj);
 						LoseHP(knight->GetAttack());
 					}
@@ -185,8 +173,7 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 					{
 						Raven* raven = dynamic_cast<Raven*>(e->obj);
 						raven->SetState(RAVEN_DESTROYED);
-						SetState(DEAD);
-						return;
+						LoseHP(raven->GetAttack());
 					}
 					else if (dynamic_cast<Ghost*>(e->obj))
 					{
@@ -198,10 +185,15 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 						HunchBack* hunchback = dynamic_cast<HunchBack*>(e->obj);
 						LoseHP(hunchback->GetAttack());
 					}
-					if (dynamic_cast<Zombie*>(e->obj))
+					else if (dynamic_cast<Zombie*>(e->obj))
 					{
 						Zombie* zombie = dynamic_cast<Zombie*>(e->obj);
 						LoseHP(zombie->GetAttack());
+					}
+					else if (dynamic_cast<Bone*>(e->obj))
+					{
+						LoseHP(1);
+						e->obj->SetEnable(false);
 					}
 					else if (dynamic_cast<Boss*>(e->obj))
 					{
@@ -209,17 +201,18 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 						LoseHP(boss->GetAttack());
 					}
 					
+					
 
 					if (isStandOnStair == false || hp == 0)  // Simon đứng trên cầu thang sẽ không nhấp nháy
 					{
 						// đặt trạng thái nhấp nháy cho simon
-						if (e->nx != 0)
+						/*if (e->nx != 0)
 						{
 							if (e->nx == 1 && this->nx == 1) 
 								this->nx = -1;
 							else if (e->nx == -1 && this->nx == -1) 
 								this->nx = 1;
-						}
+						}*/
 
 						SetState(HURT);
 					}
