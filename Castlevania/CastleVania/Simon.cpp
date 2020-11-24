@@ -72,6 +72,9 @@ void Simon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects, bool stopMoving)
 
 	CalcPotentialCollisions(coObjects, coEvents);
 
+	if (y > 480.f) {
+		SetState(DEAD);
+	}
 	if (coEvents.size() == 0 && isAutoWalk == false)
 	{
 		
