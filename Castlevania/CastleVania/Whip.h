@@ -31,6 +31,8 @@ class Whip : public GameObject
 public:
 	Whip();
 	~Whip() {};
+	bool isCanHit = true;
+	DWORD lastTimeThrown = 0;
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL, bool stopMoving = false);
 	virtual void Render() {}
